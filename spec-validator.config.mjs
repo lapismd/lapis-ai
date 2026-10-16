@@ -3,7 +3,8 @@ import {
   tableRequirements,
   singleIdVerification,
 } from "@lapismd/spec-validator";
-export default defineConfig(tableRequirements(), {
+import { automationExempt } from "./scripts/ci-automation.mjs";
+const config = defineConfig(tableRequirements(), {
   name: "lapis-ai",
   idPattern: /^LAI-[A-Z]+-\d{3}$/,
   tableSection: "Requirements",
@@ -49,7 +50,7 @@ export default defineConfig(tableRequirements(), {
         "^spec/src/current/(?:verification|progress)/",
       ],
       protected: [
-        "^(?:\\.github/|crates/|scripts/|examples/|Cargo|rust|package|pnpm|AGENTS|README|docs/|spec-validator)",
+        "^(?:\\.github/|crates/|scripts/|examples/|Cargo|rust|package|pnpm|AGENTS|README|docs/|spec-validator|release\\.toml|CHANGELOG|\\.changeset/)",
       ],
       rules: [
         {
@@ -86,7 +87,7 @@ export default defineConfig(tableRequirements(), {
         },
         {
           pattern:
-            "^(?:\\.github/|scripts/|Cargo|rust|package|pnpm|AGENTS|README|docs/|spec-validator)",
+            "^(?:\\.github/|scripts/|Cargo|rust|package|pnpm|AGENTS|README|docs/|spec-validator|release\\.toml|CHANGELOG|\\.changeset/)",
           chapters: ["spec/src/current/governance.md"],
         },
       ],
@@ -96,6 +97,7 @@ export default defineConfig(tableRequirements(), {
     first: true,
     build: true,
     lanes: [
+      { name: "release", command: "pnpm", args: ["release:check"] },
       { name: "format", command: "pnpm", args: ["format:check"] },
       { name: "architecture", command: "pnpm", args: ["check:architecture"] },
       { name: "boundaries", command: "pnpm", args: ["check:boundaries"] },
@@ -105,3 +107,6 @@ export default defineConfig(tableRequirements(), {
     ],
   },
 });
+
+if (automationExempt()) config.validators.specFirst = false;
+export default config;

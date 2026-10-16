@@ -38,3 +38,7 @@ live Codex/Cursor and JJ Store host evidence is not inherited acceptance.
 
 `docs/imports/acp-release-reference.md` is historical source context. This new
 repository has no publication, signing or hosted release qualification.
+
+Cargo publication metadata and coordinated versions follow the
+[release contract](../release.md). The ACP wire, catalog, session, task and
+permission contracts remain unchanged by release preparation.

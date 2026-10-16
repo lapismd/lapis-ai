@@ -66,8 +66,8 @@ commands.
 
 ## Supervised clients
 
-Add `lapis-ai-config` and `lapis-ai-runtime` as Rust dependencies. They are local,
-unpublished crates at version 0.1.0. `Config::load` is inert. `AcpClient::start`
+Add `lapis-ai-config` and `lapis-ai-runtime` as Rust dependencies. They share the coordinated workspace version. The first registry release is
+pending; use a source checkout until a release is available. `Config::load` is inert. `AcpClient::start`
 launches Control V3 and validates readiness; its command sender retains request
 IDs, session handles and exact provider permission option IDs.
 

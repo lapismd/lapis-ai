@@ -8,7 +8,7 @@ export CARGO_TARGET_DIR=/work/.local/linux-target
 export CARGO_BUILD_JOBS=1
 node scripts/managed-cargo.mjs build --workspace --locked
 node scripts/managed-cargo.mjs build -p lapis-ai-runtime --examples --locked
-node scripts/managed-cargo.mjs test --workspace --locked
+node scripts/managed-cargo.mjs test --workspace --features lapis-agent/test-support --locked
 python3 scripts/client-acceptance.py --acp "$CARGO_TARGET_DIR/debug/lapis-acp" --agent "$CARGO_TARGET_DIR/debug/lapis-agent" --tools "$CARGO_TARGET_DIR/debug/lapis-agent-tools" --client "$CARGO_TARGET_DIR/debug/examples/native-session" --catalog-client "$CARGO_TARGET_DIR/debug/examples/agent-catalog" --allow
 python3 scripts/client-acceptance.py --acp "$CARGO_TARGET_DIR/debug/lapis-acp" --agent "$CARGO_TARGET_DIR/debug/lapis-agent" --tools "$CARGO_TARGET_DIR/debug/lapis-agent-tools" --client "$CARGO_TARGET_DIR/debug/examples/native-session"
 python3 scripts/local-compute.acceptance.py --compute "$CARGO_TARGET_DIR/debug/lapis-compute" --root "${LAPIS_AI_NATIVE_ACCEPTANCE_ROOT:-/work/.local/linux-trixie-native}" --cold --acp "$CARGO_TARGET_DIR/debug/lapis-acp" --agent "$CARGO_TARGET_DIR/debug/lapis-agent" --tools "$CARGO_TARGET_DIR/debug/lapis-agent-tools"

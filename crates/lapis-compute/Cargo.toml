@@ -1,9 +1,16 @@
 [package]
 name = "lapis-compute"
-version = "0.1.0"
+version.workspace = true
 edition = "2024"
 license = "Apache-2.0"
 publish = false
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+rust-version.workspace = true
+readme = "README.md"
+description = "Pinned native local inference and admitted paired compute for Lapis applications"
+
 [dependencies]
 lapis-ai-config.workspace = true
 mesh-llm-sdk = { git = "https://github.com/Mesh-LLM/mesh-llm.git", rev = "9f192c9d821991ba43d79bb15fd2f2f12e597571", default-features = false, features = ["client", "serving"] }

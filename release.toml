@@ -1,0 +1,6 @@
+version = 1
+repository = "stevejuma/lapis-ai"
+coordinator = "@lapismd/lapis-ai"
+bootstrap_version = "0.1.1"
+crates = ["lapis-ai-config", "lapis-acp-protocol", "lapis-acp-agent", "lapis-acp-testkit", "lapis-acp-runner", "lapis-acp-control", "lapis-acp", "lapis-agent", "lapis-agent-tools", "lapis-ai-runtime"]
+native_only = ["lapis-compute"]

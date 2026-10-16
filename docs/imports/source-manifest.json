@@ -915,14 +915,14 @@
       "source": "store",
       "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
       "path": "runtime/local-agent/scripts/model-capabilities.json",
-      "destination": "scripts/model-capabilities.json",
+      "destination": "crates/lapis-agent/data/model-capabilities.json",
       "sha256": "62b6cab5366e0fd559a22b4a6776f2e080d452e571c30344ef1e095303aecbf7"
     },
     {
       "source": "store",
       "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
       "path": "runtime/local-agent/scripts/normative-corpus.json",
-      "destination": "scripts/normative-corpus.json",
+      "destination": "crates/lapis-agent/data/normative-corpus.json",
       "sha256": "7479b263cdb7e25abf45ea65519a350eda2c6969d9be40e7f54e2da519b827b0"
     },
     {

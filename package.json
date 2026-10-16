@@ -8,8 +8,8 @@
   "scripts": {
     "dev:cargo": "node scripts/managed-cargo.mjs",
     "build": "pnpm dev:cargo -- build --workspace --locked && pnpm dev:cargo -- build -p lapis-ai-runtime --examples --locked",
-    "check": "pnpm spec:validate && pnpm check:architecture && pnpm check:boundaries && pnpm check:progress && pnpm check:upstream && pnpm format:check && pnpm dev:cargo -- clippy --workspace --all-targets --locked -- -D warnings",
-    "test": "pnpm test:governance && pnpm dev:cargo -- test --workspace --locked",
+    "check": "pnpm spec:validate && pnpm release:check && pnpm check:architecture && pnpm check:boundaries && pnpm check:progress && pnpm check:upstream && pnpm format:check && pnpm dev:cargo -- clippy --workspace --all-targets --features lapis-agent/test-support --locked -- -D warnings",
+    "test": "pnpm test:governance && pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked",
     "test:governance": "node --test scripts/*.test.mjs",
     "check:architecture": "node scripts/architecture.mjs",
     "check:boundaries": "node scripts/boundaries.mjs",
@@ -22,11 +22,23 @@
     "spec:build": "spec-validator build",
     "spec:search": "spec-validator search",
     "package:stage": "node scripts/stage.mjs",
-    "check:upstream": "node scripts/upstream-sync.mjs --self-test"
+    "check:upstream": "node scripts/upstream-sync.mjs --self-test",
+    "changeset": "changeset",
+    "release:check": "node scripts/release-state.mjs",
+    "release:status": "node scripts/release-state.mjs --plan",
+    "release:version": "node scripts/changeset-version.mjs",
+    "package:check": "node scripts/package-check.mjs",
+    "check:workflow": "actionlint",
+    "release:dry-run": "pnpm package:check && pnpm dev:cargo -- publish --workspace --exclude lapis-compute --locked --dry-run"
   },
   "devDependencies": {
     "@lapismd/spec-validator": "^0.1.0",
     "prettier": "^3.6.2",
-    "@iarna/toml": "^2.2.5"
+    "@iarna/toml": "^2.2.5",
+    "@changesets/cli": "^2.31.1",
+    "@changesets/read": "^0.6.7"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

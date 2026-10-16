@@ -17,3 +17,9 @@ Completion checks require linked command/result/failure/gap evidence and complet
 dependencies. Source pins, composed imports and non-growing original file counts
 are validated separately from platform qualification. Hosted CI and broader
 release/native profiles retain their own explicit gates.
+
+Recognized same-repository Dependabot/Changesets automation may omit only
+same-change spec-first bookkeeping. Recognition validates bot identity, reserved
+branch, base main, repository and the exact checked/merged revision. Lookup errors
+fail closed. Canonical integrity, evidence integrity, tests, native acceptance,
+package checks and builds remain required; version preparation invents no evidence.

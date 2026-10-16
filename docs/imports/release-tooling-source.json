@@ -1,0 +1,47 @@
+[
+  {
+    "path": "scripts/ci-automation.mjs",
+    "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+    "sha256": "966fd6f50fb51606c8b78915c0f7add2af70b3bdb0f515994f914c655e7f926f"
+  },
+  {
+    "path": "scripts/ci-automation.test.mjs",
+    "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+    "sha256": "38a93760c7f2f5416c7450545be80abc0ef4c32b53e0e81f39b187ece175661c"
+  },
+  {
+    "path": "scripts/ci-range.mjs",
+    "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+    "sha256": "e3cc83cac5e96c248f607a6ed7e24f9cc934e79c7997bfdf4b35a76fa301875b"
+  },
+  {
+    "path": "scripts/release-orchestration.mjs",
+    "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+    "sha256": "a67a2b4895c63b9ac571406cbf769f3477bae31552e173f07607ca62cf94f343"
+  },
+  {
+    "path": "scripts/release-orchestration.test.mjs",
+    "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+    "sha256": "605848275a738ccd0113336ef7c51c67ca1061212137301f74f45e27700fb9dd"
+  },
+  {
+    "path": "scripts/registry-check.mjs",
+    "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+    "sha256": "29dacb91d63e6f6ee68d8388279b5edac7826cdc936a7496a15067cfe60f64eb"
+  },
+  {
+    "path": "scripts/registry-check.test.mjs",
+    "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+    "sha256": "7d9109867fdfcdf6211a17e65214c9fabcf2e9069e1f2818b1411d5c8dcfb410"
+  },
+  {
+    "path": "scripts/release-registry.mjs",
+    "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+    "sha256": "ac22ef6d77a4597ddd422ebbe332e705492dbf007a2e18c453616e0e6a6b0e5c"
+  },
+  {
+    "path": "scripts/release-assets.mjs",
+    "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+    "sha256": "b4fe0afa39e0454b17204b617be60cc69ec6b681c6133246f09b6dca1ed6f3fa"
+  }
+]

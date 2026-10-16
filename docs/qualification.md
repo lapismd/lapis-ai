@@ -69,7 +69,8 @@ remains explicit. Resource tests independently reject checksum corruption,
 foreign targets, missing native manifests, ABI mismatches and escaping paths.
 
 The workflow in `.github/workflows/ci.yml` defines deterministic, native and staging
-lanes. It is local configuration until a remote is created and CI is run; hosted
-results must not be inferred from local platform qualification. Publication,
-signing, installers, live cloud credentials, third-party installed adapters and
-Tauri integration are separate acceptance scopes.
+lanes. Hosted results must be observed in GitHub Actions and recorded in the ledger;
+local platform qualification does not establish a hosted result. Cargo/native
+release automation is described in [releasing](releasing.md). Signing, installers,
+live cloud credentials, third-party installed adapters and Tauri integration
+remain separate acceptance scopes.

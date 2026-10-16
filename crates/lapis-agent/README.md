@@ -1,5 +1,13 @@
 # lapis-agent
 
+Maintained Buzz-derived agent in [Lapis AI](https://github.com/stevejuma/lapis-ai).
+Rust 1.99.0; TOML configuration and supervised clients are documented in the
+[usage guide](https://github.com/stevejuma/lapis-ai/blob/main/docs/usage.md).
+The first Cargo publication is pending. Development tests require
+`pnpm dev:cargo -- test -p lapis-agent --features test-support --locked`.
+Only `lapis-agent` installs by default; fixture binaries require `test-support`.
+See `LICENSE`, `LICENSE.md`, `NOTICE.md` and the repository agent attribution.
+
 > Minimal, unbreakable ACP-compliant LLM agent. Stdio in, tool calls out. Non-streaming. No persistence. No cleverness.
 
 [ACP](https://agentclientprotocol.com) is the Agent Client Protocol — JSON-RPC 2.0 over stdio between a client (Zed, JetBrains, buzz-acp, …) and an agent. [MCP](https://modelcontextprotocol.io) is how the agent talks to its tools.

@@ -18,8 +18,9 @@ therefore come from the selected inference host; warm initialization still
 performs no discovery or prompting.
 
 The pinned model capability manifest and normative test corpus from upstream
-`scripts/` are retained under the owned `runtime/local-agent/scripts/`
-directory. The subprocess fixture serves model discovery separately from
+`scripts/` are retained under the owned `crates/lapis-agent/data/`
+directory so Cargo packages contain both embedded inputs. Their contents and
+upstream hashes are unchanged. The subprocess fixture serves model discovery separately from
 scripted completion responses, preserving the permission and cancellation
 assertions. Catalog discovery is enabled by the owned local-agent entrypoint;
 the vendored upstream entrypoint retains its configured-model behavior.

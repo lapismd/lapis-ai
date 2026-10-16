@@ -2,7 +2,10 @@ use lapis_ai_runtime::{Config, Error, ResourceBundle};
 use sha2::{Digest, Sha256};
 use std::path::Path;
 fn bundle(root: &Path, target: &str, first: &str) -> String {
-    let mut manifest = format!("version=1\npackage_version='0.1.0'\ntarget='{target}'\n");
+    let mut manifest = format!(
+        "version=1\npackage_version='{}'\ntarget='{target}'\n",
+        env!("CARGO_PKG_VERSION")
+    );
     for (index, name) in [
         "lapis-acp",
         "lapis-agent",

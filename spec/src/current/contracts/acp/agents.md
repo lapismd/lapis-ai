@@ -114,3 +114,7 @@ presence in a source checkout is not live acceptance here. Trusted TOML catalogs
 are described in `docs/usage.md`; JSON remains a compatibility input. Authored
 TOML rejects unknown fields and duplicate alias spellings, resolves executable
 paths against its file and requires environment references for credentials.
+
+Cargo publication metadata and coordinated versions follow the
+[release contract](../release.md). The ACP wire, catalog, session, task and
+permission contracts remain unchanged by release preparation.

@@ -11,3 +11,8 @@
 | LAI-RUNTIME-002 | ACP clients MUST preserve request/session identities and exact permission option IDs. Timeouts and lost acknowledgements MUST remain unknown outcomes without automatic prompt replay.                                                                                 |
 | LAI-RUNTIME-003 | The agent client MUST support bounded model discovery and metadata requests. Compute clients MUST expose configuration, explicit model lifecycle, events and pairing without conversation policy or durable orchestration.                                             |
 | LAI-RUNTIME-004 | Host credential callbacks and private token-source IPC MUST remain host-owned. Application secrets, credentials and token sources MUST NOT appear in serialized configuration, debug output or logs.                                                                   |
+
+Library publication and resource manifests use the coordinated Cargo package
+version under the [release contract](release.md). Configuration and wire version
+numbers remain independent. The bundle producer must read the coordinator version
+rather than retain a literal source-baseline version.

@@ -4,6 +4,7 @@
   - [Governance](current/governance.md)
   - [Configuration and clients](current/contracts/runtime.md)
   - [Native services](current/contracts/services.md)
+  - [CI and release](current/contracts/release.md)
   - [Tauri adapter contract](current/contracts/tauri.md)
   - [Verification](current/verification.md)
   - [Milestones](current/progress/milestones.md)
@@ -19,3 +20,4 @@
 - [Import evidence](history/2026-10-16-import.md)
 - [Foundation evidence](history/2026-10-16-foundation.md)
 - [Native and platform qualification](history/2026-10-16-qualification.md)
+- [Release setup evidence](history/2026-10-16-release-setup.md)

@@ -1,49 +1,118 @@
-name: Qualify Lapis AI
+name: CI
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        required: false
+        type: string
 permissions:
   contents: read
+  pull-requests: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  CARGO_BUILD_JOBS: 1
+  CARGO_INCREMENTAL: 0
 jobs:
-  qualify:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-24.04-arm, macos-15]
-    runs-on: ${{ matrix.os }}
-    env:
-      CARGO_BUILD_JOBS: 1
+  validate:
+    name: Canonical checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 24
+          fetch-depth: 0
+          ref:
+            ${{ inputs.ref || github.event.pull_request.head.sha || github.sha
+            }}
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
           cache: pnpm
-      - name: Native build prerequisites
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y pkg-config libssl-dev
-      - name: Require the qualified architecture
-        run: test "$(uname -m)" = arm64 || test "$(uname -m)" = aarch64
-      - run: rustup show
-      - run: pnpm install --frozen-lockfile
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
+        with:
+          toolchain: "1.99.0"
+          components: clippy,rustfmt
+      - name: Native build prerequisites and ephemeral runner disk
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libssl-dev
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+          df -h .
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
+        with:
+          tool: mdbook@0.5.4
+      - name: Install actionlint 1.7.12
+        run: |
+          curl --fail --silent --show-error --location https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/actionlint.tar.gz
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum --check
+          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
+          sudo install -m 755 /tmp/actionlint /usr/local/bin/actionlint
+      - run: pnpm install --frozen-lockfile --ignore-pnpmfile
+      - name: Fetch locked Rust dependencies before offline checks
+        run: pnpm dev:cargo -- fetch --locked
+      - name: Select committed revision range
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CI_EVENT: ${{ github.event_name }}
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: node scripts/ci-range.mjs
+      - run: pnpm spec:check --base "$LAPIS_AI_CHECK_BASE" --head
+          "$LAPIS_AI_CHECK_HEAD"
       - run: pnpm check
       - run: pnpm test
       - run: pnpm build
-      - run: pnpm spec:check
-      - name: Rust client and permission boundary
+      - run: pnpm check:workflow
+      - run: pnpm package:check
+      - run: pnpm dev:cargo -- publish --workspace --exclude lapis-compute --locked --dry-run
+  native:
+    name: Native ${{ matrix.target }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+          - runner: macos-15
+            target: aarch64-apple-darwin
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.event.pull_request.head.sha || github.sha }}
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
+        with:
+          toolchain: "1.99.0"
+      - name: Native build prerequisites and ephemeral runner disk
+        if: runner.os == 'Linux'
         run: |
-          python3 scripts/client-acceptance.py --acp target/debug/lapis-acp --agent target/debug/lapis-agent --tools target/debug/lapis-agent-tools --client target/debug/examples/native-session --catalog-client target/debug/examples/agent-catalog --allow
-          python3 scripts/client-acceptance.py --acp target/debug/lapis-acp --agent target/debug/lapis-agent --tools target/debug/lapis-agent-tools --client target/debug/examples/native-session
-      - name: Cold native inference and approved tool edit
-        run: python3 scripts/local-compute.acceptance.py --compute target/debug/lapis-compute --root .local/ci-native --cold --acp target/debug/lapis-acp --agent target/debug/lapis-agent --tools target/debug/lapis-agent-tools
-      - name: Stage and verify the bundled native runtime
-        shell: bash
-        run: |
-          native_manifest=$(find .local/ci-native/native-runtime -name manifest.json -type f -print -quit)
-          test -n "$native_manifest"
-          pnpm package:stage -- --profile debug --destination dist/qualified --native-runtime "$(dirname "$native_manifest")"
-          python3 scripts/client-acceptance.py --acp dist/qualified/lapis-acp --agent dist/qualified/lapis-agent --tools dist/qualified/lapis-agent-tools --client target/debug/examples/native-session --bundle dist/qualified --catalog-client target/debug/examples/agent-catalog --allow
-          python3 scripts/local-compute.acceptance.py --compute dist/qualified/lapis-compute --root .local/ci-bundled --cold --native-runtime dist/qualified/native-runtime --acp dist/qualified/lapis-acp --agent dist/qualified/lapis-agent --tools dist/qualified/lapis-agent-tools
-          python3 scripts/compute-client-acceptance.py --client target/debug/examples/native-compute --compute dist/qualified/lapis-compute --native-runtime dist/qualified/native-runtime --root .local/ci-rust-client --bundle dist/qualified
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libssl-dev
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+          df -h .
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - run: pnpm install --frozen-lockfile --ignore-pnpmfile
+      - name: Require qualified ARM64 architecture
+        run: test "$(uname -m)" = arm64 || test "$(uname -m)" = aarch64
+      - run: pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked
+      - name: Cold inference, permissions, Rust clients and native bundle
+        run: bash scripts/native-qualification.sh debug

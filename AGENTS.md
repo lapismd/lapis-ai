@@ -22,4 +22,6 @@ Record native/model/platform gaps separately from deterministic fixture passes.
 ACP owns no network, identity, credentials or durability. Applications own trust,
 workspace admission, secrets, context and history. No uncertain prompt is replayed.
 Tauri is a documented future adapter; Node and Python are development tools only.
-Never publish, install services, mutate user caches, or update source repositories.
+Release automation follows `spec/src/current/contracts/release.md`. Never merge
+version PRs or publish packages/tags without the governing release authorization.
+Do not install services, mutate user caches, or update source repositories.

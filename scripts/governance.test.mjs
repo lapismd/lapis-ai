@@ -13,7 +13,7 @@ test("owned sources satisfy measured non-growing import limits", () =>
 test("Done milestones require complete dependencies and actual evidence", async () => {
   const { ledgerErrors } = await import("./progress.mjs");
   const rows = Array.from(
-    { length: 5 },
+    { length: 6 },
     (_, i) =>
       `| M${i} | ${i === 0 ? "Done" : "Planned"} | ${i === 0 ? "none" : `M${i - 1}`} | gate | pending | next |`,
   ).join("\n");

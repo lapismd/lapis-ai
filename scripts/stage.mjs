@@ -65,7 +65,7 @@ for (const name of binaries)
 await mkdir(temporary, { recursive: true, mode: 0o700 });
 const manifest = {
   version: 1,
-  package_version: "0.1.0",
+  package_version: JSON.parse(await readFile("package.json", "utf8")).version,
   target,
   binary: [],
   native_file: [],

@@ -8,8 +8,8 @@ export function ledgerErrors(source, readEvidence) {
     .filter((line) => /^\| M[0-9]/.test(line))
     .map((line) => line.split("|").map((s) => s.trim()));
   const statuses = new Map(rows.map((row) => [row[1], row[2]]));
-  if (rows.length !== 5 || statuses.size !== 5)
-    errors.push("Expected exactly five foundation milestones");
+  if (rows.length !== 6 || statuses.size !== 6)
+    errors.push("Expected exactly six governed milestones");
   for (const row of rows) {
     const [task, status, dependencies, , evidence] = row.slice(1);
     if (!["Planned", "In progress", "Done"].includes(status))

@@ -188,3 +188,7 @@ servers; only absolute executable paths are accepted, with bounded
 arguments/environment and no reserved harness identity names. Errors disclose
 stable codes, not file contents or credentials. ACP continues to own no tool
 policy, authentication, network or durable settings.
+
+Cargo publication metadata and coordinated versions follow the
+[release contract](../release.md). The ACP wire, catalog, session, task and
+permission contracts remain unchanged by release preparation.

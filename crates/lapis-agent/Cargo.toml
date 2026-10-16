@@ -1,12 +1,14 @@
 [package]
 name = "lapis-agent"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
-rust-version = "1.88.0"
+rust-version.workspace = true
 license = "Apache-2.0"
-publish = false
-repository = "https://github.com/block/buzz"
-description = "Minimal, unbreakable ACP-compliant agent. Non-streaming. Tool-calls-as-output."
+publish.workspace = true
+repository.workspace = true
+authors.workspace = true
+homepage.workspace = true
+description = "ACP coding agent with provider adapters, permission gates and MCP tools"
 readme = "README.md"
 keywords = ["acp", "agent", "llm", "mcp", "minimal"]
 categories = ["command-line-utilities", "web-programming"]
@@ -19,10 +21,10 @@ path = "src/lib.rs"
 name = "lapis-agent"
 path = "src/main.rs"
 
-# Test-only fake MCP server. Built unconditionally because cargo can't gate
-# bins on `cfg(test)`, but it's tiny and only used by integration tests.
+# Test-only helper; opt in with the test-support feature.
 [[bin]]
 name = "fake-mcp"
+required-features = ["test-support"]
 path = "tests/bin/fake_mcp.rs"
 
 # Test-only lock holder: a real second process that takes the coordinator's
@@ -31,6 +33,7 @@ path = "tests/bin/fake_mcp.rs"
 # handles. Tiny; only used by the databricks auth integration tests.
 [[bin]]
 name = "lock-holder"
+required-features = ["test-support"]
 path = "tests/bin/lock_holder.rs"
 
 # Test-only auth worker: a real second process that runs the PUBLIC auth
@@ -41,7 +44,9 @@ path = "tests/bin/lock_holder.rs"
 # the databricks auth integration tests.
 [[bin]]
 name = "auth-worker"
+required-features = ["test-support"]
 path = "tests/bin/auth_worker.rs"
+
 
 [dependencies]
 lapis-ai-config.workspace = true
@@ -49,7 +54,7 @@ tokio = { version = "1", features = ["rt-multi-thread", "macros", "io-std", "io-
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1" }
 serde_yaml = { version = "0.9" }
-reqwest = { version = "0.13", features = ["json", "rustls", "form"] }
+reqwest = { version = "0.13", features = ["json", "rustls", "form", "query"] }
 rmcp = { version = "1", default-features = false, features = ["client", "transport-child-process"] }
 arc-swap = "1"
 getrandom = "0.4"
@@ -96,4 +101,9 @@ path = "tests/owned_provider_catalog.rs"
 
 [[bin]]
 name = "lapis-agent-core-fixture"
+required-features = ["test-support"]
 path = "tests/bin/agent_core.rs"
+
+[features]
+default = []
+test-support = []

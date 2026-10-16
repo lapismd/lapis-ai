@@ -11,5 +11,13 @@
 | LAI-PACKAGE-002 | macOS ARM64 and Linux CPU acceptance MUST separately prove cold native inference and an approved ACP tool operation. Unavailable prerequisites MUST leave their gates pending.                                            |
 
 Initial inference remains non-streaming. No cross-application singleton, public
-discovery or automatic cloud fallback is introduced. No consumer migration or
-remote publication is included. The Cargo and native-runtime pins remain exact.
+discovery or automatic cloud fallback is introduced. Consumer migration remains separate. Hosting and release automation follow the
+[release contract](release.md). The Cargo and native-runtime pins remain exact.
+
+Cargo packages retain the agent capability manifest and normative corpus inside
+`crates/lapis-agent/data/`. Relocation changes no bytes, capability rules, provider
+behavior or wire contract (LAI-LOCAL-001); required package inputs travel together.
+
+The agent declares its Reqwest query feature explicitly so provider pagination
+compiles outside the workspace. This preserves the already qualified request
+behavior and removes an accidental dependency on compute feature unification.

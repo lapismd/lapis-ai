@@ -1,6 +1,6 @@
 //! Runtime model-capability interpreter.
 //!
-//! `scripts/model-capabilities.json` is the single source of truth for every
+//! `data/model-capabilities.json` is the single source of truth for every
 //! model's six-axis capability profile (thinking mode, supported efforts,
 //! default effort, Databricks v2 wire route, normalization policy, and picker
 //! label). It is embedded at compile time (`include_str!`), parsed once through
@@ -226,7 +226,7 @@ pub struct CapabilityResult {
     pub registry_label: Option<&'static str>,
 }
 
-const MANIFEST_JSON: &str = include_str!("../../../scripts/model-capabilities.json");
+const MANIFEST_JSON: &str = include_str!("../data/model-capabilities.json");
 
 static MANIFEST: OnceLock<Manifest> = OnceLock::new();
 
@@ -1730,7 +1730,7 @@ mod tests {
         Vector(VectorOut),
     }
 
-    const CORPUS_JSON: &str = include_str!("../../../scripts/normative-corpus.json");
+    const CORPUS_JSON: &str = include_str!("../data/normative-corpus.json");
 
     /// Render the corpus from [`INPUTS`] by running the production [`resolve`]
     /// over every query. Deterministic: fixed input order, struct-declaration
