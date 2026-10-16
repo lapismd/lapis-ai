@@ -21,3 +21,4 @@
 - [Foundation evidence](history/2026-10-16-foundation.md)
 - [Native and platform qualification](history/2026-10-16-qualification.md)
 - [Release setup evidence](history/2026-10-16-release-setup.md)
+- [Hosted release follow-up](history/2026-10-16-release-followup.md)

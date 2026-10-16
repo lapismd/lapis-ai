@@ -78,6 +78,7 @@ export async function prepareVersion(
     "prettier",
     "--write",
     "package.json",
+    "pnpm-lock.yaml",
     "README.md",
     "CHANGELOG.md",
     ...allCrates.map((name) => `${cratePath(name)}/README.md`),

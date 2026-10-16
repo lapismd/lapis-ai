@@ -41,3 +41,7 @@ This setup includes an initial patch note and deliberately leaves the generated
 version PR open. Native profile claims remain macOS ARM64 Metal and Linux ARM64
 CPU with glibc 2.38 or later. Public release claims require actual hosted gates;
 local historical qualification does not substitute for hosted results.
+
+Coordinated preparation includes formatting regenerated lockfiles. A disposable
+real version-preparation test checks the resulting pnpm lock against the normal
+formatter, in addition to synchronized versions and preserved canonical evidence.

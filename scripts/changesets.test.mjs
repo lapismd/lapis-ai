@@ -99,6 +99,10 @@ test("real Changesets prepare all eleven Cargo versions without editing canonica
   const result = await prepareVersion(root, (cmd, args) =>
     execFileSync(cmd, args, { cwd: root, stdio: "pipe" }),
   );
+  execFileSync("pnpm", ["exec", "prettier", "--check", "pnpm-lock.yaml"], {
+    cwd: root,
+    stdio: "pipe",
+  });
   assert.equal(result.version, next);
   assert.equal(checkRelease(root), next);
   assert.equal(json(root, "package.json").version, next);

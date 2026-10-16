@@ -23,3 +23,7 @@ same-change spec-first bookkeeping. Recognition validates bot identity, reserved
 branch, base main, repository and the exact checked/merged revision. Lookup errors
 fail closed. Canonical integrity, evidence integrity, tests, native acceptance,
 package checks and builds remain required; version preparation invents no evidence.
+
+Version preparation formats its regenerated pnpm lockfile before opening the
+version PR. A real preparation regression checks that output against the ordinary
+formatting gate; bot exceptions never suppress formatting (LAI-REL-003–004).
