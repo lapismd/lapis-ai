@@ -3091,6 +3091,7 @@ dependencies = [
  "lapis-acp-runner",
  "lapis-acp-testkit",
  "lapis-ai-config",
+ "lapis-ai-runtime",
  "serde",
  "serde_json",
  "tokio",

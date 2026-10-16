@@ -8,3 +8,14 @@
 | M3   | Done        | M2           | TOML, clients, isolation and Rust examples                             | [Foundation](../../history/2026-10-16-foundation.md)                       | Maintain direct client acceptance                          |
 | M4   | Done        | M3           | macOS ARM64 Metal, Linux aarch64 CPU, mixed-version and staged bundles | [Qualification](../../history/2026-10-16-qualification.md)                 | Qualify broader native and release profiles separately     |
 | M5   | In progress | M4           | Hosted CI, Changesets, Cargo release automation and spec Pages         | [Organization transfer](../../history/2026-10-16-organization-transfer.md) | Verify hosted product CI and retain version PR #1 unmerged |
+
+## Consumer-driven native adapter
+
+This work does not depend on or change M5 release authorization. Desktop M10.1
+uses local verified public outputs and remains incomplete until Tauri/native
+acceptance passes.
+
+| Slice           | Status  | Gate                                                                                        | Evidence                                                     | Next action                                       |
+| --------------- | ------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------- |
+| ACP session     | Done    | Correlation, exact permissions, ordered bounded reconnect, isolation and supervised cleanup | [Owned ACP session](../../history/2026-10-17-acp-session.md) | Complete; continue to host-scoped Tauri transport |
+| Tauri transport | Planned | Host-scoped commands/channels, permissions, renderer client and cold native acceptance      | pending                                                      | Build on the verified session layer               |

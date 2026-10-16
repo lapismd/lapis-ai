@@ -144,30 +144,35 @@ impl NativeProcess {
     }
     pub async fn shutdown(&mut self, grace: Duration) -> Result<()> {
         self.sender.close().await;
-        if let Some(mut child) = self.child.take() {
+        if let Some(child) = self.child.as_mut() {
             let pid = child.id();
             if let Ok(status) = tokio::time::timeout(grace, child.wait()).await {
-                signal_group(pid, true);
+                // The leader has been reaped: its PID can now be recycled.
+                // Never signal its former process group after this point.
+                let status = status.map_err(|_| Error("helper_reap_failed"))?;
+                self.child = None;
                 self.reader.abort();
-                return if status.map_err(|_| Error("helper_reap_failed"))?.success() {
+                return if status.success() {
                     Ok(())
                 } else {
                     Err(Error("helper_failed"))
                 };
             }
             signal_group(pid, false);
-            if tokio::time::timeout(Duration::from_secs(2), child.wait())
-                .await
-                .is_err()
-            {
-                signal_group(pid, true);
-                let _ = child.start_kill();
+            if let Ok(status) = tokio::time::timeout(Duration::from_secs(2), child.wait()).await {
+                status.map_err(|_| Error("helper_reap_failed"))?;
+                self.child = None;
+                self.reader.abort();
+                return Ok(());
             }
+            signal_group(pid, true);
+            let _ = child.start_kill();
             let result = tokio::time::timeout(Duration::from_secs(5), child.wait())
                 .await
                 .map_err(|_| Error("helper_reap_failed"))?;
             self.reader.abort();
             result.map_err(|_| Error("helper_reap_failed"))?;
+            self.child = None;
         }
         Ok(())
     }

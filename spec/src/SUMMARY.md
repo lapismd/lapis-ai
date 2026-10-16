@@ -23,3 +23,4 @@
 - [Release setup evidence](history/2026-10-16-release-setup.md)
 - [Hosted release follow-up](history/2026-10-16-release-followup.md)
 - [Organization transfer evidence](history/2026-10-16-organization-transfer.md)
+- [Owned ACP session evidence](history/2026-10-17-acp-session.md)

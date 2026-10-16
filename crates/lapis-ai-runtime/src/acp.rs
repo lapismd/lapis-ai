@@ -95,26 +95,53 @@ impl AcpCommands {
     }
 }
 pub struct AcpClient {
-    process: NativeProcess,
+    // Taken only by Drop, so all callable methods retain a process owner.
+    process: Option<NativeProcess>,
 }
 impl AcpClient {
     pub async fn start(config: &Config, resolver: &dyn Resolver) -> Result<Self> {
-        let mut plan = PreparedLaunch::new(config, Component::Acp, resolver)?;
+        Self::start_prepared(PreparedLaunch::new(config, Component::Acp, resolver)?).await
+    }
+    /// Rust host-only launch after admission and native credential resolution.
+    pub async fn start_prepared(mut plan: PreparedLaunch) -> Result<Self> {
         plan.arguments = vec!["serve".into(), "--control-version".into(), "3".into()];
-        let mut process = NativeProcess::spawn(plan).await?;
-        let ready = process.next(Duration::from_secs(15)).await?;
+        let mut client = Self {
+            process: Some(NativeProcess::spawn(plan).await?),
+        };
+        let ready = client.next(Duration::from_secs(15)).await?;
         if ready["type"] != "ready" || ready["version"] != 3 {
             return Err(Error("invalid_acp_readiness"));
         }
-        Ok(Self { process })
+        Ok(client)
     }
     pub fn commands(&self) -> AcpCommands {
-        AcpCommands(self.process.sender())
+        AcpCommands(self.process.as_ref().expect("owned until drop").sender())
     }
     pub async fn next(&mut self, timeout: Duration) -> Result<Value> {
-        self.process.next(timeout).await
+        self.process
+            .as_mut()
+            .ok_or(Error("session_closed"))?
+            .next(timeout)
+            .await
     }
     pub async fn shutdown(&mut self) -> Result<()> {
-        self.process.shutdown(Duration::from_secs(5)).await
+        self.process
+            .as_mut()
+            .ok_or(Error("session_closed"))?
+            .shutdown(Duration::from_secs(5))
+            .await
+    }
+}
+impl Drop for AcpClient {
+    fn drop(&mut self) {
+        if let Some(mut process) = self.process.take()
+            && let Ok(runtime) = tokio::runtime::Handle::try_current()
+        {
+            // Closing control stdin lets lapis-acp cancel and reap its separately
+            // grouped provider. Killing only the harness would orphan that group.
+            runtime.spawn(async move {
+                let _ = process.shutdown(Duration::from_secs(5)).await;
+            });
+        }
     }
 }

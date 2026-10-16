@@ -80,6 +80,8 @@
 | LAI-SEC-006     | Implemented | [Foundation](../history/2026-10-16-foundation.md)          |
 | LAI-SEC-007     | Implemented | [Foundation](../history/2026-10-16-foundation.md)          |
 | LAI-TAURI-001   | Implemented | [Foundation](../history/2026-10-16-foundation.md)          |
+| LAI-TAURI-002   | Implemented | [Owned ACP session](../history/2026-10-17-acp-session.md)  |
+| LAI-TAURI-003   | Implemented | [Owned ACP session](../history/2026-10-17-acp-session.md)  |
 | LAI-REL-001     | Implemented | [Release setup](../history/2026-10-16-release-setup.md)    |
 | LAI-REL-002     | Planned     | [Release setup](../history/2026-10-16-release-setup.md)    |
 | LAI-REL-003     | Implemented | [Release setup](../history/2026-10-16-release-setup.md)    |

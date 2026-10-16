@@ -19,3 +19,15 @@ rather than retain a literal source-baseline version.
 
 Crate documentation and publication metadata follow `lapismd/lapis-ai` after
 the ownership transfer. Runtime, configuration and bundle semantics are unchanged.
+
+The owned ACP session adapter adds typed correlation and bounded reconnect state
+above the raw client (LAI-RUNTIME-001–002); it does not change control-v3 or add
+conversation policy. Rust hosts may start an ACP client with a `PreparedLaunch`
+after native credential resolution; the client fixes its control-version argv.
+The [adapter contract](tauri.md) governs this additional lifecycle boundary.
+
+ACP client drop defers supervised stdin closure and reap to the owning Tokio
+runtime. Cancelling startup must let the control helper retire its separately
+grouped provider rather than killing the helper first. Process shutdown retains
+the child owner across await points and never signals a process-group identifier
+after its leader has been reaped (LAI-RUNTIME-001).

@@ -1,5 +1,9 @@
 # CLI and exit codes
 
+The owned-session consumer regression drives the compiled control-v3 binary
+through `lapis-ai-runtime`. This adds test-only composition and confirms the
+unchanged LAI-CLI-008 boundary; runtime adapters do not enter CLI production code.
+
 The `lapis-acp` binary is the only executable in this repository. It composes the
 crates and owns nothing else: argument parsing, launch configuration assembly,
 signal handling and the process exit code.

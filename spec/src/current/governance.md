@@ -31,3 +31,10 @@ formatting gate; bot exceptions never suppress formatting (LAI-REL-003–004).
 The canonical release identity is `lapismd/lapis-ai`; automation refuses other
 owners. Historical hosting evidence retains original URLs and is supplemented
 with transfer evidence rather than rewritten.
+
+The consumer-driven ACP adapter uses the existing runtime crate and a test-only
+CLI-to-runtime dependency. Workspace versions, release authorization, dependency
+boundaries and the six foundation/release milestones remain unchanged. Its
+additional source-slice ledger distinguishes Rust qualification from Tauri IPC
+and packaged consumer acceptance; a Changeset records the public API addition
+without preparing or publishing a release.
