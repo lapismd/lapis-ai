@@ -1,0 +1,5 @@
+[book]
+src = "src"
+title = "Lapis AI specification"
+[build]
+build-dir = "book"

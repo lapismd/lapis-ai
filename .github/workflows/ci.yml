@@ -1,0 +1,49 @@
+name: Qualify Lapis AI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04-arm, macos-15]
+    runs-on: ${{ matrix.os }}
+    env:
+      CARGO_BUILD_JOBS: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Native build prerequisites
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y pkg-config libssl-dev
+      - name: Require the qualified architecture
+        run: test "$(uname -m)" = arm64 || test "$(uname -m)" = aarch64
+      - run: rustup show
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm spec:check
+      - name: Rust client and permission boundary
+        run: |
+          python3 scripts/client-acceptance.py --acp target/debug/lapis-acp --agent target/debug/lapis-agent --tools target/debug/lapis-agent-tools --client target/debug/examples/native-session --catalog-client target/debug/examples/agent-catalog --allow
+          python3 scripts/client-acceptance.py --acp target/debug/lapis-acp --agent target/debug/lapis-agent --tools target/debug/lapis-agent-tools --client target/debug/examples/native-session
+      - name: Cold native inference and approved tool edit
+        run: python3 scripts/local-compute.acceptance.py --compute target/debug/lapis-compute --root .local/ci-native --cold --acp target/debug/lapis-acp --agent target/debug/lapis-agent --tools target/debug/lapis-agent-tools
+      - name: Stage and verify the bundled native runtime
+        shell: bash
+        run: |
+          native_manifest=$(find .local/ci-native/native-runtime -name manifest.json -type f -print -quit)
+          test -n "$native_manifest"
+          pnpm package:stage -- --profile debug --destination dist/qualified --native-runtime "$(dirname "$native_manifest")"
+          python3 scripts/client-acceptance.py --acp dist/qualified/lapis-acp --agent dist/qualified/lapis-agent --tools dist/qualified/lapis-agent-tools --client target/debug/examples/native-session --bundle dist/qualified --catalog-client target/debug/examples/agent-catalog --allow
+          python3 scripts/local-compute.acceptance.py --compute dist/qualified/lapis-compute --root .local/ci-bundled --cold --native-runtime dist/qualified/native-runtime --acp dist/qualified/lapis-acp --agent dist/qualified/lapis-agent --tools dist/qualified/lapis-agent-tools
+          python3 scripts/compute-client-acceptance.py --client target/debug/examples/native-compute --compute dist/qualified/lapis-compute --native-runtime dist/qualified/native-runtime --root .local/ci-rust-client --bundle dist/qualified

@@ -1,0 +1,10 @@
+/target/
+/node_modules/
+/.local/
+/dist/
+/spec/book/
+.env
+.env.*
+*.key
+*.pem
+.DS_Store

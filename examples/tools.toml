@@ -1,0 +1,5 @@
+[[tools]]
+name = "workspace"
+command = "../target/debug/lapis-agent-tools"
+args = []
+env = []

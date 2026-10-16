@@ -1,0 +1,1327 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "LICENSE.md",
+      "destination": "LICENSE.md",
+      "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/Cargo.toml",
+      "destination": "crates/lapis-acp-agent/Cargo.toml",
+      "sha256": "37cc9027681560d95151d0cb669bab8bfd43e92a985b4d6d929b15bc5f5389ba"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/LICENSE.md",
+      "destination": "crates/lapis-acp-agent/LICENSE.md",
+      "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/NOTICE.md",
+      "destination": "crates/lapis-acp-agent/NOTICE.md",
+      "sha256": "953c281f7080c232c355d6a18f154a292119460f502d5d2896bfff93aa9d4838"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/README.md",
+      "destination": "crates/lapis-acp-agent/README.md",
+      "sha256": "d01d9a396508bf6985db552d72d6064aca2ff03db9f5b1088ff7aa792d44da6f"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/src/availability.rs",
+      "destination": "crates/lapis-acp-agent/src/availability.rs",
+      "sha256": "9b9a4cbf50c6cc4074dffa579e6261d83e6c7fb8117eec01e6ad77994eb5e36d"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/src/catalog.rs",
+      "destination": "crates/lapis-acp-agent/src/catalog.rs",
+      "sha256": "49afc0d6f938c8c1847add953999ed401444086a4c291deaa66a310658d9277e"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/src/config.rs",
+      "destination": "crates/lapis-acp-agent/src/config.rs",
+      "sha256": "182d36347a67b4467366b5cb57489e319e35fea5308fbd29553e6b12166a380d"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/src/defaults.rs",
+      "destination": "crates/lapis-acp-agent/src/defaults.rs",
+      "sha256": "c26708293d5874d8b3e46316b4187fe5eb59c17ebc25feecfb9edfac4ebf8ab6"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/src/definition.rs",
+      "destination": "crates/lapis-acp-agent/src/definition.rs",
+      "sha256": "d121f34da18409fb4eafa332daf6b82f3178cf4e2e6879c50cc36fc23299f305"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/src/environment.rs",
+      "destination": "crates/lapis-acp-agent/src/environment.rs",
+      "sha256": "99f589e9d750ee6202bedd3912dfb0e122bcace4be492299c4c9bc69b9b55991"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/src/error.rs",
+      "destination": "crates/lapis-acp-agent/src/error.rs",
+      "sha256": "8db1b69a7b2ff075564b292d01706cbd8034f038e98b7c36ac41fe0fbcebad5d"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/src/lib.rs",
+      "destination": "crates/lapis-acp-agent/src/lib.rs",
+      "sha256": "04098f2df6d0d1dfdf387aee2622d890628768305973cd6dc92771ccc038ca92"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-agent/tests/catalog.rs",
+      "destination": "crates/lapis-acp-agent/tests/catalog.rs",
+      "sha256": "7d1949968ddef5ffeefe575ae1b3eba1db1817de16c6c7ca1a365aed104b2a38"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/Cargo.toml",
+      "destination": "crates/lapis-acp-cli/Cargo.toml",
+      "sha256": "2e246c92ab07382e4fc89d92f237697ee8998282c4b27d9c9c73c55acaecd709"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/LICENSE.md",
+      "destination": "crates/lapis-acp-cli/LICENSE.md",
+      "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/NOTICE.md",
+      "destination": "crates/lapis-acp-cli/NOTICE.md",
+      "sha256": "953c281f7080c232c355d6a18f154a292119460f502d5d2896bfff93aa9d4838"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/README.md",
+      "destination": "crates/lapis-acp-cli/README.md",
+      "sha256": "c90815b327fa824507c1db71ff22f703b5f0251ac175b5a2ad57f5202a82325d"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/agents.rs",
+      "destination": "crates/lapis-acp-cli/src/agents.rs",
+      "sha256": "ae7ca0a9292d0fe8584520d8d4d0c6880149a72f02f78095a6e67f79038a8770"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/args.rs",
+      "destination": "crates/lapis-acp-cli/src/args.rs",
+      "sha256": "604aa03e4d30854481b5f3f0dc3b6d07bacda3bb2317cb3beab3f915ef755325"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/argument_values.rs",
+      "destination": "crates/lapis-acp-cli/src/argument_values.rs",
+      "sha256": "ac9bd9d709e7d045d97060a2c6670da738c20037b8a8e1dfe271674d6d1a746a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/control_version.rs",
+      "destination": "crates/lapis-acp-cli/src/control_version.rs",
+      "sha256": "48fd6681600250cb86db3a512b35931901e7b5832b735a9ed730213dccb72193"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/lib.rs",
+      "destination": "crates/lapis-acp-cli/src/lib.rs",
+      "sha256": "87ebfa1ab637eda7f29d0415674bc8fa868781694461383bf9eae09a621e266b"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/main.rs",
+      "destination": "crates/lapis-acp-cli/src/main.rs",
+      "sha256": "1e259d0c4406635d68999db325feaaba3a39a63f4f003c2e9e1fed77c716cc9f"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/run_task.rs",
+      "destination": "crates/lapis-acp-cli/src/run_task.rs",
+      "sha256": "248bc7f894b8e0be9333123b4030f6fbfb9bdcc5e0e320a2389ffd4a0c688667"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/serve.rs",
+      "destination": "crates/lapis-acp-cli/src/serve.rs",
+      "sha256": "dcecd2aa678093ac560f090c22496cef4f7e9cde23024f043d364ccfc1379594"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/signals.rs",
+      "destination": "crates/lapis-acp-cli/src/signals.rs",
+      "sha256": "4940604b06a3301e3a0249d86699dc746cbc7172761850987b620856276bcdd1"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/tools/tests.rs",
+      "destination": "crates/lapis-acp-cli/src/tools/tests.rs",
+      "sha256": "4364e176b0c0dbc4b41d7108cfceefdb45f48b8211fd2d919e983433b537f41c"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/src/tools.rs",
+      "destination": "crates/lapis-acp-cli/src/tools.rs",
+      "sha256": "94f922f1569356fe1367ebce95f2c7b18030105af14535b8df3e6b1c3c226bd6"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/args.rs",
+      "destination": "crates/lapis-acp-cli/tests/args.rs",
+      "sha256": "40af1cc3c810128b5c6b9e4243ae229c22c540fe65a01405f0f797d1cfbc303f"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/cleanup.rs",
+      "destination": "crates/lapis-acp-cli/tests/cleanup.rs",
+      "sha256": "71ac193b9e0282e94165a9c6156a218f4238eb294de01c1d4d29daa904fe07bf"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/common/mod.rs",
+      "destination": "crates/lapis-acp-cli/tests/common/mod.rs",
+      "sha256": "321f9d0ddfb4f6b52c89288a0b882cfc433f92e0ea356d6b161bfc3694fd126d"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/configuration.rs",
+      "destination": "crates/lapis-acp-cli/tests/configuration.rs",
+      "sha256": "81041d646f689cb4dc5f2349a66effb1ef4a61a208b9ad90150053e8f1d4d1dd"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/fleet.rs",
+      "destination": "crates/lapis-acp-cli/tests/fleet.rs",
+      "sha256": "35ad3d8e594bf3f0c4526f37d7c0c1a90307336c4fbc3f7a0622a2ea689c4cba"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/interactive.rs",
+      "destination": "crates/lapis-acp-cli/tests/interactive.rs",
+      "sha256": "84efcd8897c4e54714c7bb1bf4443026799010ed93f0cdbb404b3076f10efaa9"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/run_task.rs",
+      "destination": "crates/lapis-acp-cli/tests/run_task.rs",
+      "sha256": "107971c4568096716287fe1a1622c92ef953cd13576947fadd3c747d6eef03ae"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/scratch.rs",
+      "destination": "crates/lapis-acp-cli/tests/scratch.rs",
+      "sha256": "7d7782f16038e9be15ad8bd0aff5dac54c06e5598779da9ad0f74e1a837d637c"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/serve.rs",
+      "destination": "crates/lapis-acp-cli/tests/serve.rs",
+      "sha256": "42e8d8e336c5508aa46358a5e6fc4542ed5143ec13c3de2cc1418785f6c0405c"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/signals.rs",
+      "destination": "crates/lapis-acp-cli/tests/signals.rs",
+      "sha256": "21a40123102ddf6b3bef5dd7b1072e093b448ba93df244e13e5265747f367c9c"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-cli/tests/stdio_contract.rs",
+      "destination": "crates/lapis-acp-cli/tests/stdio_contract.rs",
+      "sha256": "45b28ec8d46e2bd2239d6d6ff1726be4b0152edc218482f320faeb89e358c27a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/Cargo.toml",
+      "destination": "crates/lapis-acp-control/Cargo.toml",
+      "sha256": "e080fca6a90066926d8c020532d3462bd45144c36a46109f483fbf65d0cfda28"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/LICENSE.md",
+      "destination": "crates/lapis-acp-control/LICENSE.md",
+      "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/NOTICE.md",
+      "destination": "crates/lapis-acp-control/NOTICE.md",
+      "sha256": "953c281f7080c232c355d6a18f154a292119460f502d5d2896bfff93aa9d4838"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/README.md",
+      "destination": "crates/lapis-acp-control/README.md",
+      "sha256": "e2654e236b8df14ef0500b5ed227071bc73bb460d8dd123c6806ccaeca706ef0"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/fleet.rs",
+      "destination": "crates/lapis-acp-control/src/fleet.rs",
+      "sha256": "db7fa5cdba9b07781b4f5f9dd653978c768a8f43c652c877e912a59559efe683"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/fleet_wire.rs",
+      "destination": "crates/lapis-acp-control/src/fleet_wire.rs",
+      "sha256": "3e827985c1dd512c49d9e214268eca16a1689efae7e0bd3a648b039e71862162"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/fleet_worker.rs",
+      "destination": "crates/lapis-acp-control/src/fleet_worker.rs",
+      "sha256": "b274c91959fe33490b1a9dd7b57b411bacdf0bd7df10cabf69193d8ef439c4aa"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/input.rs",
+      "destination": "crates/lapis-acp-control/src/input.rs",
+      "sha256": "d15c4b2bfa8f0c92bdc09c244df4fe3e6be6dca4edd94cf322dc16c74225cebb"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/interactive.rs",
+      "destination": "crates/lapis-acp-control/src/interactive.rs",
+      "sha256": "d02fca148c50834ccc4ebd4c1bd4cc7bf7f7439c559f47516bf936ba7d5ca617"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/interactive_handler.rs",
+      "destination": "crates/lapis-acp-control/src/interactive_handler.rs",
+      "sha256": "bfe70fda9383a36f631e35783ad71299d3ad71e932ab11277bb21550664f0d60"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/interactive_session.rs",
+      "destination": "crates/lapis-acp-control/src/interactive_session.rs",
+      "sha256": "297250cd054ef7fc0134d92ef2598a35710cf57a49fc98028324a8618e07807d"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/interactive_wire.rs",
+      "destination": "crates/lapis-acp-control/src/interactive_wire.rs",
+      "sha256": "dd4521c58090058b1092075a989643daf1944df734ade6ac2559610f6632efe6"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/interactive_worker.rs",
+      "destination": "crates/lapis-acp-control/src/interactive_worker.rs",
+      "sha256": "61e240b521dccdebfe12370f9263ccd24a2c4e1625d3cdb0c5ae5e989b6ac8ed"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/invocation.rs",
+      "destination": "crates/lapis-acp-control/src/invocation.rs",
+      "sha256": "2d4454d9c1c55c0bb86b68b4f4e29887d1029b13e7e837b724fd2fc1f2fddb78"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/lib.rs",
+      "destination": "crates/lapis-acp-control/src/lib.rs",
+      "sha256": "a85b0bd348e5450df25dc0ea3a38b74d3a7b1adb944d356ea057dc8c36d433e4"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/protocol.rs",
+      "destination": "crates/lapis-acp-control/src/protocol.rs",
+      "sha256": "8f99232da43da1e1b275a52ed928608c9ffb6bf41e8eda9e61902479b820e092"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/record.rs",
+      "destination": "crates/lapis-acp-control/src/record.rs",
+      "sha256": "208f3c3986746568e009652e14c8cd5419370a53b16212043f29f211081b6fb0"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/scheduler.rs",
+      "destination": "crates/lapis-acp-control/src/scheduler.rs",
+      "sha256": "56ff1289775b61c0e18685c7d96aee090583d25f8f4fb04c684fdefebd339662"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/serve.rs",
+      "destination": "crates/lapis-acp-control/src/serve.rs",
+      "sha256": "5de50e5ccb88aa70552b563fb8e9fd28afdf27537a04f36ac1b16d4ae85dc865"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/task.rs",
+      "destination": "crates/lapis-acp-control/src/task.rs",
+      "sha256": "e24017cb3a207d5117a72bd3a254bfebaa602777cb26471d0d09411b7aa5fa02"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/transport.rs",
+      "destination": "crates/lapis-acp-control/src/transport.rs",
+      "sha256": "ca1e1363ea256d6e4ee4900a1e9bd7d960290d51e00c5f993203c7102f504782"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/src/warm_worker.rs",
+      "destination": "crates/lapis-acp-control/src/warm_worker.rs",
+      "sha256": "f0547183f45cddae2eab1a6e135bcf3020123a26ce68cadc2005b633de30c645"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/tests/interactive_overflow.rs",
+      "destination": "crates/lapis-acp-control/tests/interactive_overflow.rs",
+      "sha256": "56bcefb4c7de44a813f4d1deb266a2a1e61c8a1fb0f07e8e9cbfb72f345cc93f"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/tests/interactive_wire.rs",
+      "destination": "crates/lapis-acp-control/tests/interactive_wire.rs",
+      "sha256": "68d8f1d70b9fbc5d75b2aae5fd878a4acb2a1834881d4035734770743b3e804f"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-control/tests/serve.rs",
+      "destination": "crates/lapis-acp-control/tests/serve.rs",
+      "sha256": "5aca37742337b79b8542fed5a1b9bce3e292d4c426fdd84e92ccfa6d192f78f7"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/Cargo.toml",
+      "destination": "crates/lapis-acp-protocol/Cargo.toml",
+      "sha256": "08dae77449a3e5478585cd37772fe5ff162b24ea8be4ac840ea8497d08f8c6e2"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/LICENSE.md",
+      "destination": "crates/lapis-acp-protocol/LICENSE.md",
+      "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/NOTICE.md",
+      "destination": "crates/lapis-acp-protocol/NOTICE.md",
+      "sha256": "953c281f7080c232c355d6a18f154a292119460f502d5d2896bfff93aa9d4838"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/README.md",
+      "destination": "crates/lapis-acp-protocol/README.md",
+      "sha256": "7f704e1900f039b2738bcbb587ba04d20f32bb45892774f03b4fa7c160dbec10"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/budget.rs",
+      "destination": "crates/lapis-acp-protocol/src/budget.rs",
+      "sha256": "72fb78a24f119103583bab0e4988c44a3f8b8a86b15939971c11d3f318976671"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/client.rs",
+      "destination": "crates/lapis-acp-protocol/src/client.rs",
+      "sha256": "61ba4a5798bab9da505b9b9208aa70a7eefc3c45db25c4c7c5f6d21e7b82730c"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/config_option.rs",
+      "destination": "crates/lapis-acp-protocol/src/config_option.rs",
+      "sha256": "98c50e8ca883c979772321ffee1ebb0d8b8e55c27c718c07da251921b42f882f"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/content.rs",
+      "destination": "crates/lapis-acp-protocol/src/content.rs",
+      "sha256": "7dc469bb5945e58e2ffcfc0fe2b9faa1e559889ed6a5c794979f33009b50cefb"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/envelope.rs",
+      "destination": "crates/lapis-acp-protocol/src/envelope.rs",
+      "sha256": "ffc4876340c90e8b00abfbc068c539b488832671f522dd9fac216c553bb033ab"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/error.rs",
+      "destination": "crates/lapis-acp-protocol/src/error.rs",
+      "sha256": "dd97180cad0e2c9cb1152ca61aa06842ed2907db85721d26ee75ce380113064a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/frame.rs",
+      "destination": "crates/lapis-acp-protocol/src/frame.rs",
+      "sha256": "b5cf90663cf9fe5539a8989135e7eb95d6cc4d83e07e248a8be78855b9515040"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/handler.rs",
+      "destination": "crates/lapis-acp-protocol/src/handler.rs",
+      "sha256": "a45a7614218b4e9617199a9db63141bac956c16071cc499b6c9139e819326b86"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/initialize.rs",
+      "destination": "crates/lapis-acp-protocol/src/initialize.rs",
+      "sha256": "1c8843c8848fff84feabf7a8988f42302f40f0655b15c03afe7ee324da62684c"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/lib.rs",
+      "destination": "crates/lapis-acp-protocol/src/lib.rs",
+      "sha256": "f758987010fff0d5d0d413c7d33417f49af72f8fab57a9e00802dc8262177cab"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/permission.rs",
+      "destination": "crates/lapis-acp-protocol/src/permission.rs",
+      "sha256": "695a0ed2a0287749e2d778a9302fa0b3bdc847667830d57df2978bc563bc7d27"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/session.rs",
+      "destination": "crates/lapis-acp-protocol/src/session.rs",
+      "sha256": "f77442fca7fbadc223ee361760311670d9f869a974322bee4c1cf5ed6768475c"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/stop_reason.rs",
+      "destination": "crates/lapis-acp-protocol/src/stop_reason.rs",
+      "sha256": "fa0abe983d37586eddcefdf7b13ec69ce993b6edcdade5273d79d1ab2d1eb2bc"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/thinking.rs",
+      "destination": "crates/lapis-acp-protocol/src/thinking.rs",
+      "sha256": "46bde36cd79fc6fbd0caa015abbfee5a76c5eed38bc52300ff7de8b76c92f82e"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/src/update.rs",
+      "destination": "crates/lapis-acp-protocol/src/update.rs",
+      "sha256": "b9f181ea10350e3dcfa0889c1cee687e77d5a7e28827f49ec3c5e9e1fcc46fcb"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/tests/bounds.rs",
+      "destination": "crates/lapis-acp-protocol/tests/bounds.rs",
+      "sha256": "acd90cc25593f585bf65ddfb54ad9eef58335fabea7aa3f68fa0e21e86e5acf2"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/tests/common/mod.rs",
+      "destination": "crates/lapis-acp-protocol/tests/common/mod.rs",
+      "sha256": "2321c7322fc9ce7931f840467c34715504e4ad6bf230286b2db3b917f789e5e6"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/tests/fixtures/codex-acp-session.json",
+      "destination": "crates/lapis-acp-protocol/tests/fixtures/codex-acp-session.json",
+      "sha256": "000a6e60db452e24ff9a6d84df5a93409e772b3dadb157e8391d88a85c5c48e3"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/tests/fixtures/cursor-acp-session.json",
+      "destination": "crates/lapis-acp-protocol/tests/fixtures/cursor-acp-session.json",
+      "sha256": "f9a991c5e015c762e397d4dcce8db4058a3a2a776d0ca0b4ad7a13d419ea86c0"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/tests/inbound.rs",
+      "destination": "crates/lapis-acp-protocol/tests/inbound.rs",
+      "sha256": "ffb9b828272d303b88aa46cdb28beff89583e1da651ac08a4b064f48346481cc"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/tests/payload.rs",
+      "destination": "crates/lapis-acp-protocol/tests/payload.rs",
+      "sha256": "eace923ced943570ebc259e00f06c6897b428d22bec049988cb29f09aba9c0c9"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/tests/real_adapter.rs",
+      "destination": "crates/lapis-acp-protocol/tests/real_adapter.rs",
+      "sha256": "81eb8d501aa89eb9ad1875391e246b2c4694530a24e005a6c2e56ec658a1b75a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/tests/session_config.rs",
+      "destination": "crates/lapis-acp-protocol/tests/session_config.rs",
+      "sha256": "d91307c33916fd8707afaec47b55fefaf92ad413761e5d9d190dc315f9c56864"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-protocol/tests/wire.rs",
+      "destination": "crates/lapis-acp-protocol/tests/wire.rs",
+      "sha256": "0f2ba880cd7eb89c73ad64234d16c75125e3424a976e2780d978fc408e67f020"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/Cargo.toml",
+      "destination": "crates/lapis-acp-runner/Cargo.toml",
+      "sha256": "fb659ce0bc0848b5cc7e7cc28fb23198b6958b3eb2da1a7801ddb758e3b98f67"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/LICENSE.md",
+      "destination": "crates/lapis-acp-runner/LICENSE.md",
+      "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/NOTICE.md",
+      "destination": "crates/lapis-acp-runner/NOTICE.md",
+      "sha256": "953c281f7080c232c355d6a18f154a292119460f502d5d2896bfff93aa9d4838"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/README.md",
+      "destination": "crates/lapis-acp-runner/README.md",
+      "sha256": "dedfcabfed73c0b08d74000777edc620e97dd4b0b412210b9e273383a58a728e"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/src/configuration.rs",
+      "destination": "crates/lapis-acp-runner/src/configuration.rs",
+      "sha256": "964dc20ebb89e5e3ac5b11fdbd7321bafbeb8cb3ef6fb44ede0d9ab5dabd40e7"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/src/launch.rs",
+      "destination": "crates/lapis-acp-runner/src/launch.rs",
+      "sha256": "8a97f7d2a02cb2bc5541858ab1500e69abb840ebe2372af97ed39f2328449898"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/src/lib.rs",
+      "destination": "crates/lapis-acp-runner/src/lib.rs",
+      "sha256": "a3294b5869b6fc06d7abd5bc297541e5929c28874a3d83268c175d1ac6f8a6dd"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/src/outcome.rs",
+      "destination": "crates/lapis-acp-runner/src/outcome.rs",
+      "sha256": "eab4a44fa1ffca2d4ccc2d9bf14c8b6482df9aa1b178cbe8ee6381e673fc9af8"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/src/persistent.rs",
+      "destination": "crates/lapis-acp-runner/src/persistent.rs",
+      "sha256": "80fae345d52696d8a62a12edf73ade2e8c0f12728058844b59a6a341239347e2"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/src/process.rs",
+      "destination": "crates/lapis-acp-runner/src/process.rs",
+      "sha256": "111223a9cd534eccfe1b7a4dc2a79630ea816e7338605d411c1969ab25e8a475"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-runner/src/turn.rs",
+      "destination": "crates/lapis-acp-runner/src/turn.rs",
+      "sha256": "4b1718c1937caa24aa30da77631c2002b7621afa7e7afa0f48b2378251108f3a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/Cargo.toml",
+      "destination": "crates/lapis-acp-testkit/Cargo.toml",
+      "sha256": "14e7d652012e0124aec1edc9ffeea1c4afd970a92f50085e4aa593469bddff96"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/LICENSE.md",
+      "destination": "crates/lapis-acp-testkit/LICENSE.md",
+      "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/NOTICE.md",
+      "destination": "crates/lapis-acp-testkit/NOTICE.md",
+      "sha256": "953c281f7080c232c355d6a18f154a292119460f502d5d2896bfff93aa9d4838"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/README.md",
+      "destination": "crates/lapis-acp-testkit/README.md",
+      "sha256": "7e1dead7ccdf24d96743c3541a3bf125771ed420d749a5f7e309620d5ff44e40"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/src/fixture.rs",
+      "destination": "crates/lapis-acp-testkit/src/fixture.rs",
+      "sha256": "5df0a2f9ffe27aed6d5da59c0839121cd0068720368e6a81fec36bda6fe34ee1"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/src/lib.rs",
+      "destination": "crates/lapis-acp-testkit/src/lib.rs",
+      "sha256": "1b0dbc0f6706b8c39ad7129785e51d4e95a9220b6343e408a095df3e10cfaa52"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/src/log.rs",
+      "destination": "crates/lapis-acp-testkit/src/log.rs",
+      "sha256": "475d02dd9e3099fb1b60e8a9512554cf618e7c8063a49f0422e16b1d3ba8252c"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/tests/fixture.rs",
+      "destination": "crates/lapis-acp-testkit/tests/fixture.rs",
+      "sha256": "32f32ed8db9e067e19e120a4ec92db01f4980a34d032690dc697a871a202f195"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/tests/fixtures/fixture_agent.py",
+      "destination": "crates/lapis-acp-testkit/tests/fixtures/fixture_agent.py",
+      "sha256": "23cc4e4e24b7193a4496fba35e00da627cac1dd287818a1711c42bb9c980cbc6"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/tests/fixtures/fleet_agent.py",
+      "destination": "crates/lapis-acp-testkit/tests/fixtures/fleet_agent.py",
+      "sha256": "4bfdb9ba05ffa5eeb8b3d305334cea4625ac40a421d29f15e1d0df05b777f0d5"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "crates/jj-acp-testkit/tests/fixtures/interactive_agent.py",
+      "destination": "crates/lapis-acp-testkit/tests/fixtures/interactive_agent.py",
+      "sha256": "6a8446deead3bcab6ee143366a924d50dd70875f9491a168517c9a553a4d0b69"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "docs/licenses/NOTICE.md",
+      "destination": "docs/licenses/NOTICE.md",
+      "sha256": "953c281f7080c232c355d6a18f154a292119460f502d5d2896bfff93aa9d4838"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "docs/upstream/disposition.json",
+      "destination": "docs/upstream/disposition.json",
+      "sha256": "0c843e45342262d5f673383c16f24f7704a5269d288f6bc0d39fbe4ece10645f"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "docs/upstream/lock.json",
+      "destination": "docs/upstream/lock.json",
+      "sha256": "e4ef5682bec5519240132a66ce4198dd390bae83e75cb29357d855f2d03c9393"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "scripts/upstream-lock.mjs",
+      "destination": "scripts/upstream-lock.mjs",
+      "sha256": "f8b21cac638abc02c50d0def62f79f35fc6024191c0f85015f3ecfe95a12951e"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "scripts/upstream-lock.test.mjs",
+      "destination": "scripts/upstream-lock.test.mjs",
+      "sha256": "7e55abdbff2762551b9111a2ac1f9f66964a39849b732e779f2abb98b7b543a3"
+    },
+    {
+      "source": "acp",
+      "revision": "47946b870b18652964d94c0af110ea177c66a80c",
+      "path": "scripts/upstream-sync.mjs",
+      "destination": "scripts/upstream-sync.mjs",
+      "sha256": "16e10196d652dc124a16891a82b2f3c18489385ab9c9ec098405efc1192abcca"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/compute/Cargo.toml",
+      "destination": "crates/lapis-compute/Cargo.toml",
+      "sha256": "d5d1290eb16f68c1042c658d85a255e8878a494747b68cecd041e3c828188f41"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/compute/src/engine.rs",
+      "destination": "crates/lapis-compute/src/engine.rs",
+      "sha256": "ca740c2cd438077490c474bcd949965a226c8f60503fd014b56bbe5307cf0fe1"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/compute/src/gateway.rs",
+      "destination": "crates/lapis-compute/src/gateway.rs",
+      "sha256": "adfb1831d35b87e7583d96ea3a1202e4285cbf011b83d6709bba4e3548d15185"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/compute/src/main.rs",
+      "destination": "crates/lapis-compute/src/main.rs",
+      "sha256": "76935822fddf07406556754d4ac4dd68fd4a6fb0fb60fe5499ea4a6eb93e29e0"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/compute/src/models.rs",
+      "destination": "crates/lapis-compute/src/models.rs",
+      "sha256": "e7a21c550591a5313f3c752babc2f61b0072e8e72e67641443d3e7c31299b09e"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/compute/src/peers.rs",
+      "destination": "crates/lapis-compute/src/peers.rs",
+      "sha256": "2443816f147180c330b094b8a03d0034867e67d74dc0ec7e76a78f221554a70e"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/compute/src/progress.rs",
+      "destination": "crates/lapis-compute/src/progress.rs",
+      "sha256": "796f8b08ac26e93981ee5529c8a16984e771245eabaf40429c685696f8acdd1f"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/compute/src/tests.rs",
+      "destination": "crates/lapis-compute/src/tests.rs",
+      "sha256": "28ad6e08a3affd7fb1fec99bfcfaf3fc69596a66d24f1d90423790164924a21f"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/UPSTREAM.md",
+      "destination": "docs/agent-upstream.md",
+      "sha256": "dd055db3fedec2f1a2da94f16c66963a4e6b53ea205ed3f38ea71e32986b5b83"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/scripts/model-capabilities.json",
+      "destination": "scripts/model-capabilities.json",
+      "sha256": "62b6cab5366e0fd559a22b4a6776f2e080d452e571c30344ef1e095303aecbf7"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/scripts/normative-corpus.json",
+      "destination": "scripts/normative-corpus.json",
+      "sha256": "7479b263cdb7e25abf45ea65519a350eda2c6969d9be40e7f54e2da519b827b0"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/src/chatgpt_token.rs",
+      "destination": "crates/lapis-agent/src/cli/chatgpt_token.rs",
+      "sha256": "24f4150cbef8a9f02bf8062b4679f2b47bf9f68c53f3caed967c59bb333af5f8"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/src/main.rs",
+      "destination": "crates/lapis-agent/src/main.rs",
+      "sha256": "17c4eb124b1eed0ab0ae1a579a24d19b5aa2f8ac9d7ee151660d07ebc70a5eac"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/src/metadata.rs",
+      "destination": "crates/lapis-agent/src/cli/metadata.rs",
+      "sha256": "53097e79035ee9afaf17f4b5100b0e7efb62a6b7494c114743e49b25fcdf0927"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/src/provider_catalog.rs",
+      "destination": "crates/lapis-agent/src/cli/provider_catalog.rs",
+      "sha256": "7015ef4a5534c164205bea8292f388b1931eeb5127ab6cdd5c7ad9d324767144"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/tests/metadata.rs",
+      "destination": "crates/lapis-agent/tests/owned_metadata.rs",
+      "sha256": "2f2ba7c9851bdbd0419eb8affea3e7fe45b52519737fa5eb010daee9c72c88e2"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/tests/provider_catalog.rs",
+      "destination": "crates/lapis-agent/tests/owned_provider_catalog.rs",
+      "sha256": "b042409c61beda965ed280e86f79c9d21d6cb900c1bc03035afe747ab19228d0"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/tools/Cargo.toml",
+      "destination": "crates/lapis-agent-tools/Cargo.toml",
+      "sha256": "ffd24fdd1d9eeed2f5051ea232a22e4848ecaf67055b8ff2ed9793578430a21a"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/tools/src/files.rs",
+      "destination": "crates/lapis-agent-tools/src/files.rs",
+      "sha256": "b0ec085b56bc028613dad75dc5cda123a83b8c6c661c668c1f2342228abcf1a9"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/tools/src/main.rs",
+      "destination": "crates/lapis-agent-tools/src/main.rs",
+      "sha256": "a3492c42fe68b0afc1dba7c332dc481076d7789dcb40bf9176254ea556d2b434"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/tools/src/shell.rs",
+      "destination": "crates/lapis-agent-tools/src/shell.rs",
+      "sha256": "2a10b4bb0814f61b37d6adb43389257b961f81db6aca3153b43bc92f1c10929d"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/Cargo.toml",
+      "destination": "crates/lapis-agent/Cargo.toml",
+      "sha256": "23c9b4823ea812981d27d27cc7358cdd94007c80ca7add90d4eb9c0976008ae7"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/DATABRICKS_REUSE.md",
+      "destination": "crates/lapis-agent/DATABRICKS_REUSE.md",
+      "sha256": "14a8245707e61532a102c96fd156e2a17bed3deb2114688ebcb0f5d8fa4cf9f6"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/LICENSE",
+      "destination": "crates/lapis-agent/LICENSE",
+      "sha256": "108cb15997e51b75a8d18b0c1e2c52bd3879d051ab02118973387df1e4aab584"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/README.md",
+      "destination": "crates/lapis-agent/README.md",
+      "sha256": "e7bf931636a9c54cad789778915fa13f4345dc10e9d05f0d2cb409285a875c10"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/agent.rs",
+      "destination": "crates/lapis-agent/src/agent.rs",
+      "sha256": "e55e12d28c84db5288b05cbabf5167ef126a1d126e00850f7fd8ab17763d5817",
+      "counted_lines": 1225
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/auth.rs",
+      "destination": "crates/lapis-agent/src/auth.rs",
+      "sha256": "f2da73abda592fb632a6587ca60fe81e62d48ae47b67d1e413d1abeddf66eef6",
+      "counted_lines": 1869
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/auth_http.rs",
+      "destination": "crates/lapis-agent/src/auth_http.rs",
+      "sha256": "887d4a21c668b117cb65d1f93b2cbc1dea0d048324315a7c4c7ca5650adaa9f6"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/builtin.rs",
+      "destination": "crates/lapis-agent/src/builtin.rs",
+      "sha256": "aceb5c11d3c883ad329bbbd2b29262a73d38d99dc3f9021737c620eee5c877f1",
+      "counted_lines": 492
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/catalog.rs",
+      "destination": "crates/lapis-agent/src/catalog.rs",
+      "sha256": "949b9abf4eabd2dac0a77b1aab186a6b867450c64699e8815f5c1e9f24c03edd",
+      "counted_lines": 1691
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/config.rs",
+      "destination": "crates/lapis-agent/src/config.rs",
+      "sha256": "b59f92e2da2df2a6c526d60b20f27598d236a862c8edfbb1624fccf2f8f0bb54",
+      "counted_lines": 1912
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/databricks.rs",
+      "destination": "crates/lapis-agent/src/databricks.rs",
+      "sha256": "533384cf7f7d4455e53226b9d28f7dd2243ad8ff9ac67a51cf2026d8e4875591"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/databricks_test_support.rs",
+      "destination": "crates/lapis-agent/src/databricks_test_support.rs",
+      "sha256": "1c43a3c48de8311b5849108ad27f27b664f11a7666406e93f43069007a6478d9"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/databricks_tests.rs",
+      "destination": "crates/lapis-agent/src/databricks_tests.rs",
+      "sha256": "d8f6a5cf9913a354330cee68cc8ffb346d308ee00f8ce92949f3a1bea68c8e19",
+      "counted_lines": 790
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/handoff.rs",
+      "destination": "crates/lapis-agent/src/handoff.rs",
+      "sha256": "620cd4d98ed5cf62e9140ce534192c66f7c4445bc5b438b0ec6fd1ff242e8478",
+      "counted_lines": 448
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/hints.rs",
+      "destination": "crates/lapis-agent/src/hints.rs",
+      "sha256": "f7bc76ea45e598d33a4cefa9914807906006b1781d0b3ae8aa2241e7f7f08a95",
+      "counted_lines": 605
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/lib.rs",
+      "destination": "crates/lapis-agent/src/lib.rs",
+      "sha256": "92add0133f8a3caa79c1c4c672468046660217c8334c05294ad11ed78cb7b59f",
+      "counted_lines": 965
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/llm/chatgpt_plan/tests.rs",
+      "destination": "crates/lapis-agent/src/llm/chatgpt_plan/tests.rs",
+      "sha256": "f4d40e0a40fce629c24713d4bb62886600e1b74a958badcb19f934e0f7772828"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/llm/chatgpt_plan.rs",
+      "destination": "crates/lapis-agent/src/llm/chatgpt_plan.rs",
+      "sha256": "dc6a9ccce507778aca4daa8b4ad07b89bb24c2fd9b7acb2a1e20a213489bd2d4"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/llm.rs",
+      "destination": "crates/lapis-agent/src/llm.rs",
+      "sha256": "81d366b846587f0856df8a859bdde0920459cfa3b0aa9e7afb0ae30c852d0d9e",
+      "counted_lines": 6567
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/llm_fqn_tests.rs",
+      "destination": "crates/lapis-agent/src/llm_fqn_tests.rs",
+      "sha256": "a6d928778863f3ae279da673aa7fc8c06ff67ff8726ddff1654db99d9081f44c"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/local_catalog.rs",
+      "destination": "crates/lapis-agent/src/local_catalog.rs",
+      "sha256": "74477ec67e2ed6915e1b9b61d72a1850726e7e4247a0cc3bfcb86407fb64974b"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/main.rs",
+      "destination": "crates/lapis-agent/src/main.rs",
+      "sha256": "fee279f5499c14a8459ab1a4feec6c03cd100814425ad90433c4667ec95d665f"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/mcp.rs",
+      "destination": "crates/lapis-agent/src/mcp.rs",
+      "sha256": "6b44860cfc72811909491edd99202346b5eabc3b9aab6364dbc51bf4358adb70",
+      "counted_lines": 1021
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/model_capabilities.rs",
+      "destination": "crates/lapis-agent/src/model_capabilities.rs",
+      "sha256": "10cd41c27053da6fec1b2f90afff1e02fe40b3b12de4064b94e5c5ad13e9ed59",
+      "counted_lines": 1827
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/permission.rs",
+      "destination": "crates/lapis-agent/src/permission.rs",
+      "sha256": "93695e6289cd9cc7b8dec32a38c69635b47d99674a3abb720b50cced6d806b75",
+      "counted_lines": 692
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/types.rs",
+      "destination": "crates/lapis-agent/src/types.rs",
+      "sha256": "057238038bb2133813b1f9600f1f327bc2934b1dd84e218fc98c7c41c9d2d1e6",
+      "counted_lines": 765
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/src/wire.rs",
+      "destination": "crates/lapis-agent/src/wire.rs",
+      "sha256": "40766ce8a470559917b7b5e556c6dd0f156bf2906d504556529e2db31563e42c",
+      "counted_lines": 589
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/bin/auth_worker.rs",
+      "destination": "crates/lapis-agent/tests/bin/auth_worker.rs",
+      "sha256": "d03e3d7ec389267e84950b364e04e5ec875ed5da9468a3eab19df7083190340f"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/bin/fake_mcp.rs",
+      "destination": "crates/lapis-agent/tests/bin/fake_mcp.rs",
+      "sha256": "4ab1bd07866128a5e22b56e0f544b5008c995706ad18e2925ba8473f20b469da"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/bin/lock_holder.rs",
+      "destination": "crates/lapis-agent/tests/bin/lock_holder.rs",
+      "sha256": "eef30bc4e4ae97e6c2477c411432541f47a81f85de5362c8c5dbf63f009282a4"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/common/mod.rs",
+      "destination": "crates/lapis-agent/tests/common/mod.rs",
+      "sha256": "7bc50fa4bbc09bf5616f54ffae8946a024562c5fe4b8d2f56fef48b3601ccef0"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/databricks_auth_coordinator.rs",
+      "destination": "crates/lapis-agent/tests/databricks_auth_coordinator.rs",
+      "sha256": "9dda05018cfb15ad6a2e4dcb49daecbb22aa3bbffd0219ee61acc4eda6fd4c6d",
+      "counted_lines": 2278
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/databricks_cli_auth.rs",
+      "destination": "crates/lapis-agent/tests/databricks_cli_auth.rs",
+      "sha256": "3c316b8e0e6d254fd43cec19ae15341450578f1973a761a53f610477a3ce7477"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/databricks_oauth.rs",
+      "destination": "crates/lapis-agent/tests/databricks_oauth.rs",
+      "sha256": "85721653b23f71f39fafd7e19fe2e56cb6dfd2fe2b3ff17c96c9c72699709fd8",
+      "counted_lines": 1127
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/fake_llm.rs",
+      "destination": "crates/lapis-agent/tests/fake_llm.rs",
+      "sha256": "f650957dffdfdc50867ae083d04d5ab51ad5c541a6a33af466201fdeb26ecfc6",
+      "counted_lines": 1385
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/fqn_capabilities.rs",
+      "destination": "crates/lapis-agent/tests/fqn_capabilities.rs",
+      "sha256": "9ad54af9db4cc902843c15c5820b2d9f50029aefd8c99a9f8fd20a8df321fbbf"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/golden_transcripts.rs",
+      "destination": "crates/lapis-agent/tests/golden_transcripts.rs",
+      "sha256": "492107291ad5f99ad4138192da2310f424919f59b1144e1c3d73cd53b302a353",
+      "counted_lines": 887
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/hints_integration.rs",
+      "destination": "crates/lapis-agent/tests/hints_integration.rs",
+      "sha256": "6dd0ac1f1b0c57319393f287c9351a23f1cb064095832fde72b730af7eae2389"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/openai_auto_upgrade.rs",
+      "destination": "crates/lapis-agent/tests/openai_auto_upgrade.rs",
+      "sha256": "7b869939c53aa9d3c811da0e78fb3c937bad780ce4c0b6858c17efb0d3b616a4"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/permission_boundary.rs",
+      "destination": "crates/lapis-agent/tests/permission_boundary.rs",
+      "sha256": "dc157ea8cf56c94ad75cd62f13ed19377f72c29ac00b00282308f603c53e8c2e"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "runtime/local-agent/vendor/buzz-agent/tests/regressions.rs",
+      "destination": "crates/lapis-agent/tests/regressions.rs",
+      "sha256": "a1ff2b668d5a55f3f953d629ca3f3aba15917ac4c6af8fd4f4927ca737406ce8",
+      "counted_lines": 2839
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "scripts/local-agent-acp.acceptance.py",
+      "destination": "scripts/local-agent-acp.acceptance.py",
+      "sha256": "85f43f6798f895e8bc3d083ba97ad929666520bc62f8203ca108dc1a4399ac25"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "scripts/local-agent-tools.acceptance.py",
+      "destination": "scripts/local-agent-tools.acceptance.py",
+      "sha256": "4b5cc4340a39212389b80022a865a8c2fa582b055673e8ab72c15a2901cf592c"
+    },
+    {
+      "source": "store",
+      "revision": "01ea0741ff608bbe14daa8d929448e3ec0790afd",
+      "path": "scripts/local-compute.acceptance.py",
+      "destination": "scripts/local-compute.acceptance.py",
+      "sha256": "20fe16fe41f26e9b98dc6fd714a284d02ce38b58c58084defcb26532e9533b5a"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+[[runners]]
+id = "local"
+label = "Lapis Agent"
+command = "../target/debug/lapis-agent"
+args = []
+mcp_transport = "stdio"
+enabled = true
+
+# Additional installed ACP adapters can be declared here. A bare command name
+# uses PATH; commands containing a slash resolve relative to this file.

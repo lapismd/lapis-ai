@@ -1,0 +1,12 @@
+[package]
+name = "lapis-agent-tools"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+publish = false
+[dependencies]
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "io-std", "io-util", "process", "time", "signal", "sync"] }
+
+[target.'cfg(unix)'.dependencies]
+nix = { version = "0.31", features = ["signal", "process", "fs"] }

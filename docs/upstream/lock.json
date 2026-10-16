@@ -1,0 +1,249 @@
+{
+  "repository": "block/buzz",
+  "path": "crates/buzz-acp",
+  "commit": "2664d14316790a57ea44b3f97c57440b70e43436",
+  "commitDate": "2026-09-30",
+  "license": "Apache-2.0",
+  "files": {
+    "Cargo.toml": {
+      "sha256": "2fa37047f56cccac505465cb90c07a78ebfdd7986c2971325e215759ffc767f3",
+      "bytes": 2038,
+      "disposition": "ported-with-changes",
+      "owner": "Cargo.toml"
+    },
+    "README.md": {
+      "sha256": "174bdb3e6c69b69ff1a2fbd7644edbe363fdcbc44da0a9e7332cd4be017b3367",
+      "bytes": 21006,
+      "disposition": "ported-with-changes",
+      "owner": "README.md"
+    },
+    "TASKS.md": {
+      "sha256": "5313a1777a89e7d7afbfba95d1f38ca48e8b3134d7cb405e39a45f548509637c",
+      "bytes": 7958,
+      "disposition": "ported-with-changes",
+      "owner": "spec/src/control.md"
+    },
+    "TESTING.md": {
+      "sha256": "bfb82159f88af0a8ebac1412f29fda461f1edc5a79243906f700b59d675b9bf8",
+      "bytes": 2184,
+      "disposition": "not-ported",
+      "owner": "spec/src/compatibility.md"
+    },
+    "src/acp.rs": {
+      "sha256": "71635b2710a5c353e35f65b453b4429f337eebe73216fe07aa0ad0bd28070718",
+      "bytes": 215460,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-protocol"
+    },
+    "src/acp/system_prompt_tests.rs": {
+      "sha256": "82e1e0edec2bf5019eaa4c6f92c9c48619e8665aba7e9f3bf0261707cab8dba8",
+      "bytes": 5431,
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-protocol"
+    },
+    "src/base_prompt.md": {
+      "sha256": "311f7593896e6c4d8ce20514dc8c843161e439c96f246047faf068c1648562dd",
+      "bytes": 17771,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner"
+    },
+    "src/config.rs": {
+      "sha256": "b1836f02f94ddc1e8a4694dc9545765e3039a390e8d06206c28a5e1c8d570513",
+      "bytes": 117626,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli"
+    },
+    "src/engram_fetch.rs": {
+      "sha256": "7894398b28b818398e4e307c72042a9b342690446d969daf41a3747b76c47e0e",
+      "bytes": 10038,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/filter.rs": {
+      "sha256": "f34aec7b31603b2fa285158a0927d7d0f08ceeea51bbd1abe30286f16563b4e0",
+      "bytes": 27787,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/git.rs": {
+      "sha256": "72e673810a730b9393361931771c68842a3fb6f8e55fc7d10e00a357919a8897",
+      "bytes": 22807,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/git_runtime_tests.rs": {
+      "sha256": "6f4fcea1ce54dde67542e4f1cafaef6354ae7dae8e1d49a15ccb014a897ac835",
+      "bytes": 7429,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/isolated_execution.rs": {
+      "sha256": "3e62bc0059a23772ea34d44464562cf5ab2b2155e698f58ba3f6e5224b96d041",
+      "bytes": 3559,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner"
+    },
+    "src/lib.rs": {
+      "sha256": "30af5e223cd54af2906a3f935a8bfd116a6ded4ec90314f9c9344dc93774482d",
+      "bytes": 467337,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli"
+    },
+    "src/main.rs": {
+      "sha256": "81d7d727d7c598ed7ffc4b500a0cdc9cc82b06a8767313f791636f37e413c46d",
+      "bytes": 56,
+      "disposition": "ported",
+      "owner": "crates/jj-acp-cli"
+    },
+    "src/observer.rs": {
+      "sha256": "77396790298d5b9df12b33e0f2c5c052b769066569e35d82d1187e43edc0780b",
+      "bytes": 5095,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/pool.rs": {
+      "sha256": "ace979f1ef6d0adaf77d4e3d13358ec0846e410e4972a3eae69db0a08fd22260",
+      "bytes": 478683,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner"
+    },
+    "src/pool/pi_prompt_tests.rs": {
+      "sha256": "71a1e0f0063d3835cab9c8a054e6a27e9f40e101ce60490c82ee846a209ad580",
+      "bytes": 13112,
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-runner"
+    },
+    "src/pool/system_prompt_tests.rs": {
+      "sha256": "6c0a484eee79f2d347d507d307c0c46704b13f95962bb33e65c8e7cce36ad92e",
+      "bytes": 3211,
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-runner"
+    },
+    "src/pool_lifecycle.rs": {
+      "sha256": "0a38702e86db5d5ce168313656d5139aa2a70f27d9c16b373919e0ade527eb55",
+      "bytes": 10702,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner"
+    },
+    "src/prompt_framing.rs": {
+      "sha256": "44f223d641f735dc7a1c0d9facd5909615abe234a5f7a289cfad0dae0523c733",
+      "bytes": 3918,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner"
+    },
+    "src/prompt_project.rs": {
+      "sha256": "200eea011dc40b285644f19d34cc5e76a56df97b6dec4814beca84cb6793728e",
+      "bytes": 8832,
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-control"
+    },
+    "src/queue.rs": {
+      "sha256": "5fd64b9ebdbb9c27014fa801172e572f8336a40a11429f25d856bc5fc2a967b9",
+      "bytes": 256671,
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-control"
+    },
+    "src/relay.rs": {
+      "sha256": "b81a9935e2dc98779f42e10713e2d6d235b1039ed04dda927ad7d80ab3886224",
+      "bytes": 281655,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/relay/recovery.rs": {
+      "sha256": "126c659c9ab32663408ab3356ae01c7972756076023cddf249084cfb2548e8be",
+      "bytes": 5384,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/relay/recovery_tests.rs": {
+      "sha256": "f0177bb14aad47df702c96917a48e8fba7b461ca7244179007a8a152d35089e3",
+      "bytes": 14967,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/relay/recovery_wake_tests.rs": {
+      "sha256": "c678f3da80f92f1d20df6aae49bddff1462ddd034ab74af67d93200e7480a29e",
+      "bytes": 17128,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/run_task.rs": {
+      "sha256": "0249a1f95d07fe2ca666e00fb8d72759b73112ea8e12f81e116553a04b587838",
+      "bytes": 10079,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli"
+    },
+    "src/runtime.rs": {
+      "sha256": "9a22ecc17e9af3e6a19b4f56861dca5b804ce18f0fbd3482f7e6e3c2308331c5",
+      "bytes": 4687,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner"
+    },
+    "src/scope.rs": {
+      "sha256": "4b8362570340558f44f57cbd918586024e4017a17c4d18fc562b8a930588d1ba",
+      "bytes": 16537,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-control"
+    },
+    "src/session_model_channel.md": {
+      "sha256": "654860da1e5f34b2bb0b6ad6fb6e9adbfca05fb434f896dafbd09a23a978ea9f",
+      "bytes": 881,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/session_model_task.md": {
+      "sha256": "b3490c35881e972276c5dd07497fff7a9af7bb0fe27260c820bc094d51ab65ee",
+      "bytes": 656,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner"
+    },
+    "src/session_model_thread.md": {
+      "sha256": "a5dc7527ac55cfeb94abd40c54c2b203c88c829e90b53c36ad83d67360b5916b",
+      "bytes": 979,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/setup_mode.rs": {
+      "sha256": "f1c5e2c101138b919026203e25635f6bd7483600c0ebf4a54463fb55ace02b01",
+      "bytes": 49251,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "src/usage.rs": {
+      "sha256": "b14fc2707f707a455c72857da206298bccd4f18389ff9318d30c61fd604bb228",
+      "bytes": 153588,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "tests/fixtures/task_agent.py": {
+      "sha256": "32300f075c5970c14c2d28481ec9c4d00fa2df6ca87c6d1298908c7e64dd2cb5",
+      "bytes": 3404,
+      "disposition": "ported-with-changes",
+      "owner": "tests/fixtures"
+    },
+    "tests/git_bootstrap.rs": {
+      "sha256": "f6c7a74b58cbed1abe5c30c0febe0ba04eed20a82c95f974516e49a2f0e553ef",
+      "bytes": 8287,
+      "disposition": "dropped",
+      "owner": "none"
+    },
+    "tests/pool_lifecycle_state.rs": {
+      "sha256": "e2cb53e7adbe2c05abe1089edfad413b9ea9071be47a44c2edc13adea341d43f",
+      "bytes": 159,
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-runner"
+    },
+    "tests/run_task.rs": {
+      "sha256": "6a2acd97606506adc3ff09f3ab0cf937f5895ca282c9ec5fa631a84d5dd568da",
+      "bytes": 20652,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli"
+    },
+    "tests/stdio_contract.rs": {
+      "sha256": "c60f580fb6c6c3813358187ab8cda45650491ec32d4d109f45f580d510391757",
+      "bytes": 1078,
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli"
+    }
+  }
+}

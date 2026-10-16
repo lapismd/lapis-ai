@@ -1,0 +1,232 @@
+{
+  "repository": "block/buzz",
+  "path": "crates/buzz-acp",
+  "commit": "2664d14316790a57ea44b3f97c57440b70e43436",
+  "commitDate": "2026-09-30",
+  "license": "Apache-2.0",
+  "owners": [
+    "Cargo.toml",
+    "README.md",
+    "AGENTS.md",
+    "docs/upstream-lock.md",
+    "docs/licenses/NOTICE.md",
+    "spec/src/architecture.md",
+    "spec/src/protocol.md",
+    "spec/src/agents.md",
+    "spec/src/runner.md",
+    "spec/src/control.md",
+    "spec/src/cli.md",
+    "spec/src/security.md",
+    "spec/src/compatibility.md",
+    "crates/jj-acp-protocol",
+    "crates/jj-acp-agent",
+    "crates/jj-acp-runner",
+    "crates/jj-acp-control",
+    "crates/jj-acp-cli",
+    "crates/jj-acp-testkit",
+    "tests/fixtures",
+    "none"
+  ],
+  "files": {
+    "Cargo.toml": {
+      "disposition": "ported-with-changes",
+      "owner": "Cargo.toml",
+      "note": "Dependency set reduced to the non-Nostr subset; relay, HTTP, TLS and signing crates removed."
+    },
+    "README.md": {
+      "disposition": "ported-with-changes",
+      "owner": "README.md",
+      "note": "Rewritten without relay, keypair, channel and membership concepts."
+    },
+    "TASKS.md": {
+      "disposition": "ported-with-changes",
+      "owner": "spec/src/control.md",
+      "note": "Task document contract retargeted from agentPubkey to a runner identifier; relay reporting removed."
+    },
+    "TESTING.md": {
+      "disposition": "not-ported",
+      "owner": "spec/src/compatibility.md",
+      "note": "Upstream integration guide is relay-centric; replaced by the fixture-peer and real-runner qualification split."
+    },
+    "src/acp.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-protocol",
+      "note": "Decomposed into twelve bounded modules; permission auto-approval replaced by a caller-supplied decision defaulting to cancellation; terminal-auth and vendor notification capability advertisements removed; relay-derived prompt assembly dropped."
+    },
+    "src/acp/system_prompt_tests.rs": {
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-protocol",
+      "note": "Covers relay-derived system prompt assembly that this port does not carry."
+    },
+    "src/base_prompt.md": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner",
+      "note": "Standing instructions rewritten without Buzz CLI, relay and channel references."
+    },
+    "src/config.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli",
+      "note": "Launch, runner, model, permission and prompt sections ported; key, persona, relay and membership sections dropped."
+    },
+    "src/engram_fetch.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Nostr memory fetch keyed by relay identity."
+    },
+    "src/filter.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Nostr author gate, owner resolution and workflow provenance checking."
+    },
+    "src/git.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Nostr commit and tag signing, scoped credential helpers and ephemeral keyfile custody."
+    },
+    "src/git_runtime_tests.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Tests the Nostr Git signing runtime that is not ported."
+    },
+    "src/isolated_execution.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner",
+      "note": "Isolated turn execution retained; relay socket publication removed."
+    },
+    "src/lib.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli",
+      "note": "Composition root only; relay connection, subscription and channel discovery wiring dropped."
+    },
+    "src/main.rs": {
+      "disposition": "ported",
+      "owner": "crates/jj-acp-cli",
+      "note": "Thin binary entry point delegating to the library run function."
+    },
+    "src/observer.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Relay publication of harness telemetry."
+    },
+    "src/pool.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner",
+      "note": "Session and turn machinery ported; channel context resolution and relay presence dropped."
+    },
+    "src/pool/pi_prompt_tests.rs": {
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-runner",
+      "note": "Pi harness prompt specifics outside the default runner catalog."
+    },
+    "src/pool/system_prompt_tests.rs": {
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-runner",
+      "note": "Covers relay-derived standing prompt assembly."
+    },
+    "src/pool_lifecycle.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner",
+      "note": "Pool lifecycle states retained without relay-driven wake conditions."
+    },
+    "src/prompt_framing.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner",
+      "note": "Modern and legacy first-turn framing retained; relay context injection removed."
+    },
+    "src/prompt_project.rs": {
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-control",
+      "note": "Channel history projection depends on relay reads; deferred with the persistent transport."
+    },
+    "src/queue.rs": {
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-control",
+      "note": "Inbound batching, deduplication and overflow replay arrive with the persistent transport."
+    },
+    "src/relay.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Nostr WebSocket intake, NIP-42 authentication, NIP-98 signing and REST channel discovery."
+    },
+    "src/relay/recovery.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Relay reconnection and subscription replay recovery."
+    },
+    "src/relay/recovery_tests.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Tests relay recovery that is not ported."
+    },
+    "src/relay/recovery_wake_tests.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Tests relay recovery wake conditions that are not ported."
+    },
+    "src/run_task.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli",
+      "note": "One-shot task invocation, terminal record and exit codes ported; identity check retargeted to the runner identifier."
+    },
+    "src/runtime.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner",
+      "note": "Shared runtime, pool startup and prompt context retained; relay client, owner and key fields removed."
+    },
+    "src/scope.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-control",
+      "note": "Channel, thread and task scopes generalized to one opaque caller-named session scope."
+    },
+    "src/session_model_channel.md": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Channel session model is a relay concept."
+    },
+    "src/session_model_task.md": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-runner",
+      "note": "Task session description retained without relay reporting instructions."
+    },
+    "src/session_model_thread.md": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Thread session model is a relay concept."
+    },
+    "src/setup_mode.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Relay onboarding, membership registration and interactive setup."
+    },
+    "src/usage.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Relay publication of usage and cost telemetry."
+    },
+    "tests/fixtures/task_agent.py": {
+      "disposition": "ported-with-changes",
+      "owner": "tests/fixtures",
+      "note": "Deterministic ACP peer retained with all ten failure modes; launch-log assertions retargeted from relay URL, agent key and Nostr git keyfile to the harness-reserved variables this repository injects."
+    },
+    "tests/git_bootstrap.rs": {
+      "disposition": "dropped",
+      "owner": "none",
+      "note": "Nostr Git signing bootstrap."
+    },
+    "tests/pool_lifecycle_state.rs": {
+      "disposition": "not-ported",
+      "owner": "crates/jj-acp-runner",
+      "note": "Arrives with the standing pool in the persistent transport slice."
+    },
+    "tests/run_task.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli",
+      "note": "Binary-level task contract tests ported; relay, identity and memory cases removed."
+    },
+    "tests/stdio_contract.rs": {
+      "disposition": "ported-with-changes",
+      "owner": "crates/jj-acp-cli",
+      "note": "Clean-stdout contract ported; the unreachable-relay startup failure is replaced by an unresolvable runner."
+    }
+  }
+}

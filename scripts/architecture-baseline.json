@@ -1,0 +1,22 @@
+{
+  "crates/lapis-agent/src/agent.rs": 1223,
+  "crates/lapis-agent/src/auth.rs": 1869,
+  "crates/lapis-agent/src/builtin.rs": 492,
+  "crates/lapis-agent/src/catalog.rs": 1687,
+  "crates/lapis-agent/src/config.rs": 1910,
+  "crates/lapis-agent/src/databricks_tests.rs": 788,
+  "crates/lapis-agent/src/handoff.rs": 448,
+  "crates/lapis-agent/src/hints.rs": 603,
+  "crates/lapis-agent/src/lib.rs": 965,
+  "crates/lapis-agent/src/llm.rs": 6561,
+  "crates/lapis-agent/src/mcp.rs": 1021,
+  "crates/lapis-agent/src/model_capabilities.rs": 1827,
+  "crates/lapis-agent/src/permission.rs": 692,
+  "crates/lapis-agent/src/types.rs": 765,
+  "crates/lapis-agent/src/wire.rs": 589,
+  "crates/lapis-agent/tests/databricks_auth_coordinator.rs": 2278,
+  "crates/lapis-agent/tests/databricks_oauth.rs": 1127,
+  "crates/lapis-agent/tests/fake_llm.rs": 1385,
+  "crates/lapis-agent/tests/golden_transcripts.rs": 883,
+  "crates/lapis-agent/tests/regressions.rs": 2839
+}

@@ -1,0 +1,47 @@
+[package]
+name = "lapis-acp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+description = "Pluggable Agent Client Protocol harness for controlling applications"
+keywords = ["acp", "agent", "stdio", "json-rpc"]
+categories = ["development-tools"]
+
+[lib]
+name = "lapis_acp_cli"
+path = "src/lib.rs"
+
+[[bin]]
+name = "lapis-acp"
+path = "src/main.rs"
+
+[dependencies]
+toml = "0.9"
+lapis-ai-config.workspace = true
+lapis-acp-protocol.workspace = true
+lapis-acp-agent.workspace = true
+lapis-acp-runner.workspace = true
+lapis-acp-control.workspace = true
+serde_json.workspace = true
+serde.workspace = true
+tokio = { workspace = true, features = [
+  "fs",
+  "io-std",
+  "io-util",
+  "process",
+  "rt",
+  "rt-multi-thread",
+  "signal",
+  "sync",
+  "time",
+] }
+
+[dev-dependencies]
+lapis-acp-testkit.workspace = true
+tokio = { workspace = true, features = ["macros"] }

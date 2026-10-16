@@ -1,0 +1,13 @@
+version = 1
+license = "Apache-2.0"
+acp_revision = "47946b870b18652964d94c0af110ea177c66a80c"
+store_revision = "01ea0741ff608bbe14daa8d929448e3ec0790afd"
+buzz_agent_revision = "ef2aa1ae38fadcc0bc22b8bf6ed96b35933146be"
+mesh_revision = "9f192c9d821991ba43d79bb15fd2f2f12e597571"
+source_manifest = "imports/source-manifest.json"
+notes = "ACP identifiers and Rust package names renamed; maintained agent wrapper composed into lapis-agent; compute wire ALPN retained. Sources remain unchanged."
+
+[native_llama]
+base_revision = "cc83d7b4824f73cfdda4dfbb47ee39804f71b328"
+license = "MIT"
+license_sha256 = "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d"

@@ -1,0 +1,24 @@
+[package]
+name = "lapis-compute"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+publish = false
+[dependencies]
+lapis-ai-config.workspace = true
+mesh-llm-sdk = { git = "https://github.com/Mesh-LLM/mesh-llm.git", rev = "9f192c9d821991ba43d79bb15fd2f2f12e597571", default-features = false, features = ["client", "serving"] }
+mesh-llm-host-runtime = { git = "https://github.com/Mesh-LLM/mesh-llm.git", rev = "9f192c9d821991ba43d79bb15fd2f2f12e597571", default-features = false, features = ["dynamic-native-runtime"] }
+mesh-llm-events = { git = "https://github.com/Mesh-LLM/mesh-llm.git", rev = "9f192c9d821991ba43d79bb15fd2f2f12e597571" }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.13", default-features = false, features = ["json", "rustls"] }
+axum = "0.8"
+anyhow = "1"
+iroh = "=1.3.0"
+hex = "0.4"
+sha2 = "0.10"
+getrandom = "0.4"
+futures-util = "0.3"
+toml = "0.9"
+tempfile = "3"

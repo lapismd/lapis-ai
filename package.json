@@ -1,0 +1,32 @@
+{
+  "name": "@lapismd/lapis-ai",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@10.34.5",
+  "scripts": {
+    "dev:cargo": "node scripts/managed-cargo.mjs",
+    "build": "pnpm dev:cargo -- build --workspace --locked && pnpm dev:cargo -- build -p lapis-ai-runtime --examples --locked",
+    "check": "pnpm spec:validate && pnpm check:architecture && pnpm check:boundaries && pnpm check:progress && pnpm check:upstream && pnpm format:check && pnpm dev:cargo -- clippy --workspace --all-targets --locked -- -D warnings",
+    "test": "pnpm test:governance && pnpm dev:cargo -- test --workspace --locked",
+    "test:governance": "node --test scripts/*.test.mjs",
+    "check:architecture": "node scripts/architecture.mjs",
+    "check:boundaries": "node scripts/boundaries.mjs",
+    "check:progress": "node scripts/progress.mjs",
+    "format": "pnpm dev:cargo -- fmt --all && prettier --write .",
+    "format:check": "pnpm dev:cargo -- fmt --all -- --check && prettier --check .",
+    "spec:check": "spec-validator check",
+    "spec:validate": "spec-validator validate",
+    "spec:first": "spec-validator first",
+    "spec:build": "spec-validator build",
+    "spec:search": "spec-validator search",
+    "package:stage": "node scripts/stage.mjs",
+    "check:upstream": "node scripts/upstream-sync.mjs --self-test"
+  },
+  "devDependencies": {
+    "@lapismd/spec-validator": "^0.1.0",
+    "prettier": "^3.6.2",
+    "@iarna/toml": "^2.2.5"
+  }
+}

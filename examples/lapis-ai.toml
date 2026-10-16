@@ -1,0 +1,33 @@
+version = 1
+
+[runtime]
+acp = "../target/debug/lapis-acp"
+agent = "../target/debug/lapis-agent"
+tools = "../target/debug/lapis-agent-tools"
+compute = "../target/debug/lapis-compute"
+data_dir = "../.local/example"
+
+[acp]
+runner = "local"
+cwd = "."
+catalog = "runners.toml"
+tools = "tools.toml"
+control_version = 3
+idle_timeout = 60
+max_turn_duration = 180
+
+[agent]
+provider = "openai"
+model = "host-selected-model"
+
+[agent.environment]
+OPENAI_COMPAT_API = "chat"
+OPENAI_COMPAT_BASE_URL = { env = "LAPIS_MODEL_BASE_URL" }
+OPENAI_COMPAT_API_KEY = { env = "LAPIS_MODEL_TOKEN" }
+BUZZ_AGENT_REQUIRE_REPLY = "0"
+
+[compute]
+memory_gb = 4
+sharing = false
+identity = { env = "LAPIS_COMPUTE_IDENTITY" }
+token = { env = "LAPIS_COMPUTE_TOKEN" }

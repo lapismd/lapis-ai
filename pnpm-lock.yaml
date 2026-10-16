@@ -1,0 +1,75 @@
+lockfileVersion: "9.0"
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+  .:
+    devDependencies:
+      "@iarna/toml":
+        specifier: ^2.2.5
+        version: 2.2.5
+      "@lapismd/spec-validator":
+        specifier: ^0.1.0
+        version: 0.1.4
+      prettier:
+        specifier: ^3.6.2
+        version: 3.9.10
+
+packages:
+  "@iarna/toml@2.2.5":
+    resolution:
+      {
+        integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==,
+      }
+
+  "@lapismd/spec-validator@0.1.4":
+    resolution:
+      {
+        integrity: sha512-/y2jWDEZsxI9uKvUQNiUYz9mCYz3dRj8nzOXC8WH7AoAbE4KBNyXpSv2zTEx8o+gFdAQQXFg3um0YMdr61QvRw==,
+      }
+    engines: { deno: 2.9.5, node: ">=22" }
+    hasBin: true
+    peerDependencies:
+      "@tobilu/qmd": 2.5.3
+    peerDependenciesMeta:
+      "@tobilu/qmd":
+        optional: true
+
+  jiti@2.7.0:
+    resolution:
+      {
+        integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==,
+      }
+    hasBin: true
+
+  prettier@3.9.10:
+    resolution:
+      {
+        integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==,
+      }
+    engines: { node: ">=14" }
+    hasBin: true
+
+  typescript@5.9.3:
+    resolution:
+      {
+        integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==,
+      }
+    engines: { node: ">=14.17" }
+    hasBin: true
+
+snapshots:
+  "@iarna/toml@2.2.5": {}
+
+  "@lapismd/spec-validator@0.1.4":
+    dependencies:
+      jiti: 2.7.0
+      typescript: 5.9.3
+
+  jiti@2.7.0: {}
+
+  prettier@3.9.10: {}
+
+  typescript@5.9.3: {}

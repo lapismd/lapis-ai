@@ -1,0 +1,10 @@
+target
+node_modules
+.local
+dist
+spec/book
+Cargo.lock
+crates
+docs/imports
+scripts/model-capabilities.json
+scripts/normative-corpus.json
