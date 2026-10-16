@@ -4,13 +4,13 @@ import { releaseState } from "./release-state.mjs";
 
 export function githubClient(env = process.env, fetcher = fetch) {
   if (
-    env.GITHUB_REPOSITORY !== "stevejuma/lapis-ai" ||
+    env.GITHUB_REPOSITORY !== "lapismd/lapis-ai" ||
     env.GITHUB_REF !== "refs/heads/main"
   )
     throw Error("release orchestration requires canonical main");
   return async (path, method = "GET", body) => {
     const response = await fetcher(
-      `https://api.github.com/repos/stevejuma/lapis-ai/${path}`,
+      `https://api.github.com/repos/lapismd/lapis-ai/${path}`,
       {
         method,
         headers: {
@@ -77,7 +77,7 @@ export async function dispatchVersionChecks(number, request) {
   if (
     pull.status !== 200 ||
     pull.data.base?.ref !== "main" ||
-    pull.data.head?.repo?.full_name !== "stevejuma/lapis-ai"
+    pull.data.head?.repo?.full_name !== "lapismd/lapis-ai"
   )
     throw Error("version pull request must belong to canonical main");
   for (const workflow of ["ci.yml", "publish-spec-pages.yml"]) {

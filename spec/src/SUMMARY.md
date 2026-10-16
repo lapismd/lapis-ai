@@ -22,3 +22,4 @@
 - [Native and platform qualification](history/2026-10-16-qualification.md)
 - [Release setup evidence](history/2026-10-16-release-setup.md)
 - [Hosted release follow-up](history/2026-10-16-release-followup.md)
+- [Organization transfer evidence](history/2026-10-16-organization-transfer.md)

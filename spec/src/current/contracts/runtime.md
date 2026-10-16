@@ -16,3 +16,6 @@ Library publication and resource manifests use the coordinated Cargo package
 version under the [release contract](release.md). Configuration and wire version
 numbers remain independent. The bundle producer must read the coordinator version
 rather than retain a literal source-baseline version.
+
+Crate documentation and publication metadata follow `lapismd/lapis-ai` after
+the ownership transfer. Runtime, configuration and bundle semantics are unchanged.

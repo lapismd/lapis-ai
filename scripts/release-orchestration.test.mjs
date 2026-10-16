@@ -75,7 +75,7 @@ test("bot_version_pr_explicitly_dispatches_required_ci_and_pages_build", async (
             base: { ref: "main" },
             head: {
               ref: "changeset-release/main",
-              repo: { full_name: "stevejuma/lapis-ai" },
+              repo: { full_name: "lapismd/lapis-ai" },
             },
           },
         }
@@ -98,7 +98,7 @@ test("release_orchestration_refuses_forks_and_non_main_context", () => {
   for (const env of [
     { GITHUB_REPOSITORY: "someone/jj-acp", GITHUB_REF: "refs/heads/main" },
     {
-      GITHUB_REPOSITORY: "stevejuma/lapis-ai",
+      GITHUB_REPOSITORY: "lapismd/lapis-ai",
       GITHUB_REF: "refs/heads/feature",
     },
   ])
@@ -107,7 +107,7 @@ test("release_orchestration_refuses_forks_and_non_main_context", () => {
 test("github_errors_are_fail_closed_without_disclosing_credentials", async () => {
   const client = githubClient(
     {
-      GITHUB_REPOSITORY: "stevejuma/lapis-ai",
+      GITHUB_REPOSITORY: "lapismd/lapis-ai",
       GITHUB_REF: "refs/heads/main",
       GITHUB_TOKEN: "fixture-private-token",
     },

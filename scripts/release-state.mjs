@@ -19,7 +19,7 @@ export function checkRelease(root = ".") {
     config = policy(root),
     pkg = json(root, "package.json");
   if (
-    config.repository !== "stevejuma/lapis-ai" ||
+    config.repository !== "lapismd/lapis-ai" ||
     config.version !== 1 ||
     config.coordinator !== coordinator ||
     config.crates.length !== 10 ||

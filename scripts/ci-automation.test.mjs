@@ -8,7 +8,7 @@ import {
   selectAutomation,
 } from "./ci-automation.mjs";
 
-const repository = "stevejuma/lapis-ai";
+const repository = "lapismd/lapis-ai";
 const head = "a".repeat(40);
 const base = "b".repeat(40);
 const pr = (kind = "dependabot") => ({

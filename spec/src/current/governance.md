@@ -27,3 +27,7 @@ package checks and builds remain required; version preparation invents no eviden
 Version preparation formats its regenerated pnpm lockfile before opening the
 version PR. A real preparation regression checks that output against the ordinary
 formatting gate; bot exceptions never suppress formatting (LAI-REL-003–004).
+
+The canonical release identity is `lapismd/lapis-ai`; automation refuses other
+owners. Historical hosting evidence retains original URLs and is supplemented
+with transfer evidence rather than rewritten.

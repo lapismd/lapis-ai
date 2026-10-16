@@ -26,11 +26,11 @@ canonical integrity, tests, build, package contents and dry-run gates remain.
 
 ## GitHub setup
 
-The public repository is `stevejuma/lapis-ai`. Enable Actions permission to
+The public repository is `lapismd/lapis-ai`. Enable Actions permission to
 create pull requests. Workflows keep default token access read-only and grant
 write scopes to the jobs that need them. Pages uses **GitHub Actions** as its
 build source and the `github-pages` environment. The spec publishes at
-<https://stevejuma.github.io/lapis-ai/> with site prefix `/lapis-ai/`.
+<https://lapismd.github.io/lapis-ai/> with site prefix `/lapis-ai/`.
 
 Create a protected **release** environment restricted to version tags and a
 maintainer approval. Credentials belong only in that environment. Never add
@@ -52,14 +52,14 @@ or create a token during setup.
    protected job. Dispatch from the tag as well as selecting its input, because
    the environment admits only version-tag workflow runs. The identity guard
    refuses this mode for other versions or events. Delete this secret after initial namespace creation.
-3. Configure a trusted publisher on every admitted crate for owner `stevejuma`,
+3. Configure a trusted publisher on every admitted crate for owner `lapismd`,
    repository `lapis-ai`, workflow `release.yml`, environment `release`.
    Future publication exchanges GitHub OIDC for a short-lived scoped token.
 
 The explicit initial dispatch is:
 
 ```sh
-gh workflow run release.yml --repo stevejuma/lapis-ai --ref v0.1.1 -f tag=v0.1.1 -F publish_crates=true -F bootstrap=true
+gh workflow run release.yml --repo lapismd/lapis-ai --ref v0.1.1 -f tag=v0.1.1 -F publish_crates=true -F bootstrap=true
 ```
 
 Cancel any earlier blocked release run before dispatching its retry; release runs

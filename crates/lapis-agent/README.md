@@ -1,8 +1,8 @@
 # lapis-agent
 
-Maintained Buzz-derived agent in [Lapis AI](https://github.com/stevejuma/lapis-ai).
+Maintained Buzz-derived agent in [Lapis AI](https://github.com/lapismd/lapis-ai).
 Rust 1.99.0; TOML configuration and supervised clients are documented in the
-[usage guide](https://github.com/stevejuma/lapis-ai/blob/main/docs/usage.md).
+[usage guide](https://github.com/lapismd/lapis-ai/blob/main/docs/usage.md).
 The first Cargo publication is pending. Development tests require
 `pnpm dev:cargo -- test -p lapis-agent --features test-support --locked`.
 Only `lapis-agent` installs by default; fixture binaries require `test-support`.

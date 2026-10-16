@@ -1,7 +1,8 @@
 # CI, versioning and release
 
-The canonical repository is `stevejuma/lapis-ai`. This change prepares GitHub
-hosting and release automation. Version PRs require human review and are never
+The canonical repository is `lapismd/lapis-ai`. Repository transfers MUST update
+owner-bound automation, package metadata, remote URLs and trusted-publisher
+instructions while preserving public visibility, history and open version PRs. Version PRs require human review and are never
 merged by automation. No package or tag is published during this setup.
 
 ## Requirements

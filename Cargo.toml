@@ -21,8 +21,8 @@ rust-version = "1.99.0"
 license = "Apache-2.0"
 authors = ["LapisMD contributors"]
 publish = ["crates-io"]
-repository = "https://github.com/stevejuma/lapis-ai"
-homepage = "https://github.com/stevejuma/lapis-ai"
+repository = "https://github.com/lapismd/lapis-ai"
+homepage = "https://github.com/lapismd/lapis-ai"
 
 [workspace.dependencies]
 lapis-acp-protocol = { path = "crates/lapis-acp-protocol", version = "0.1.0" }

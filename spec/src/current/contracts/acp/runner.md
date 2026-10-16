@@ -275,3 +275,6 @@ policy, authentication, network or durable settings.
 Cargo publication metadata and coordinated versions follow the
 [release contract](../release.md). The ACP wire, catalog, session, task and
 permission contracts remain unchanged by release preparation.
+
+The GitHub ownership transfer updates package documentation links to
+`lapismd/lapis-ai`; the owning ACP requirements and runtime behavior are unchanged.

@@ -1,7 +1,7 @@
 # Lapis AI
 
-[![CI](https://github.com/stevejuma/lapis-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/stevejuma/lapis-ai/actions/workflows/ci.yml)
-[![Specification](https://github.com/stevejuma/lapis-ai/actions/workflows/publish-spec-pages.yml/badge.svg)](https://stevejuma.github.io/lapis-ai/)
+[![CI](https://github.com/lapismd/lapis-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/lapismd/lapis-ai/actions/workflows/ci.yml)
+[![Specification](https://github.com/lapismd/lapis-ai/actions/workflows/publish-spec-pages.yml/badge.svg)](https://lapismd.github.io/lapis-ai/)
 
 Shared Rust AI infrastructure for Lapis applications: ACP transport, a maintained
 Buzz-derived agent, workspace tools, local/paired compute, TOML configuration and
@@ -70,7 +70,7 @@ cargo install lapis-agent --version 0.1.0 --locked
 cargo install lapis-agent-tools --version 0.1.0 --locked
 ```
 
-Native distributions are published through [GitHub releases](https://github.com/stevejuma/lapis-ai/releases).
+Native distributions are published through [GitHub releases](https://github.com/lapismd/lapis-ai/releases).
 Verify `SHA256SUMS` before admitting a bundle. Native preparation and model
 selection/download are explicit operations. Source and release builds never
 require an account with a model provider.
@@ -125,7 +125,7 @@ This setup intentionally leaves the first version PR open and publishes no crate
 
 ## Specification and provenance
 
-Read the [published specification](https://stevejuma.github.io/lapis-ai/),
+Read the [published specification](https://lapismd.github.io/lapis-ai/),
 [canonical Markdown](spec/src/current/index.md) and
 [milestones](spec/src/current/progress/milestones.md). `pnpm spec:build` builds
 mdBook locally. PRs build the book; main deploys it to GitHub Pages. Generated

@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   version:
-    if: github.repository == 'stevejuma/lapis-ai' && github.ref == 'refs/heads/main'
+    if: github.repository == 'lapismd/lapis-ai' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:

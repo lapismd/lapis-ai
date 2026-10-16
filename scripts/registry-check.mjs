@@ -10,7 +10,7 @@ export async function verifyExisting(
   const options = {
     headers: {
       "User-Agent":
-        "lapis-ai release verification (github.com/stevejuma/lapis-ai)",
+        "lapis-ai release verification (github.com/lapismd/lapis-ai)",
     },
   };
   const metadata = await request(url, options);
