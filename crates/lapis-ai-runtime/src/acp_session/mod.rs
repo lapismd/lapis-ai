@@ -66,9 +66,19 @@ impl Drop for Inner {
 pub struct AcpSession(Arc<Inner>);
 impl AcpSession {
     pub async fn start(plan: PreparedLaunch, options: SessionOptions) -> Result<Self> {
+        let (_owner, cancel) = watch::channel(false);
+        Self::start_cancellable(plan, options, cancel).await
+    }
+    /// Native owners can revoke startup and await complete supervised cleanup.
+    pub async fn start_cancellable(
+        plan: PreparedLaunch,
+        options: SessionOptions,
+        mut cancel: watch::Receiver<bool>,
+    ) -> Result<Self> {
         options.validate()?;
         let mut journal = journal::Journal::new(options.event_limit, options.event_byte_limit);
-        let (client, facts, sequence) = bootstrap::start(plan, &options, &mut journal).await?;
+        let (client, facts, sequence) =
+            bootstrap::start(plan, &options, &mut journal, &mut cancel).await?;
         let journal = Arc::new(Mutex::new(journal));
         let (commands, queue) = mpsc::channel(32);
         let (stop, cancel) = watch::channel(false);

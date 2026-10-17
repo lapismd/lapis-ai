@@ -179,3 +179,20 @@ async fn cancelled_process_shutdown_retains_ownership_of_the_whole_child_group()
     reaped(pid).await;
     reaped(child).await;
 }
+
+#[tokio::test]
+async fn a_new_provider_identity_cannot_silently_replace_explicit_resume() {
+    let root = tempfile::tempdir().unwrap();
+    let mut selected = options(root.path(), "resume-mismatch");
+    selected.resume = Some("existing-provider-session".into());
+    assert_eq!(
+        AcpSession::start(plan(root.path()), selected).await.err(),
+        Some(Error("provider_resume_mismatch"))
+    );
+    reaped(frames(root.path())[0]["pid"].as_u64().unwrap() as u32).await;
+    assert!(
+        !frames(root.path())
+            .iter()
+            .any(|frame| frame["type"] == "prompt")
+    );
+}

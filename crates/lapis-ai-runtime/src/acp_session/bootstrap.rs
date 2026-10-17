@@ -7,6 +7,7 @@ pub async fn start(
     mut plan: PreparedLaunch,
     options: &SessionOptions,
     journal: &mut Journal,
+    cancel: &mut tokio::sync::watch::Receiver<bool>,
 ) -> Result<(AcpClient, Value, u64)> {
     let root = plan
         .directory
@@ -21,28 +22,42 @@ pub async fn start(
     }
     plan.directory = root.clone();
     plan.override_environment("JJ_ACP_CWD", root.to_string_lossy())?;
-    let mut client = AcpClient::start_prepared(plan).await?;
+    let mut client = AcpClient::start_prepared_cancellable(plan, cancel).await?;
+    let result = tokio::select! {
+        biased;
+        _ = cancel.changed() => Err(Error("startup_cancelled")),
+        result = initialize(&mut client, options, journal, &cwd) => result,
+    };
+    match result {
+        Ok((facts, sequence)) => Ok((client, facts, sequence)),
+        Err(error) => {
+            client
+                .shutdown()
+                .await
+                .map_err(|_| Error("startup_cleanup_unknown"))?;
+            Err(error)
+        }
+    }
+}
+async fn initialize(
+    client: &mut AcpClient,
+    options: &SessionOptions,
+    journal: &mut Journal,
+    cwd: &std::path::Path,
+) -> Result<(Value, u64)> {
     let commands = client.commands();
     commands.warm("native-warm").await?;
-    let (_, mut sequence) =
-        receive(&mut client, options, "native-warm", "warmed", journal, 0).await?;
+    let (_, mut sequence) = receive(client, options, "native-warm", "warmed", journal, 0).await?;
     commands
         .open(
             "native-open",
             &options.handle,
-            &cwd,
+            cwd,
             options.resume.as_deref(),
         )
         .await?;
-    let (facts, next) = receive(
-        &mut client,
-        options,
-        "native-open",
-        "opened",
-        journal,
-        sequence,
-    )
-    .await?;
+    let (facts, next) =
+        receive(client, options, "native-open", "opened", journal, sequence).await?;
     sequence = next;
     if !facts["adapterSessionId"]
         .as_str()
@@ -50,7 +65,14 @@ pub async fn start(
     {
         return Err(Error("invalid_adapter_session_identity"));
     }
-    Ok((client, facts, sequence))
+    if options
+        .resume
+        .as_ref()
+        .is_some_and(|resume| facts["adapterSessionId"] != *resume)
+    {
+        return Err(Error("provider_resume_mismatch"));
+    }
+    Ok((facts, sequence))
 }
 async fn receive(
     client: &mut AcpClient,

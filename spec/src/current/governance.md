@@ -38,3 +38,8 @@ boundaries and the six foundation/release milestones remain unchanged. Its
 additional source-slice ledger distinguishes Rust qualification from Tauri IPC
 and packaged consumer acceptance; a Changeset records the public API addition
 without preparing or publishing a release.
+
+The optional Tauri adapter is a twelfth governed Cargo package. Its own module,
+permission and host-policy tests follow the same non-growing source budgets.
+The release inventory adds its portable package without changing publication
+authorization; version preparation remains a disposable development regression.

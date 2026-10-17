@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-submit"
+description = "Enables the submit command without any pre-configured scope."
+commands.allow = ["submit"]
+
+[[permission]]
+identifier = "deny-submit"
+description = "Denies the submit command without any pre-configured scope."
+commands.deny = ["submit"]

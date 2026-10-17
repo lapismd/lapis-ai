@@ -54,6 +54,10 @@ const config = defineConfig(tableRequirements(), {
       ],
       rules: [
         {
+          pattern: "^crates/tauri-plugin-lapis-ai/",
+          chapters: ["spec/src/current/contracts/tauri.md"],
+        },
+        {
           pattern: "^crates/lapis-acp-protocol/",
           chapters: ["spec/src/current/contracts/acp/protocol.md"],
         },

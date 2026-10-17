@@ -31,3 +31,7 @@ runtime. Cancelling startup must let the control helper retire its separately
 grouped provider rather than killing the helper first. Process shutdown retains
 the child owner across await points and never signals a process-group identifier
 after its leader has been reaped (LAI-RUNTIME-001).
+
+Native adapters may use cancellable session startup and await its cleanup when
+an admission is revoked. This extends the same supervised client contract; it
+does not add replay, process selection or application-history authority.

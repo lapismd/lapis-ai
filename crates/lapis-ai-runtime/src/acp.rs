@@ -103,14 +103,39 @@ impl AcpClient {
         Self::start_prepared(PreparedLaunch::new(config, Component::Acp, resolver)?).await
     }
     /// Rust host-only launch after admission and native credential resolution.
-    pub async fn start_prepared(mut plan: PreparedLaunch) -> Result<Self> {
+    pub async fn start_prepared(plan: PreparedLaunch) -> Result<Self> {
+        let (_owner, mut cancel) = tokio::sync::watch::channel(false);
+        Self::start_prepared_cancellable(plan, &mut cancel).await
+    }
+    pub(crate) async fn start_prepared_cancellable(
+        mut plan: PreparedLaunch,
+        cancel: &mut tokio::sync::watch::Receiver<bool>,
+    ) -> Result<Self> {
+        if *cancel.borrow() {
+            return Err(Error("startup_cancelled"));
+        }
         plan.arguments = vec!["serve".into(), "--control-version".into(), "3".into()];
         let mut client = Self {
             process: Some(NativeProcess::spawn(plan).await?),
         };
-        let ready = client.next(Duration::from_secs(15)).await?;
-        if ready["type"] != "ready" || ready["version"] != 3 {
-            return Err(Error("invalid_acp_readiness"));
+        let ready = tokio::select! {
+            biased;
+            _ = cancel.changed() => Err(Error("startup_cancelled")),
+            ready = client.next(Duration::from_secs(15)) => ready,
+        };
+        let result = ready.and_then(|ready| {
+            if ready["type"] != "ready" || ready["version"] != 3 {
+                Err(Error("invalid_acp_readiness"))
+            } else {
+                Ok(())
+            }
+        });
+        if let Err(error) = result {
+            client
+                .shutdown()
+                .await
+                .map_err(|_| Error("startup_cleanup_unknown"))?;
+            return Err(error);
         }
         Ok(client)
     }

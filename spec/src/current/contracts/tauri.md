@@ -2,11 +2,13 @@
 
 ## Requirements
 
-| ID            | Requirement                                                                                                                                                                                                                                                                                   |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LAI-TAURI-001 | Future adapters MUST wrap the Rust runtime clients with host-selected executables and admitted workspace roots, scoped opaque session handles, ordered events and explicit cancellation/teardown. Secrets and arbitrary process launch MUST remain on the Rust side.                          |
-| LAI-TAURI-002 | The reusable ACP session layer MUST own one worker per concurrent conversation, correlate every response, fence session and permission identities, preserve exact option IDs and reject overlapping turns. Lost output, deadlines and uncertain writes MUST retire the worker without replay. |
-| LAI-TAURI-003 | Detach/reconnect MUST preserve a bounded acknowledged event journal with monotonic cursors. Coverage loss MUST remain observable independently of queued events. Explicit close and owner teardown MUST perform supervised process cleanup; cancelled consumer waits MUST NOT orphan workers. |
+| ID            | Requirement                                                                                                                                                                                                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LAI-TAURI-001 | Future adapters MUST wrap the Rust runtime clients with host-selected executables and admitted workspace roots, scoped opaque session handles, ordered events and explicit cancellation/teardown. Secrets and arbitrary process launch MUST remain on the Rust side.                                      |
+| LAI-TAURI-002 | The reusable ACP session layer MUST own one worker per concurrent conversation, correlate every response, fence session and permission identities, preserve exact option IDs and reject overlapping turns. Lost output, deadlines and uncertain writes MUST retire the worker without replay.             |
+| LAI-TAURI-003 | Detach/reconnect MUST preserve a bounded acknowledged event journal with monotonic cursors. Coverage loss MUST remain observable independently of queued events. Explicit close and owner teardown MUST perform supervised process cleanup; cancelled consumer waits MUST NOT orphan workers.             |
+| LAI-TAURI-004 | The Tauri host MUST derive caller context from the invoking WebView, authorize every operation against the current host admission, and scope opaque worker/subscription handles to that window and admission generation. Only Rust policy MAY resolve targets into launches, directories and credentials. |
+| LAI-TAURI-005 | Explicit disable, admission revocation, window destruction and actual exit MUST cancel startup and release affected workers/subscriptions. Cancelled close/exit requests MUST preserve workers. Command permissions MUST default to empty and require an explicit ACP-session grant.                      |
 
 The session layer is the first implementation slice. Tauri command, WebView and
 packaged desktop qualification remain separate, pending gates.
@@ -42,3 +44,30 @@ correlation, output failure or request deadline latches failure, identifies
 unresolved requests and stops the process. No automatic continuation or retry is
 performed. These facts are not a durable transcript or a provider-session deletion
 claim. The consuming host still owns admission, generation fencing and history.
+
+## Tauri host boundary
+
+`tauri-plugin-lapis-ai` wraps the owned session layer. Its Rust `HostPolicy`
+authorizes the invoking window/origin and returns a current opaque admission
+generation. Targets are opaque catalog choices; resolving one supplies a prepared
+launch and admitted directory entirely on the Rust side. No renderer command
+accepts a path, program, environment, credential, MCP launch or admission override.
+An optional renderer resume value names a consumer binding, never a provider
+session directly. Native policy must admit that binding for the current vault
+and return the provider identity. A resume response must match the admitted
+provider identity; mismatch or unsupported resume never falls back to new work.
+
+Open requests reserve bounded slots before awaiting startup and retain request
+identity after cancellation or uncertain acknowledgement. A changed admission,
+disabled host or removed slot cannot publish a late worker. Applications call
+scoped revocation on vault closure, plugin disable and trust changes; global
+disable is a separate Rust-only control. Re-enable never resurrects old handles.
+Startup completion includes its cleanup result. A failed cleanup must propagate
+through revocation/shutdown rather than treating task termination as a clean stop.
+
+Only one current channel subscription owns acknowledgements for a session.
+Replacing/detaching a channel preserves the worker and its unacknowledged
+journal. Stale subscription acknowledgements and cursors beyond delivered events
+fail closed. Channel failure detaches delivery; bounded retention still retires a
+worker if coverage cannot be preserved. Cold packaged WebView acceptance remains
+distinct from Rust host-policy and channel-sink tests.

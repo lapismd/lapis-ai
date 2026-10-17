@@ -15,7 +15,8 @@ This work does not depend on or change M5 release authorization. Desktop M10.1
 uses local verified public outputs and remains incomplete until Tauri/native
 acceptance passes.
 
-| Slice           | Status  | Gate                                                                                        | Evidence                                                     | Next action                                       |
-| --------------- | ------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------- |
-| ACP session     | Done    | Correlation, exact permissions, ordered bounded reconnect, isolation and supervised cleanup | [Owned ACP session](../../history/2026-10-17-acp-session.md) | Complete; continue to host-scoped Tauri transport |
-| Tauri transport | Planned | Host-scoped commands/channels, permissions, renderer client and cold native acceptance      | pending                                                      | Build on the verified session layer               |
+| Slice           | Status      | Gate                                                                                        | Evidence                                                              | Next action                                            |
+| --------------- | ----------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------ |
+| ACP session     | Done        | Correlation, exact permissions, ordered bounded reconnect, isolation and supervised cleanup | [Owned ACP session](../../history/2026-10-17-acp-session.md)          | Complete; continue to host-scoped Tauri transport      |
+| Rust Tauri host | Done        | Host-scoped native policy, bounded commands/channels and supervised startup revocation      | [Native Tauri transport](../../history/2026-10-17-tauri-transport.md) | Continue to renderer and native consumer qualification |
+| Tauri transport | In progress | Host-scoped commands/channels, permissions, renderer client and cold native acceptance      | [Native Tauri transport](../../history/2026-10-17-tauri-transport.md) | Implement renderer client and cold packaged acceptance |

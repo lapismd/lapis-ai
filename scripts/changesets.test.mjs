@@ -84,7 +84,7 @@ test("missing offline Cargo bootstrap preserves notes and all version metadata",
   assert.deepEqual(snapshot(root, metadata), before);
   assert.equal((await pendingChangesets(root)).length, 1);
 });
-test("real Changesets prepare all eleven Cargo versions without editing canonical evidence", async (t) => {
+test("real Changesets prepare every governed Cargo version without editing canonical evidence", async (t) => {
   const root = fixture(t),
     canonical = snapshot(root, [
       "spec/src/current/contracts/release.md",

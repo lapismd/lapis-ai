@@ -44,5 +44,5 @@ tokio = { workspace = true, features = [
 
 [dev-dependencies]
 lapis-acp-testkit.workspace = true
-lapis-ai-runtime = { version = "0.1.1", path = "../lapis-ai-runtime" }
+lapis-ai-runtime.workspace = true
 tokio = { workspace = true, features = ["macros"] }

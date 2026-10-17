@@ -5,6 +5,7 @@ const acp = /^lapis-acp(?:-|$)/;
 const forbidden =
   /^(nostr.*|reqwest|axum|hyper|rustls|rusqlite|sqlx.*|turso|tauri.*)$/;
 export const allowed = {
+  "tauri-plugin-lapis-ai": ["lapis-ai-runtime"],
   "lapis-acp-protocol": [],
   "lapis-acp-agent": ["lapis-acp-protocol"],
   "lapis-acp-runner": ["lapis-acp-protocol", "lapis-acp-agent"],

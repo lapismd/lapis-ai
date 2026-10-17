@@ -43,6 +43,11 @@ their numeric suffixes. This repository is named `lapis-ai`.
 
 ## Qualification
 
+The optional `tauri-plugin-lapis-ai` crate depends on `lapis-ai-runtime`, Tauri
+and bounded host/channel support. No ACP crate acquires a Tauri dependency.
+The dependency matrix and coordinated release inventory include this adapter;
+application admission and durable conversation state remain consumer-owned.
+
 The verification table and milestone ledger own current acceptance. Source
 repository live-runner, host, publication and platform results are historical
 references. They are not acceptance for renamed helpers. No consumer or public
