@@ -10,8 +10,9 @@ permissions, workspace admission, context, credentials and conversation history.
 
 This is the shared backend foundation for Rust applications, including future
 Lapis Notes Tauri integration. Production helpers use Rust and native processes;
-Node and Python are development tools. The [Tauri adapter contract](spec/src/current/contracts/tauri.md)
-is documented; a Tauri plugin and consumer migration have not been implemented.
+Node and Python are development tools. The [Tauri ACP transport and typed client](spec/src/current/contracts/tauri.md)
+are qualified independently; application context, history, tools and optional
+compute retain their consuming application gates.
 
 ## Packages and delivery
 
@@ -29,6 +30,7 @@ and Changesets coordinator. The first registry publication is pending.
 | `lapis-agent`        | Provider adapters, models, permissions and MCP tools       | Cargo + native executable |
 | `lapis-agent-tools`  | Permissioned workspace tools over MCP stdio                | Cargo + native executable |
 | `lapis-ai-config`    | Inert TOML and secret-reference resolution                 | Cargo library             |
+| `lapis-ai-capture`   | Read-only bounded external-session source discovery        | Cargo library             |
 | `lapis-ai-runtime`   | Supervised helper clients and resource verification        | Cargo library             |
 | `lapis-compute`      | Authenticated local inference and admitted paired compute  | Native executable only    |
 
@@ -144,3 +146,7 @@ The private `@lapismd/ai` migration package exposes a typed client from built
 `pnpm check:client` and `pnpm test:client` qualify this boundary; normal root
 commands include them. It shares the coordinated version and has no npm release
 lane. See [the client guide](packages/ai/README.md) for consumption and recovery.
+
+Native source discovery is independently reusable through `lapis-ai-capture`.
+See [the capture guide](docs/capture.md). Hosts retain activity admission,
+redaction and durable publication; registering a profile grants none of these.

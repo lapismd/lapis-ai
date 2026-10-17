@@ -3,6 +3,7 @@
 - [Current specification](current/index.md)
   - [Governance](current/governance.md)
   - [Configuration and clients](current/contracts/runtime.md)
+  - [Session-source acquisition](current/contracts/capture.md)
   - [Native services](current/contracts/services.md)
   - [CI and release](current/contracts/release.md)
   - [Tauri adapter contract](current/contracts/tauri.md)
@@ -31,3 +32,5 @@
   - [Packaged ACP Tauri qualification](history/2026-10-17-native-tauri.md)
 
 - [Host-prepared native clients](history/2026-10-17-host-clients.md)
+
+- [Filesystem capture acquisition](history/2026-10-17-capture-discovery.md)

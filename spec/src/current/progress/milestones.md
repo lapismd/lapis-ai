@@ -30,3 +30,12 @@ surface for host-prepared Control V3 launches, bounded agent discovery and
 independent compute command/events. M0–M4 and the existing Tauri qualification
 retain their recorded status; M5 publication is unchanged. jj-store consumer
 and cold native qualification are separate from this shared source slice.
+
+## Reusable session acquisition
+
+[Filesystem acquisition](../../history/2026-10-17-capture-discovery.md) qualifies
+the independent approved-root scanner, versioned product inventory and bounded
+Codex file inspection. The complete workspace suite, strict checks, build and
+public package contents pass. Publishing-consumer routing, leases/cursors and
+broader source formats remain jj-store M33 work. M0–M5 status and publication
+authorization are unchanged.

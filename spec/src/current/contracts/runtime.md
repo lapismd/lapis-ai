@@ -49,3 +49,8 @@ receiver, so progress and Stop do not wait for a long operation's completion.
 Native hosts may obtain a non-serializable, redacted connection credential for
 local or explicitly admitted peer agent launches. Tokens are zeroized on drop.
 Existing convenience methods remain supported; hosts choose one event owner.
+
+Source acquisition is independently owned by the bounded
+[capture library](capture.md), without an execution/runtime edge. Its profile
+inventory and read-only metadata discovery neither spawn nor authorize an ACP
+worker, and do not change LAI-RUNTIME-001–004.

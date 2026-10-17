@@ -58,3 +58,8 @@ Host-prepared clients and the shared development bundle verifier retain the
 existing runtime/service boundaries and LAI-GOV-100–104 evidence rules. Native
 hosts own admission and durable state; Node packaging tools remain development
 only. The API Changeset does not authorize version preparation or publication.
+
+The session acquisition extraction adds the coordinated `lapis-ai-capture` Cargo
+package with explicit dependency boundaries, a crate README and independent
+source/profile tests. Existing source provenance, architecture budgets, runtime
+qualification and publication gates remain enforced.

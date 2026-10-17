@@ -1,5 +1,6 @@
 [workspace]
 members = [
+  "crates/lapis-ai-capture",
   "crates/lapis-acp-protocol",
   "crates/lapis-acp-agent",
   "crates/lapis-acp-runner",

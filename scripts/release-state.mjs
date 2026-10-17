@@ -22,7 +22,7 @@ export function checkRelease(root = ".") {
     config.repository !== "lapismd/lapis-ai" ||
     config.version !== 1 ||
     config.coordinator !== coordinator ||
-    config.crates.length !== 11 ||
+    config.crates.length !== 12 ||
     config.native_only.join(",") !== "lapis-compute"
   )
     throw Error("unexpected release policy");
