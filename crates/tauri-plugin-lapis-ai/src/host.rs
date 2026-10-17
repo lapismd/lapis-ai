@@ -100,11 +100,12 @@ impl AcpHost {
     }
     pub async fn close(&self, context: &HostContext, id: &str) -> Result<()> {
         let scope = self.scope(context)?;
-        let slot = {
+        let completions = {
             let mut state = self.state.lock().map_err(|_| Error("host_unavailable"))?;
             state.slot(&scope, id)?;
-            state.slots.remove(id).ok_or(Error("unknown_session"))?
+            let slot = state.slots.remove(id).ok_or(Error("unknown_session"))?;
+            crate::cleanup::retire(&mut state, &self.state, vec![slot])
         };
-        Self::stop_slots(vec![slot]).await
+        crate::cleanup::wait(completions).await
     }
 }

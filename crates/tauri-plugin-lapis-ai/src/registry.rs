@@ -57,18 +57,32 @@ impl Drop for Slot {
 }
 pub(crate) struct Registry {
     pub slots: HashMap<String, Slot>,
+    pub retiring: HashMap<String, Retirement>,
     pub seen: HashSet<(String, String, String)>,
     pub enabled: bool,
     pub stopped: bool,
+}
+pub(crate) struct Retirement {
+    pub scopes: Vec<Scope>,
+    pub done: watch::Receiver<Option<Result<()>>>,
 }
 impl Registry {
     pub fn new() -> Self {
         Self {
             slots: HashMap::new(),
+            retiring: HashMap::new(),
             seen: HashSet::new(),
             enabled: true,
             stopped: false,
         }
+    }
+    pub fn resources(&self) -> usize {
+        self.slots.len()
+            + self
+                .retiring
+                .values()
+                .map(|job| job.scopes.len())
+                .sum::<usize>()
     }
     pub fn available(&self) -> Result<()> {
         if !self.enabled || self.stopped {

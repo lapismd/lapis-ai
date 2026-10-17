@@ -18,6 +18,7 @@ pub struct Policy {
     pub generation: AtomicU64,
     pub blocked: AtomicBool,
     pub bad_cleanup: AtomicBool,
+    pub slow_shutdown: AtomicBool,
 }
 impl HostPolicy for Policy {
     fn authorize(&self, context: &HostContext) -> Result<String> {
@@ -68,6 +69,9 @@ impl HostPolicy for Policy {
         if self.bad_cleanup.load(Ordering::Acquire) {
             environment.0.insert("FAIL_CLEANUP".into(), "1".into());
         }
+        if self.slow_shutdown.load(Ordering::Acquire) {
+            environment.0.insert("SLOW_SHUTDOWN".into(), "1".into());
+        }
         Ok(Launch {
             prepared: PreparedLaunch {
                 executable: path,
@@ -86,6 +90,7 @@ pub fn setup(root: &Path) -> (Arc<AcpHost>, Arc<Policy>) {
         generation: AtomicU64::new(0),
         blocked: AtomicBool::new(false),
         bad_cleanup: AtomicBool::new(false),
+        slow_shutdown: AtomicBool::new(false),
     });
     (
         Arc::new(AcpHost::new(policy.clone(), Config::default()).unwrap()),
@@ -179,7 +184,7 @@ pub fn prompt() -> SessionRequest {
     }
 }
 const PEER: &str = r#"#!/usr/bin/env python3
-import sys,os,json
+import sys,os,json,time
 log=open(os.environ['LOG'],'a',buffering=1)
 log.write(json.dumps({'pid':os.getpid()})+'\n')
 scope=None
@@ -204,4 +209,5 @@ for line in sys.stdin:
   emit('activity',rid,update={'content':{'text':'reply'}})
   emit('record',rid,record={'version':1,'taskId':rid,'status':'completed'},sessionUsable=True,quiescent=True)
  elif kind=='status':emit('status',rid)
+if os.environ.get('SLOW_SHUTDOWN'):time.sleep(0.5)
 "#;

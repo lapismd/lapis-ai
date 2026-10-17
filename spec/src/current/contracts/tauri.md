@@ -65,6 +65,10 @@ scoped revocation on vault closure, plugin disable and trust changes; global
 disable is a separate Rust-only control. Re-enable never resurrects old handles.
 Startup completion includes its cleanup result. A failed cleanup must propagate
 through revocation/shutdown rather than treating task termination as a clean stop.
+Retirement remains registry-owned after slots are removed or a caller's wait is
+cancelled. Global shutdown must await cleanup already started by window teardown.
+Retiring workers continue to consume capacity until reaped; scoped failures stay
+observable without stopping unrelated windows (LAI-TAURI-005).
 
 Only one current channel subscription owns acknowledgements for a session.
 Replacing/detaching a channel preserves the worker and its unacknowledged

@@ -49,3 +49,7 @@ and participates in normal TypeScript check/test/build lanes. Its optional Tauri
 entry is separate from the runtime-independent root. Changesets fixtures copy the
 workspace and client manifest, and coordinated preparation updates its version
 without adding npm publication or modifying canonical evidence.
+
+Adapter teardown qualification includes cancelled caller waits and overlapping
+window revocation/global exit. Registry-owned retirement preserves the existing
+scope and capacity boundaries; it changes no wire or release authority.

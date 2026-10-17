@@ -1,5 +1,6 @@
 //! Optional Tauri transport; applications own admission and conversation policy.
 #![forbid(unsafe_code)]
+mod cleanup;
 mod commands;
 mod error;
 mod host;

@@ -27,3 +27,4 @@
 
 - [Tauri transport evidence](history/2026-10-17-tauri-transport.md)
   - [Typed ACP renderer](history/2026-10-17-acp-renderer.md)
+  - [Registry-owned ACP retirement](history/2026-10-17-owned-retirement.md)

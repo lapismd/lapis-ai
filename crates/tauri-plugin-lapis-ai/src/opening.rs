@@ -41,7 +41,7 @@ impl AcpHost {
             if state.seen.contains(&key) {
                 return Err(Error("duplicate_request"));
             }
-            if state.slots.len() >= self.config.maximum_sessions {
+            if state.resources() >= self.config.maximum_sessions {
                 return Err(Error("session_limit"));
             }
             if state.seen.len() >= 4096 {

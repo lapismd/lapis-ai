@@ -1,4 +1,4 @@
-use crate::{AcpHost, Error, Result, registry::Slot};
+use crate::{AcpHost, Error, Result, cleanup, registry::Slot};
 impl AcpHost {
     pub fn enable(&self) -> Result<()> {
         let mut state = self.state.lock().map_err(|_| Error("host_unavailable"))?;
@@ -15,17 +15,19 @@ impl AcpHost {
         self.stop(true).await
     }
     async fn stop(&self, permanent: bool) -> Result<()> {
-        let slots = {
+        let completions = {
             let mut state = self.state.lock().map_err(|_| Error("host_unavailable"))?;
             state.enabled = false;
             state.stopped |= permanent;
-            state.slots.drain().map(|(_, slot)| slot).collect()
+            let slots = state.slots.drain().map(|(_, slot)| slot).collect();
+            cleanup::retire(&mut state, &self.state, slots);
+            cleanup::pending(&state, |_| true)
         };
-        Self::stop_slots(slots).await
+        cleanup::wait(completions).await
     }
     /// Rust-only owner teardown; unrelated windows and vaults remain alive.
     pub async fn revoke(&self, window: &str, admission: Option<&str>) -> Result<()> {
-        let slots = {
+        let completions = {
             let mut state = self.state.lock().map_err(|_| Error("host_unavailable"))?;
             let ids: Vec<_> = state
                 .slots
@@ -36,11 +38,16 @@ impl AcpHost {
                 })
                 .map(|(id, _)| id.clone())
                 .collect();
-            ids.into_iter()
+            let slots = ids
+                .into_iter()
                 .filter_map(|id| state.slots.remove(&id))
-                .collect()
+                .collect();
+            cleanup::retire(&mut state, &self.state, slots);
+            cleanup::pending(&state, |scope| {
+                scope.window == window && admission.is_none_or(|id| scope.admission == id)
+            })
         };
-        Self::stop_slots(slots).await
+        cleanup::wait(completions).await
     }
     pub(crate) async fn stop_slots(slots: Vec<Slot>) -> Result<()> {
         let mut tasks = tokio::task::JoinSet::new();
@@ -84,7 +91,8 @@ impl Drop for AcpHost {
         if let Ok(mut state) = self.state.lock() {
             state.enabled = false;
             state.stopped = true;
-            state.slots.clear();
+            let slots = state.slots.drain().map(|(_, slot)| slot).collect();
+            cleanup::retire(&mut state, &self.state, slots);
         }
     }
 }
