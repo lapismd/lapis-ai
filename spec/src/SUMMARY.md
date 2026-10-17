@@ -26,3 +26,4 @@
 - [Owned ACP session evidence](history/2026-10-17-acp-session.md)
 
 - [Tauri transport evidence](history/2026-10-17-tauri-transport.md)
+  - [Typed ACP renderer](history/2026-10-17-acp-renderer.md)

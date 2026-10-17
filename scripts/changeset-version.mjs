@@ -22,6 +22,12 @@ export function synchronizeVersion(root, selected) {
   if (changed < 0 || after[changed] < before[changed])
     throw Error("version preparation requires a newer stable version");
   const cargo = manifest(root, "Cargo.toml");
+  const client = json(root, "packages/ai/package.json");
+  client.version = selected;
+  writeFileSync(
+    join(root, "packages/ai/package.json"),
+    JSON.stringify(client, null, 2) + "\n",
+  );
   cargo.workspace.package.version = selected;
   for (const [name, dependency] of Object.entries(cargo.workspace.dependencies))
     if (allCrates.includes(name)) dependency.version = selected;
@@ -78,6 +84,7 @@ export async function prepareVersion(
     "prettier",
     "--write",
     "package.json",
+    "packages/ai/package.json",
     "pnpm-lock.yaml",
     "README.md",
     "CHANGELOG.md",

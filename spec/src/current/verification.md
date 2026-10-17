@@ -91,3 +91,4 @@
 | LAI-REL-007     | Planned     | [Release setup](../history/2026-10-16-release-setup.md)     |
 | LAI-TAURI-004   | Planned     | [Tauri transport](../history/2026-10-17-tauri-transport.md) |
 | LAI-TAURI-005   | Planned     | [Tauri transport](../history/2026-10-17-tauri-transport.md) |
+| LAI-TAURI-006   | Planned     | [Typed renderer](../history/2026-10-17-acp-renderer.md)     |

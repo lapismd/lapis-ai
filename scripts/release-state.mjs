@@ -33,6 +33,13 @@ export function checkRelease(root = ".") {
   )
     throw Error("private coordinator and Cargo versions must match");
   const changesets = json(root, ".changeset/config.json");
+  const client = json(root, "packages/ai/package.json");
+  if (
+    client.name !== "@lapismd/ai" ||
+    client.private !== true ||
+    client.version !== selected
+  )
+    throw Error("private renderer client and Cargo versions must match");
   if (
     changesets.privatePackages?.version !== true ||
     changesets.privatePackages?.tag !== false ||

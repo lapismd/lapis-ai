@@ -2,13 +2,14 @@
 
 ## Requirements
 
-| ID            | Requirement                                                                                                                                                                                                                                                                                               |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LAI-TAURI-001 | Future adapters MUST wrap the Rust runtime clients with host-selected executables and admitted workspace roots, scoped opaque session handles, ordered events and explicit cancellation/teardown. Secrets and arbitrary process launch MUST remain on the Rust side.                                      |
-| LAI-TAURI-002 | The reusable ACP session layer MUST own one worker per concurrent conversation, correlate every response, fence session and permission identities, preserve exact option IDs and reject overlapping turns. Lost output, deadlines and uncertain writes MUST retire the worker without replay.             |
-| LAI-TAURI-003 | Detach/reconnect MUST preserve a bounded acknowledged event journal with monotonic cursors. Coverage loss MUST remain observable independently of queued events. Explicit close and owner teardown MUST perform supervised process cleanup; cancelled consumer waits MUST NOT orphan workers.             |
-| LAI-TAURI-004 | The Tauri host MUST derive caller context from the invoking WebView, authorize every operation against the current host admission, and scope opaque worker/subscription handles to that window and admission generation. Only Rust policy MAY resolve targets into launches, directories and credentials. |
-| LAI-TAURI-005 | Explicit disable, admission revocation, window destruction and actual exit MUST cancel startup and release affected workers/subscriptions. Cancelled close/exit requests MUST preserve workers. Command permissions MUST default to empty and require an explicit ACP-session grant.                      |
+| ID            | Requirement                                                                                                                                                                                                                                                                                                |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LAI-TAURI-001 | Future adapters MUST wrap the Rust runtime clients with host-selected executables and admitted workspace roots, scoped opaque session handles, ordered events and explicit cancellation/teardown. Secrets and arbitrary process launch MUST remain on the Rust side.                                       |
+| LAI-TAURI-002 | The reusable ACP session layer MUST own one worker per concurrent conversation, correlate every response, fence session and permission identities, preserve exact option IDs and reject overlapping turns. Lost output, deadlines and uncertain writes MUST retire the worker without replay.              |
+| LAI-TAURI-003 | Detach/reconnect MUST preserve a bounded acknowledged event journal with monotonic cursors. Coverage loss MUST remain observable independently of queued events. Explicit close and owner teardown MUST perform supervised process cleanup; cancelled consumer waits MUST NOT orphan workers.              |
+| LAI-TAURI-004 | The Tauri host MUST derive caller context from the invoking WebView, authorize every operation against the current host admission, and scope opaque worker/subscription handles to that window and admission generation. Only Rust policy MAY resolve targets into launches, directories and credentials.  |
+| LAI-TAURI-005 | Explicit disable, admission revocation, window destruction and actual exit MUST cancel startup and release affected workers/subscriptions. Cancelled close/exit requests MUST preserve workers. Command permissions MUST default to empty and require an explicit ACP-session grant.                       |
+| LAI-TAURI-006 | The reusable renderer client MUST correlate before dispatch, buffer bounded early channel delivery, validate session/subscription identity and contiguous journal cursors, and acknowledge only consumed events. Detach MUST preserve native workers; uncertain submissions MUST NOT replay automatically. |
 
 The session layer is the first implementation slice. Tauri command, WebView and
 packaged desktop qualification remain separate, pending gates.
@@ -71,3 +72,26 @@ journal. Stale subscription acknowledgements and cursors beyond delivered events
 fail closed. Channel failure detaches delivery; bounded retention still retires a
 worker if coverage cannot be preserved. Cold packaged WebView acceptance remains
 distinct from Rust host-policy and channel-sink tests.
+
+## Renderer client
+
+The private migration package `@lapismd/ai` exposes built public exports: a
+runtime-independent typed client at the root and the optional Tauri transport
+at `./tauri`. Only the latter imports Tauri IPC. It carries raw control-v3
+frames; application event mapping, transcript persistence, context and memory
+remain consumer policy. Permission choices preserve exact provider option IDs,
+including explicit cancellation through a null option. No semantic fallback
+approves a request.
+
+Pending correlation is registered before submission. Channel delivery may precede
+the attach invocation's subscription token; bounded delivery waits for that token
+before consuming. Every snapshot must match the current worker/subscription and
+cover the next contiguous journal range. A consumer callback must complete before
+the cursor advances or acknowledgement is sent. A failed callback, lost channel,
+invalid cursor or unknown submission remains observable without replay. Reattach
+uses the last consumed cursor and fences obsolete deliveries. Lost open replies
+are recoverable by listing native request identities, never by retrying open.
+
+The private client shares the coordinated version for local public-build
+consumption. It has no npm publication or tag lane. Native/model qualification
+remains separate from its deterministic transport tests.

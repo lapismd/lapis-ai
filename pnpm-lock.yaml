@@ -19,9 +19,21 @@ importers:
       "@lapismd/spec-validator":
         specifier: ^0.1.0
         version: 0.1.4
+      "@tauri-apps/api":
+        specifier: ~2.12.4
+        version: 2.12.4
       prettier:
         specifier: ^3.6.2
         version: 3.9.10
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/ai:
+    dependencies:
+      "@tauri-apps/api":
+        specifier: ^2.12.4
+        version: 2.12.4
 
 packages:
   "@babel/runtime@7.29.10":
@@ -203,6 +215,12 @@ packages:
         integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==,
       }
     engines: { node: ">= 8" }
+
+  "@tauri-apps/api@2.12.4":
+    resolution:
+      {
+        integrity: sha512-pVmfis+4zT8H0Qhp3xPZx9Ju7kpzvA6rr/PSJPyuwfvucTQ8sVt61NYU9KMkK703UFlYadFmjKA4HhybOtN0gg==,
+      }
 
   "@types/node@12.20.55":
     resolution:
@@ -922,6 +940,8 @@ snapshots:
     dependencies:
       "@nodelib/fs.scandir": 2.1.5
       fastq: 1.20.3
+
+  "@tauri-apps/api@2.12.4": {}
 
   "@types/node@12.20.55": {}
 

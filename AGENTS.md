@@ -23,6 +23,8 @@ ACP owns no network, identity, credentials or durability. Applications own trust
 workspace admission, secrets, context and history. No uncertain prompt is replayed.
 Tauri integration wraps the native runtime in its own adapter crate; application
 admission and history remain host-owned. Node and Python are development tools only.
+The private renderer client lives in `packages/ai`; consume its built public
+exports. Keep its generic entry independent of the optional Tauri transport.
 Release automation follows `spec/src/current/contracts/release.md`. Never merge
 version PRs or publish packages/tags without the governing release authorization.
 Do not install services, mutate user caches, or update source repositories.

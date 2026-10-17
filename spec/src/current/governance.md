@@ -43,3 +43,9 @@ The optional Tauri adapter is a twelfth governed Cargo package. Its own module,
 permission and host-policy tests follow the same non-growing source budgets.
 The release inventory adds its portable package without changing publication
 authorization; version preparation remains a disposable development regression.
+
+The private renderer client lives in `packages/ai`, exposes built public exports
+and participates in normal TypeScript check/test/build lanes. Its optional Tauri
+entry is separate from the runtime-independent root. Changesets fixtures copy the
+workspace and client manifest, and coordinated preparation updates its version
+without adding npm publication or modifying canonical evidence.

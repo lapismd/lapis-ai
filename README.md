@@ -15,7 +15,7 @@ is documented; a Tauri plugin and consumer migration have not been implemented.
 
 ## Packages and delivery
 
-All eleven crates share one version. The private npm package is a development
+All twelve Cargo packages share one version. The private npm package is a development
 and Changesets coordinator. The first registry publication is pending.
 
 | Package              | Responsibility                                             | Delivery                  |
@@ -136,3 +136,11 @@ Markdown within 400 physical lines / 32768 bytes. Imported exceptions never grow
 The [source pins](docs/provenance.toml), [import manifest](docs/imports/source-manifest.json)
 and [agent attribution](docs/agent-upstream.md) preserve upstream ownership.
 Apache-2.0; see [LICENSE](LICENSE.md) and [notices](docs/licenses/NOTICE.md).
+
+## Typed renderer client
+
+The private `@lapismd/ai` migration package exposes a typed client from built
+`dist` and an optional `@lapismd/ai/tauri` transport. `pnpm build:client`,
+`pnpm check:client` and `pnpm test:client` qualify this boundary; normal root
+commands include them. It shares the coordinated version and has no npm release
+lane. See [the client guide](packages/ai/README.md) for consumption and recovery.

@@ -50,9 +50,13 @@ const config = defineConfig(tableRequirements(), {
         "^spec/src/current/(?:verification|progress)/",
       ],
       protected: [
-        "^(?:\\.github/|crates/|scripts/|examples/|Cargo|rust|package|pnpm|AGENTS|README|docs/|spec-validator|release\\.toml|CHANGELOG|\\.changeset/)",
+        "^(?:\\.github/|crates/|packages/|scripts/|examples/|Cargo|rust|package|pnpm|AGENTS|README|docs/|spec-validator|release\\.toml|CHANGELOG|\\.changeset/)",
       ],
       rules: [
+        {
+          pattern: "^packages/ai/",
+          chapters: ["spec/src/current/contracts/tauri.md"],
+        },
         {
           pattern: "^crates/tauri-plugin-lapis-ai/",
           chapters: ["spec/src/current/contracts/tauri.md"],
