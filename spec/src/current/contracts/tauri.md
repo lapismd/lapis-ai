@@ -11,8 +11,10 @@
 | LAI-TAURI-005 | Explicit disable, admission revocation, window destruction and actual exit MUST cancel startup and release affected workers/subscriptions. Cancelled close/exit requests MUST preserve workers. Command permissions MUST default to empty and require an explicit ACP-session grant.                       |
 | LAI-TAURI-006 | The reusable renderer client MUST correlate before dispatch, buffer bounded early channel delivery, validate session/subscription identity and contiguous journal cursors, and acknowledge only consumed events. Detach MUST preserve native workers; uncertain submissions MUST NOT replay automatically. |
 
-The session layer is the first implementation slice. Tauri command, WebView and
-packaged desktop qualification remain separate, pending gates.
+The ACP session, native host and typed client are qualified together in a
+packaged macOS ARM64 consumer. Rust, renderer and native evidence remain distinct.
+Desktop application orchestration and compute Tauri integration retain their
+separate consumer gates.
 The adapter maps ACP warm/open/configure/prompt/permission/cancel/close and compute
 configuration/model/pairing operations to clients. Each WebView subscription is
 owned by its originating window and application instance; teardown releases it.
