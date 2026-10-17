@@ -1,4 +1,4 @@
-use crate::{Error, PreparedLaunch, Result};
+use crate::{Error, PreparedLaunch, ProcessLimits, Result};
 use serde_json::Value;
 use std::{process::Stdio, sync::Arc, time::Duration};
 use tokio::{
@@ -6,22 +6,21 @@ use tokio::{
     process::{Child, ChildStdin},
     sync::{Mutex, mpsc, watch},
 };
-const MAX_FRAME: usize = 4 * 1024 * 1024;
 #[derive(Clone)]
-pub struct Sender(Arc<Mutex<Option<ChildStdin>>>);
+pub struct Sender(Arc<Mutex<Option<ChildStdin>>>, ProcessLimits);
 impl Sender {
     pub async fn send(&self, value: &Value) -> Result<()> {
-        self.send_bounded(value, MAX_FRAME).await
+        self.send_bounded(value, self.1.maximum_request_bytes).await
     }
     pub(crate) async fn send_bounded(&self, value: &Value, maximum: usize) -> Result<()> {
         let mut bytes = serde_json::to_vec(value).map_err(|_| Error("invalid_request"))?;
-        if bytes.len() > maximum {
+        if bytes.len() > maximum.min(self.1.maximum_request_bytes) {
             return Err(Error("request_limit"));
         }
         bytes.push(b'\n');
         let mut input = self.0.lock().await;
         let input = input.as_mut().ok_or(Error("helper_input_closed"))?;
-        tokio::time::timeout(Duration::from_secs(10), async {
+        tokio::time::timeout(self.1.write_timeout, async {
             input.write_all(&bytes).await?;
             input.flush().await
         })
@@ -42,12 +41,17 @@ pub struct NativeProcess {
 }
 impl NativeProcess {
     pub async fn spawn(plan: PreparedLaunch) -> Result<Self> {
-        Self::spawn_mode(plan, false).await
+        Self::spawn_with_limits(plan, ProcessLimits::default()).await
     }
-    pub(crate) async fn spawn_single(plan: PreparedLaunch) -> Result<Self> {
-        Self::spawn_mode(plan, true).await
+    pub async fn spawn_with_limits(plan: PreparedLaunch, limits: ProcessLimits) -> Result<Self> {
+        Self::spawn_mode(plan, false, limits).await
     }
-    async fn spawn_mode(plan: PreparedLaunch, single: bool) -> Result<Self> {
+    pub(crate) async fn spawn_single(plan: PreparedLaunch, limits: ProcessLimits) -> Result<Self> {
+        Self::spawn_mode(plan, true, limits).await
+    }
+    async fn spawn_mode(plan: PreparedLaunch, single: bool, limits: ProcessLimits) -> Result<Self> {
+        let limits = limits.validate()?;
+        let maximum = limits.maximum_frame_bytes;
         if !plan.directory.is_dir() {
             return Err(Error("working_directory_unavailable"));
         }
@@ -72,7 +76,7 @@ impl NativeProcess {
             .stdout
             .take()
             .ok_or(Error("helper_pipes_unavailable"))?;
-        let (tx, frames) = mpsc::channel(256);
+        let (tx, frames) = mpsc::channel(limits.queued_frames);
         let (failed, failure) = watch::channel(None);
         let reader = tokio::spawn(async move {
             let mut input = BufReader::new(output);
@@ -80,10 +84,10 @@ impl NativeProcess {
                 use tokio::io::AsyncReadExt;
                 let mut bytes = Vec::new();
                 let read = input
-                    .take((MAX_FRAME + 1) as u64)
+                    .take((maximum + 1) as u64)
                     .read_to_end(&mut bytes)
                     .await;
-                let result = if read.is_err() || bytes.len() > MAX_FRAME {
+                let result = if read.is_err() || bytes.len() > maximum {
                     Err(Error("helper_protocol_failed"))
                 } else {
                     serde_json::from_slice(&bytes).map_err(|_| Error("helper_protocol_failed"))
@@ -93,14 +97,14 @@ impl NativeProcess {
             }
             loop {
                 let mut bytes = Vec::new();
-                let read = tokio::io::AsyncReadExt::take(&mut input, (MAX_FRAME + 1) as u64)
+                let read = tokio::io::AsyncReadExt::take(&mut input, (maximum + 1) as u64)
                     .read_until(b'\n', &mut bytes)
                     .await;
                 if matches!(read, Ok(0)) {
                     break;
                 }
                 let value =
-                    if read.is_err() || bytes.len() > MAX_FRAME || bytes.last() != Some(&b'\n') {
+                    if read.is_err() || bytes.len() > maximum || bytes.last() != Some(&b'\n') {
                         Err(Error("helper_protocol_failed"))
                     } else {
                         serde_json::from_slice(&bytes).map_err(|_| Error("helper_protocol_failed"))
@@ -117,7 +121,7 @@ impl NativeProcess {
         });
         Ok(Self {
             child: Some(child),
-            sender: Sender(Arc::new(Mutex::new(Some(input)))),
+            sender: Sender(Arc::new(Mutex::new(Some(input))), limits),
             frames,
             failure,
             reader,

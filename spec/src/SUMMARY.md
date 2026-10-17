@@ -29,3 +29,5 @@
   - [Typed ACP renderer](history/2026-10-17-acp-renderer.md)
   - [Registry-owned ACP retirement](history/2026-10-17-owned-retirement.md)
   - [Packaged ACP Tauri qualification](history/2026-10-17-native-tauri.md)
+
+- [Host-prepared native clients](history/2026-10-17-host-clients.md)

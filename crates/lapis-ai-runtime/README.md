@@ -23,3 +23,10 @@ The repository is preparing its first Cargo publication; consult releases for
 available versions. Source builds use `pnpm dev:cargo -- build -p lapis-ai-runtime --locked`.
 
 Apache-2.0. See the included `LICENSE.md` and `NOTICE.md` for attribution.
+
+Hosts with existing orchestration can use `AcpClient` for Control V3,
+`AgentClient::{models_prepared, metadata_prepared}` and
+`ComputeClient::start_prepared`. `PreparedLaunch::from_command` copies only
+explicit native launch values. `ProcessLimits` retains host transport bounds.
+Compute's separate `commands()` and `next_event()` keep progress and Stop
+responsive; its redacted `connection()` stays in native code.

@@ -35,3 +35,17 @@ after its leader has been reaped (LAI-RUNTIME-001).
 Native adapters may use cancellable session startup and await its cleanup when
 an admission is revoked. This extends the same supervised client contract; it
 does not add replay, process selection or application-history authority.
+
+Host integrations may select bounded `ProcessLimits` and prepare launches from
+explicit native command values. This copies no implicit parent environment.
+`AcpClient::start_prepared_with_options` retains admitted launch flags while
+fixing Control V3; competing protocol selectors are rejected. The existing
+session adapter retains its fixed argv. Readiness is available to native hosts.
+Agent discovery and metadata also accept prepared launches with independent
+input/output bounds and host deadlines (LAI-RUNTIME-001–004).
+
+Compute exposes an independent bounded command sender and one ordered event
+receiver, so progress and Stop do not wait for a long operation's completion.
+Native hosts may obtain a non-serializable, redacted connection credential for
+local or explicitly admitted peer agent launches. Tokens are zeroized on drop.
+Existing convenience methods remain supported; hosts choose one event owner.

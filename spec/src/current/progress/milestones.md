@@ -22,3 +22,11 @@ acceptance passes.
 | Renderer client  | Done   | Typed public outputs, bounded consumed delivery and correlated uncertain outcomes           | [Typed renderer](../../history/2026-10-17-acp-renderer.md)            | Continue to cold packaged WebView qualification        |
 | Owned retirement | Done   | Caller cancellation and overlapping revocation/exit retain supervised cleanup and capacity  | [Owned retirement](../../history/2026-10-17-owned-retirement.md)      | Complete; refresh native consumer                      |
 | Tauri transport  | Done   | Host-scoped commands/channels, permissions, renderer client and cold native acceptance      | [Packaged ACP Tauri](../../history/2026-10-17-native-tauri.md)        | Complete; desktop UI/tools and optional compute follow |
+
+## jj-store consumer integration
+
+[Host clients](../../history/2026-10-17-host-clients.md) extends the M3 client
+surface for host-prepared Control V3 launches, bounded agent discovery and
+independent compute command/events. M0–M4 and the existing Tauri qualification
+retain their recorded status; M5 publication is unchanged. jj-store consumer
+and cold native qualification are separate from this shared source slice.

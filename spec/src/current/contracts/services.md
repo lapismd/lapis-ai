@@ -25,3 +25,7 @@ behavior and removes an accidental dependency on compute feature unification.
 The canonical GitHub owner is now `lapismd`. Service documentation and Cargo
 metadata follow this identity; providers, native pins and wire contracts remain
 unchanged (LAI-LOCAL-001, LAI-COMPUTE-001–002).
+
+Bundle verification rejects symbolic links in manifests, helper files and native
+file path components, including links within the bundle. Consumer startup uses
+only the verified regular files (LAI-PACKAGE-001).

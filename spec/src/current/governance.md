@@ -53,3 +53,8 @@ without adding npm publication or modifying canonical evidence.
 Adapter teardown qualification includes cancelled caller waits and overlapping
 window revocation/global exit. Registry-owned retirement preserves the existing
 scope and capacity boundaries; it changes no wire or release authority.
+
+Host-prepared clients and the shared development bundle verifier retain the
+existing runtime/service boundaries and LAI-GOV-100–104 evidence rules. Native
+hosts own admission and durable state; Node packaging tools remain development
+only. The API Changeset does not authorize version preparation or publication.

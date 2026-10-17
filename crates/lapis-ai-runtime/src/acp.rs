@@ -1,9 +1,23 @@
-use crate::{Component, Config, Error, NativeProcess, PreparedLaunch, Resolver, Result, Sender};
+use crate::{
+    AcpOptions, Component, Config, Error, NativeProcess, PreparedLaunch, Resolver, Result, Sender,
+};
 use serde_json::{Value, json};
 use std::time::Duration;
 #[derive(Clone)]
 pub struct AcpCommands(Sender);
 impl AcpCommands {
+    /// Forward an admitted host frame without losing extension fields or exact identities.
+    pub async fn send_frame(&self, frame: &Value) -> Result<()> {
+        if frame["version"] != 3
+            || frame["requestId"]
+                .as_str()
+                .is_none_or(|id| id.trim().is_empty() || id.len() > 256)
+            || frame["type"].as_str().is_none()
+        {
+            return Err(Error("invalid_request"));
+        }
+        self.0.send_bounded(frame, 1_048_576).await
+    }
     pub async fn warm(&self, id: &str) -> Result<()> {
         self.send("warm", id, None, json!({})).await
     }
@@ -97,6 +111,8 @@ impl AcpCommands {
 pub struct AcpClient {
     // Taken only by Drop, so all callable methods retain a process owner.
     process: Option<NativeProcess>,
+    ready: Value,
+    shutdown_grace: Duration,
 }
 impl AcpClient {
     pub async fn start(config: &Config, resolver: &dyn Resolver) -> Result<Self> {
@@ -107,26 +123,56 @@ impl AcpClient {
         let (_owner, mut cancel) = tokio::sync::watch::channel(false);
         Self::start_prepared_cancellable(plan, &mut cancel).await
     }
+    /// Host-only launch flags, with Control V3 fixed by the shared client.
+    pub async fn start_prepared_with_options(
+        plan: PreparedLaunch,
+        options: AcpOptions,
+    ) -> Result<Self> {
+        let (_owner, mut cancel) = tokio::sync::watch::channel(false);
+        Self::start_host(plan, options, &mut cancel).await
+    }
     pub(crate) async fn start_prepared_cancellable(
         mut plan: PreparedLaunch,
+        cancel: &mut tokio::sync::watch::Receiver<bool>,
+    ) -> Result<Self> {
+        // Preserve the existing session adapter's fixed-argv contract.
+        plan.arguments.clear();
+        Self::start_host(plan, AcpOptions::default(), cancel).await
+    }
+    async fn start_host(
+        mut plan: PreparedLaunch,
+        options: AcpOptions,
         cancel: &mut tokio::sync::watch::Receiver<bool>,
     ) -> Result<Self> {
         if *cancel.borrow() {
             return Err(Error("startup_cancelled"));
         }
-        plan.arguments = vec!["serve".into(), "--control-version".into(), "3".into()];
+        if plan.arguments.iter().any(|arg| {
+            arg == "serve" || arg == "--control-version" || arg.starts_with("--control-version=")
+        }) || options.readiness_timeout.is_zero()
+            || options.shutdown_grace.is_zero()
+        {
+            return Err(Error("invalid_acp_launch"));
+        }
+        plan.arguments.splice(
+            0..0,
+            ["serve".into(), "--control-version".into(), "3".into()],
+        );
         let mut client = Self {
-            process: Some(NativeProcess::spawn(plan).await?),
+            process: Some(NativeProcess::spawn_with_limits(plan, options.limits).await?),
+            ready: Value::Null,
+            shutdown_grace: options.shutdown_grace,
         };
         let ready = tokio::select! {
             biased;
             _ = cancel.changed() => Err(Error("startup_cancelled")),
-            ready = client.next(Duration::from_secs(15)) => ready,
+            ready = client.next(options.readiness_timeout) => ready,
         };
         let result = ready.and_then(|ready| {
             if ready["type"] != "ready" || ready["version"] != 3 {
                 Err(Error("invalid_acp_readiness"))
             } else {
+                client.ready = ready;
                 Ok(())
             }
         });
@@ -138,6 +184,9 @@ impl AcpClient {
             return Err(error);
         }
         Ok(client)
+    }
+    pub fn readiness(&self) -> &Value {
+        &self.ready
     }
     pub fn commands(&self) -> AcpCommands {
         AcpCommands(self.process.as_ref().expect("owned until drop").sender())
@@ -153,7 +202,7 @@ impl AcpClient {
         self.process
             .as_mut()
             .ok_or(Error("session_closed"))?
-            .shutdown(Duration::from_secs(5))
+            .shutdown(self.shutdown_grace)
             .await
     }
 }
@@ -164,8 +213,9 @@ impl Drop for AcpClient {
         {
             // Closing control stdin lets lapis-acp cancel and reap its separately
             // grouped provider. Killing only the harness would orphan that group.
+            let grace = self.shutdown_grace;
             runtime.spawn(async move {
-                let _ = process.shutdown(Duration::from_secs(5)).await;
+                let _ = process.shutdown(grace).await;
             });
         }
     }
