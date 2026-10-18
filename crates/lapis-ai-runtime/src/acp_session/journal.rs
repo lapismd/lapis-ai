@@ -1,3 +1,4 @@
+use super::processed::{FrameBatch, payload_size};
 use crate::{Error, Result};
 use serde::Serialize;
 use serde_json::Value;
@@ -9,6 +10,19 @@ use tokio::sync::watch;
 pub struct SessionEvent {
     pub sequence: u64,
     pub frame: Value,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub before: Vec<Value>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub after: Vec<Value>,
+}
+impl SessionEvent {
+    /// Every safe frame at this cursor, in delivery order.
+    pub fn frames(&self) -> impl Iterator<Item = &Value> {
+        self.before
+            .iter()
+            .chain(std::iter::once(&self.frame))
+            .chain(self.after.iter())
+    }
 }
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -65,10 +79,8 @@ impl Journal {
         self.failure = self.failure.or(Some(reason));
         self.changed.send_modify(|revision| *revision += 1);
     }
-    pub fn emit(&mut self, frame: Value) -> Result<()> {
-        let size = serde_json::to_vec(&frame)
-            .map_err(|_| Error("invalid_frame"))?
-            .len();
+    pub fn emit(&mut self, batch: FrameBatch) -> Result<()> {
+        let size = batch.size()?;
         if self.events.len() >= self.limit || size > self.byte_limit.saturating_sub(self.bytes) {
             return Err(Error("output_coverage_lost"));
         }
@@ -76,8 +88,32 @@ impl Journal {
         self.bytes += size;
         self.events.push_back(SessionEvent {
             sequence: self.sequence,
-            frame,
+            frame: batch.frame,
+            before: batch.before,
+            after: Vec::new(),
         });
+        self.changed.send_modify(|revision| *revision += 1);
+        Ok(())
+    }
+    /// Startup owns this journal exclusively until all opened facts are ready.
+    /// Appending a facts-triggered text flush cannot revise an exposed event.
+    pub fn append_startup_tail(&mut self, frames: Vec<Value>) -> Result<()> {
+        if frames.is_empty() {
+            return Ok(());
+        }
+        let size = payload_size(frames.iter())?;
+        if size > self.byte_limit.saturating_sub(self.bytes) {
+            return Err(Error("output_coverage_lost"));
+        }
+        let event = self
+            .events
+            .back_mut()
+            .ok_or(Error("processed_batch_invalid"))?;
+        if frames.len() > 16 || !event.after.is_empty() {
+            return Err(Error("processed_batch_invalid"));
+        }
+        event.after = frames;
+        self.bytes += size;
         self.changed.send_modify(|revision| *revision += 1);
         Ok(())
     }
@@ -128,9 +164,7 @@ impl Journal {
             .is_some_and(|event| event.sequence <= sequence)
         {
             if let Some(event) = self.events.pop_front() {
-                self.bytes -= serde_json::to_vec(&event.frame)
-                    .map_err(|_| Error("invalid_frame"))?
-                    .len();
+                self.bytes -= payload_size(event.frames())?;
             }
         }
         self.acknowledged = sequence;

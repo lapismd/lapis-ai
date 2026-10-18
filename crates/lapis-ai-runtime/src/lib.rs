@@ -10,8 +10,8 @@ mod process;
 mod resources;
 pub use acp::{AcpClient, AcpCommands};
 pub use acp_session::{
-    AcpSession, FrameInput, FramePublication, ProcessorFuture, SessionEvent, SessionOptions,
-    SessionProcessor, SessionRequest, SessionSnapshot,
+    AcpSession, BatchProcessorFuture, FrameBatch, FrameInput, FramePublication, ProcessorFuture,
+    SessionEvent, SessionOptions, SessionProcessor, SessionRequest, SessionSnapshot,
 };
 pub use agent::AgentClient;
 pub use compute::ComputeClient;

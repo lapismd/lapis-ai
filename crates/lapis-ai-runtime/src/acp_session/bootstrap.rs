@@ -94,7 +94,8 @@ async fn initialize(
         .prepare(facts, FramePublication::Facts)
         .await?;
     cancelled(events.cancel)?;
-    Ok((facts, sequence))
+    events.journal.append_startup_tail(facts.before)?;
+    Ok((facts.frame, sequence))
 }
 struct StartupEvents<'a> {
     options: &'a SessionOptions,

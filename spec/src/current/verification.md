@@ -95,4 +95,5 @@
 | LAI-TAURI-005   | Implemented | [Packaged ACP Tauri](../history/2026-10-17-native-tauri.md)           |
 | LAI-TAURI-006   | Implemented | [Packaged ACP Tauri](../history/2026-10-17-native-tauri.md)           |
 | LAI-TAURI-007   | Implemented | [Native frame processing](../history/2026-10-18-native-processing.md) |
-| LAI-TAURI-008   | Planned     | [Native processor factory](../history/2026-10-18-tauri-processing.md) |
+| LAI-TAURI-008   | Implemented | [Native processor factory](../history/2026-10-18-tauri-processing.md) |
+| LAI-TAURI-009   | Implemented | [Native text groups](../history/2026-10-18-native-batches.md)         |

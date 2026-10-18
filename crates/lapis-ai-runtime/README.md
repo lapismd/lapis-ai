@@ -25,6 +25,13 @@ or replay. Startup cancellation and close drain in-flight processing. The host
 still owns privacy rules, storage, receipt recovery and backend teardown; see the
 full [adapter contract](https://lapismd.github.io/lapis-ai/current/contracts/tauri.html).
 
+Override `SessionProcessor::process_batch` when sanitization flushes deferred
+text before the current frame. Return `FrameBatch::from_frames` after capturing
+the entire group. Iterate `SessionEvent::frames()` to consume every safe frame;
+one native cursor acknowledges the complete group. Facts-triggered text joins
+the unexposed startup event. Existing single-frame processors and default event
+serialization retain their behavior.
+
 See the [usage guide](https://github.com/lapismd/lapis-ai/blob/main/docs/usage.md),
 [specification](https://lapismd.github.io/lapis-ai/) and
 [release guide](https://github.com/lapismd/lapis-ai/blob/main/docs/releasing.md).

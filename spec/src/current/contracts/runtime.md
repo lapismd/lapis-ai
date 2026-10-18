@@ -32,6 +32,13 @@ job drains admitted processing before cancellation cleanup or handoff. The host
 owns sanitation, durable capture and receipt recovery; the runtime adds no
 storage or application-history authority.
 
+LAI-TAURI-009 extends native processing with bounded deferred text groups. The
+existing event cursor owns every ordered frame in its group; primary control
+identities remain unchanged. Facts-triggered text joins the unexposed startup
+journal without adding a cursor. Client acknowledgements prune complete groups
+and account for all retained payload bytes. Native supervision still drains the
+whole callback, and failures preserve unresolved requests without replay.
+
 ACP client drop defers supervised stdin closure and reap to the owning Tokio
 runtime. Cancelling startup must let the control helper retire its separately
 grouped provider rather than killing the helper first. Process shutdown retains

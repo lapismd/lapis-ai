@@ -52,3 +52,10 @@ Codex file inspection. The complete workspace suite, strict checks, build and
 public package contents pass. Publishing-consumer routing, leases/cursors and
 broader source formats remain jj-store M33 work. M0–M5 status and publication
 authorization are unchanged.
+
+[Deferred native text groups](../../history/2026-10-18-native-batches.md) adds
+the NOTES-06C2 runtime/scoped-host/client transport boundary. Seven runtime,
+two native-host and twelve renderer cases pass. Full source qualification
+passes (1,013 Rust tests, two inherited ignored; 39 renderer/45 governance).
+Cold native batch acceptance remains pending; Notes privacy/durable storage and JJ backend
+adoption remain separate. M0–M5 and release authorization are unchanged.

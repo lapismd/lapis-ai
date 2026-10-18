@@ -2,16 +2,17 @@
 
 ## Requirements
 
-| ID            | Requirement                                                                                                                                                                                                                                                                                                                                                                                             |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LAI-TAURI-001 | Future adapters MUST wrap the Rust runtime clients with host-selected executables and admitted workspace roots, scoped opaque session handles, ordered events and explicit cancellation/teardown. Secrets and arbitrary process launch MUST remain on the Rust side.                                                                                                                                    |
-| LAI-TAURI-002 | The reusable ACP session layer MUST own one worker per concurrent conversation, correlate every response, fence session and permission identities, preserve exact option IDs and reject overlapping turns. Lost output, deadlines and uncertain writes MUST retire the worker without replay.                                                                                                           |
-| LAI-TAURI-003 | Detach/reconnect MUST preserve a bounded acknowledged event journal with monotonic cursors. Coverage loss MUST remain observable independently of queued events. Explicit close and owner teardown MUST perform supervised process cleanup; cancelled consumer waits MUST NOT orphan workers.                                                                                                           |
-| LAI-TAURI-004 | The Tauri host MUST derive caller context from the invoking WebView, authorize every operation against the current host admission, and scope opaque worker/subscription handles to that window and admission generation. Only Rust policy MAY resolve targets into launches, directories and credentials.                                                                                               |
-| LAI-TAURI-005 | Explicit disable, admission revocation, window destruction and actual exit MUST cancel startup and release affected workers/subscriptions. Cancelled close/exit requests MUST preserve workers. Command permissions MUST default to empty and require an explicit ACP-session grant.                                                                                                                    |
-| LAI-TAURI-006 | The reusable renderer client MUST correlate before dispatch, buffer bounded early channel delivery, validate session/subscription identity and contiguous journal cursors, and acknowledge only consumed events. Detach MUST preserve native workers; uncertain submissions MUST NOT replay automatically.                                                                                              |
-| LAI-TAURI-007 | Rust hosts MAY inject one native session frame processor. When selected, returned startup facts and every emitted event MUST pass it before exposure. Processing MUST preserve protocol identities, permission choices and bounds; failure MUST retire without raw fallback or replay. Startup cancellation and close MUST drain admitted processing.                                                   |
-| LAI-TAURI-008 | Native processor factories MUST receive the reserved worker/open-request/target/admission binding and actual caller context. Current scope MUST be checked before/after construction and each processing call. Factory/processor failures MUST NOT fall back to unprocessed execution. Revocation and last-owner teardown MUST drain admitted processing without retaining the host in a wrapper cycle. |
+| ID            | Requirement                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LAI-TAURI-001 | Future adapters MUST wrap the Rust runtime clients with host-selected executables and admitted workspace roots, scoped opaque session handles, ordered events and explicit cancellation/teardown. Secrets and arbitrary process launch MUST remain on the Rust side.                                                                                                                                                      |
+| LAI-TAURI-002 | The reusable ACP session layer MUST own one worker per concurrent conversation, correlate every response, fence session and permission identities, preserve exact option IDs and reject overlapping turns. Lost output, deadlines and uncertain writes MUST retire the worker without replay.                                                                                                                             |
+| LAI-TAURI-003 | Detach/reconnect MUST preserve a bounded acknowledged event journal with monotonic cursors. Coverage loss MUST remain observable independently of queued events. Explicit close and owner teardown MUST perform supervised process cleanup; cancelled consumer waits MUST NOT orphan workers.                                                                                                                             |
+| LAI-TAURI-004 | The Tauri host MUST derive caller context from the invoking WebView, authorize every operation against the current host admission, and scope opaque worker/subscription handles to that window and admission generation. Only Rust policy MAY resolve targets into launches, directories and credentials.                                                                                                                 |
+| LAI-TAURI-005 | Explicit disable, admission revocation, window destruction and actual exit MUST cancel startup and release affected workers/subscriptions. Cancelled close/exit requests MUST preserve workers. Command permissions MUST default to empty and require an explicit ACP-session grant.                                                                                                                                      |
+| LAI-TAURI-006 | The reusable renderer client MUST correlate before dispatch, buffer bounded early channel delivery, validate session/subscription identity and contiguous journal cursors, and acknowledge only consumed events. Detach MUST preserve native workers; uncertain submissions MUST NOT replay automatically.                                                                                                                |
+| LAI-TAURI-007 | Rust hosts MAY inject one native session frame processor. When selected, returned startup facts and every emitted event MUST pass it before exposure. Processing MUST preserve protocol identities, permission choices and bounds; failure MUST retire without raw fallback or replay. Startup cancellation and close MUST drain admitted processing.                                                                     |
+| LAI-TAURI-008 | Native processor factories MUST receive the reserved worker/open-request/target/admission binding and actual caller context. Current scope MUST be checked before/after construction and each processing call. Factory/processor failures MUST NOT fall back to unprocessed execution. Revocation and last-owner teardown MUST drain admitted processing without retaining the host in a wrapper cycle.                   |
+| LAI-TAURI-009 | Native processors MAY return bounded deferred text frames before their preserved primary frame. A native event cursor MUST own the complete ordered group and acknowledgement MUST prune it atomically. Facts-triggered deferred text MUST join the unexposed startup event before opening returns. Invalid identity, permission injection, capacity failure or revocation MUST release no partial group or raw fallback. |
 
 The ACP session, native host and typed client are qualified together in a
 packaged macOS ARM64 consumer. Rust, renderer and native evidence remain distinct.
@@ -169,3 +170,32 @@ The wrapper retains policy and registry state, rather than `Arc<AcpHost>`, so
 last-host drop can trigger supervised retirement. Application processors must
 also avoid retaining the host in their own ownership cycle. Applications still
 own privacy, storage admission, exact receipts and persistence-backend drain.
+
+## Deferred native text groups
+
+`SessionProcessor::process_batch` defaults to the existing single-frame callback.
+A batch implementation returns its primary `frame` and up to 16 deferred
+`before` text frames only after its capture fence. The primary preserves the
+original control identity and outcome fields. Deferred frames must be text
+activity matching the immediately preceding sanitized text event's request,
+session, update kind and message identity, with no invented provider sequence.
+They cannot introduce permissions, terminal outcomes or another worker.
+
+An event retains its original native cursor. Optional `before` frames precede
+the primary frame in that same event. A facts-triggered flush joins the
+preceding startup event as `after` frames while the startup journal is still
+unexposed. Facts still consume no event cursor. All payload bytes count against
+existing retention limits; an oversized group is refused atomically. Empty
+groups serialize with the original event shape.
+
+Rust `SessionEvent::frames` and the typed client's `sessionEventFrames` expose
+the complete order. Consumers finish all frames before acknowledging the native
+cursor and retain a frame index when they need distinct per-frame provenance.
+The client validates every derived text frame before consumption. Failed
+consumption leaves the entire group unacknowledged. Source capture receipts,
+native cursor acknowledgement and repository publication remain distinct.
+
+Current-scope checks surround the complete batch callback. Startup cancellation,
+close, revocation and last-owner teardown retain their existing drained lifetime.
+No renderer option selects batching, a processor or a durable backend. Notes
+adoption and actual native consumer evidence remain separately qualified.

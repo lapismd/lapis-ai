@@ -2,13 +2,17 @@
 mod actor;
 mod bootstrap;
 mod journal;
+mod processed;
 mod processing;
 mod request;
 mod routing;
 mod startup;
 use crate::{Error, PreparedLaunch, Result};
 pub use journal::{SessionEvent, SessionSnapshot};
-pub use processing::{FrameInput, FramePublication, ProcessorFuture, SessionProcessor};
+pub use processed::FrameBatch;
+pub use processing::{
+    BatchProcessorFuture, FrameInput, FramePublication, ProcessorFuture, SessionProcessor,
+};
 pub use request::SessionRequest;
 use serde_json::Value;
 use std::{

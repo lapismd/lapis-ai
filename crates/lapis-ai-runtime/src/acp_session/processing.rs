@@ -1,3 +1,4 @@
+use super::processed::{FrameBatch, TextIdentity};
 use crate::{Error, Result};
 use serde_json::Value;
 use std::{future::Future, pin::Pin};
@@ -16,13 +17,21 @@ pub struct FrameInput<'a> {
     pub frame: &'a Value,
 }
 pub type ProcessorFuture<'a> = Pin<Box<dyn Future<Output = Result<Value>> + Send + 'a>>;
+pub type BatchProcessorFuture<'a> = Pin<Box<dyn Future<Output = Result<FrameBatch>> + Send + 'a>>;
 /// One owned processor per worker, invoked serially before any frame is exposed.
 ///
 /// Hosts own privacy and durable receipt recovery. Return only after required
 /// capture is durable; never detach persistence work. Failure retires the worker
 /// without raw fallback or replay. Identity and permission IDs must remain exact.
 pub trait SessionProcessor: Send + 'static {
-    fn process<'a>(&'a mut self, input: FrameInput<'a>) -> ProcessorFuture<'a>;
+    fn process<'a>(&'a mut self, _input: FrameInput<'a>) -> ProcessorFuture<'a> {
+        Box::pin(async { Err(Error("single_frame_processing_unavailable")) })
+    }
+    /// Override for a captured deferred text group. The default preserves all
+    /// existing single-frame processors without selecting a raw fallback.
+    fn process_batch<'a>(&'a mut self, input: FrameInput<'a>) -> BatchProcessorFuture<'a> {
+        Box::pin(async move { self.process(input).await.map(FrameBatch::single) })
+    }
 }
 
 pub(super) struct Processing {
@@ -30,6 +39,7 @@ pub(super) struct Processing {
     ordinal: u64,
     byte_limit: usize,
     processor: Option<Box<dyn SessionProcessor>>,
+    previous: Option<TextIdentity>,
 }
 impl Processing {
     pub fn new(
@@ -42,34 +52,46 @@ impl Processing {
             ordinal: 0,
             byte_limit,
             processor,
+            previous: None,
         }
     }
-    pub async fn prepare(&mut self, frame: Value, publication: FramePublication) -> Result<Value> {
+    pub async fn prepare(
+        &mut self,
+        frame: Value,
+        publication: FramePublication,
+    ) -> Result<FrameBatch> {
         let Some(processor) = self.processor.as_mut() else {
-            return Ok(frame);
+            return Ok(FrameBatch::single(frame));
         };
         self.ordinal = self
             .ordinal
             .checked_add(1)
             .ok_or(Error("processing_cursor_exhausted"))?;
         let output = processor
-            .process(FrameInput {
+            .process_batch(FrameInput {
                 session_id: &self.session_id,
                 ordinal: self.ordinal,
                 publication,
                 frame: &frame,
             })
             .await?;
-        if !identity_preserved(&frame, &output) {
+        if !identity_preserved(&frame, &output.frame) {
             return Err(Error("processed_identity_changed"));
         }
-        if serde_json::to_vec(&output)
-            .map_err(|_| Error("invalid_frame"))?
-            .len()
-            > self.byte_limit
+        if output.before.len() > 16
+            || output.before.iter().any(|prefix| {
+                !self
+                    .previous
+                    .as_ref()
+                    .is_some_and(|previous| previous.accepts(prefix))
+            })
         {
+            return Err(Error("processed_batch_invalid"));
+        }
+        if output.size()? > self.byte_limit {
             return Err(Error("output_coverage_lost"));
         }
+        self.previous = TextIdentity::of(&output.frame);
         Ok(output)
     }
 }

@@ -63,3 +63,10 @@ The session acquisition extraction adds the coordinated `lapis-ai-capture` Cargo
 package with explicit dependency boundaries, a crate README and independent
 source/profile tests. Existing source provenance, architecture budgets, runtime
 qualification and publication gates remain enforced.
+
+Deferred native text groups extend the shared runtime, scoped Tauri host and
+typed renderer client under LAI-TAURI-009. Their complete affected source suites
+and public package inventories are required; fixture callbacks do not qualify a
+packaged native consumer or Notes-owned durable publication. Optional group
+fields retain default wire compatibility, and native evidence records whole
+group consumption, acknowledgement and uncertain outcomes separately.

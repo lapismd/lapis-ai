@@ -5,6 +5,7 @@ and consume only its public `dist` exports. No package publication is performed.
 
 ```ts
 import { createTauriAcpClient } from "@lapismd/ai/tauri";
+import { sessionEventFrames } from "@lapismd/ai";
 
 const client = createTauriAcpClient();
 const targets = await client.targets();
@@ -12,7 +13,11 @@ const session = await client.open(
   { requestId: crypto.randomUUID(), targetId: targets[0]!.id },
   {
     consume: async (snapshot) => {
-      /* Persist/map raw control-v3 events here. */
+      for (const event of snapshot.events) {
+        for (const [index, frame] of sessionEventFrames(event).entries()) {
+          /* Handle each frame with its native event.sequence and frame index. */
+        }
+      }
     },
   },
 );
@@ -46,3 +51,10 @@ events to the consumer rather than inventing a new prompt or promise.
 Use the exact permission request and provider option IDs. A null option cancels;
 unknown choices never become implicit approval. Conversation identities, context,
 transcripts, durable history and memory remain application-owned.
+
+Native capture can return deferred text grouped before or after an event's
+primary frame. Always use `sessionEventFrames` to retain that order. All frames
+must finish consumption before the callback returns; acknowledgement covers the
+whole native cursor. The helper invents no provider sequence or execution
+authority. Hosts own sanitation, durable capture and receipt recovery before
+native delivery.

@@ -27,6 +27,10 @@ export interface ControlFrame {
 export interface SessionEvent {
   sequence: number;
   frame: ControlFrame;
+  /** Deferred sanitized text, owned by the same acknowledgement cursor. */
+  before?: ControlFrame[];
+  /** A facts-triggered flush joined before startup becomes observable. */
+  after?: ControlFrame[];
 }
 export interface SessionSnapshot {
   events: SessionEvent[];

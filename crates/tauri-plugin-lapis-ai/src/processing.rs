@@ -2,7 +2,9 @@ use crate::{
     AcpHost, Error, HostContext, HostPolicy, Result, SessionBinding,
     registry::{Registry, Scope},
 };
-use lapis_ai_runtime::{self as runtime, FrameInput, ProcessorFuture, SessionProcessor};
+use lapis_ai_runtime::{
+    self as runtime, BatchProcessorFuture, FrameInput, ProcessorFuture, SessionProcessor,
+};
 use std::sync::{Arc, Mutex};
 
 pub(crate) fn create(
@@ -75,6 +77,14 @@ impl ScopedProcessor {
     }
 }
 impl SessionProcessor for ScopedProcessor {
+    fn process_batch<'a>(&'a mut self, input: FrameInput<'a>) -> BatchProcessorFuture<'a> {
+        Box::pin(async move {
+            self.check(input.session_id)?;
+            let output = self.inner.process_batch(input).await?;
+            self.check(&self.id)?;
+            Ok(output)
+        })
+    }
     fn process<'a>(&'a mut self, input: FrameInput<'a>) -> ProcessorFuture<'a> {
         Box::pin(async move {
             self.check(input.session_id)?;

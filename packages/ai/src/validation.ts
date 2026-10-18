@@ -1,5 +1,6 @@
 import { AcpError } from "./errors.js";
 import type { SessionInfo, SessionSnapshot } from "./protocol.js";
+import { eventGroupsValid } from "./event-frames.js";
 export function cursor(value: number): boolean {
   return Number.isSafeInteger(value) && value >= 0;
 }
@@ -54,7 +55,8 @@ export function snapshot(
       frame?.version !== 3 ||
       !label(frame.type) ||
       !label(frame.requestId) ||
-      (frame.sessionId !== undefined && frame.sessionId !== sessionId)
+      (frame.sessionId !== undefined && frame.sessionId !== sessionId) ||
+      !eventGroupsValid(event, sessionId)
     ) {
       throw new AcpError("invalid_session_frame");
     }
