@@ -35,3 +35,4 @@
 
 - [Filesystem capture acquisition](history/2026-10-17-capture-discovery.md)
 - [Native frame processing](history/2026-10-18-native-processing.md)
+- [Native Tauri processor factory](history/2026-10-18-tauri-processing.md)

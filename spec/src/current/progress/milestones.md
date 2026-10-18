@@ -25,6 +25,13 @@ acceptance passes.
 
 ## jj-store consumer integration
 
+[Native processor factory](../../history/2026-10-18-tauri-processing.md) adds the
+Tauri host policy hook and native scope guard over session processing. Nine
+focused cases, all 27 Tauri host cases, full source qualification (1,004 Rust
+passes, two inherited ignored) and six cold packaged ACP compatibility cases
+pass. Native foreground assistance remains explicit. Notes privacy/durable
+backend adoption remains separate. No M0–M5 or publication status is changed.
+
 [Native frame processing](../../history/2026-10-18-native-processing.md) adds a
 host-injected pre-publication hook to the owned ACP session layer. Its nine focused
 runtime cases, full source qualification and six cold packaged ACP compatibility

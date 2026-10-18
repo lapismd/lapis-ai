@@ -1,5 +1,5 @@
 use crate::{
-    AcpHost, Error, HostContext, Result, SessionInfo,
+    AcpHost, Error, HostContext, Result, SessionBinding, SessionInfo,
     policy::label,
     registry::{Reservation, Slot},
 };
@@ -62,6 +62,12 @@ impl AcpHost {
             );
         }
         let mut reservation = Reservation::new(self.state.clone(), id.clone(), done);
+        let binding = SessionBinding {
+            session_id: id.clone(),
+            request_id: request.into(),
+            target_id: target.into(),
+            admission: scope.admission.clone(),
+        };
         let mut options = SessionOptions::new(id, launch.directory);
         options.resume = launch.resume;
         options.request_timeout = self.config.request_timeout;
@@ -73,21 +79,40 @@ impl AcpHost {
         // The registry owns startup even if the invoking WebView loses its reply.
         // Revocation cancels this task cooperatively and waits for its guard.
         tokio::spawn(async move {
-            let result =
-                match AcpSession::start_cancellable(launch.prepared, options, cancelled).await {
-                    Ok(session) => {
-                        let result = if host.scope(&context).is_ok_and(|current| current == scope) {
-                            reservation.commit(session.clone())
-                        } else {
-                            Err(Error("admission_revoked"))
-                        };
-                        if result.is_err() && session.close().await.is_err() {
-                            return finish(reservation, reply, Err(Error("cleanup_unknown")));
+            let result = match crate::processing::create(&host, &context, &scope, &binding) {
+                Ok(processor) => {
+                    let started = match processor {
+                        Some(processor) => {
+                            AcpSession::start_cancellable_with_processor(
+                                launch.prepared,
+                                options,
+                                cancelled,
+                                processor,
+                            )
+                            .await
                         }
-                        result
+                        None => {
+                            AcpSession::start_cancellable(launch.prepared, options, cancelled).await
+                        }
+                    };
+                    match started {
+                        Ok(session) => {
+                            let result =
+                                if host.scope(&context).is_ok_and(|current| current == scope) {
+                                    reservation.commit(session.clone())
+                                } else {
+                                    Err(Error("admission_revoked"))
+                                };
+                            if result.is_err() && session.close().await.is_err() {
+                                return finish(reservation, reply, Err(Error("cleanup_unknown")));
+                            }
+                            result
+                        }
+                        Err(error) => Err(error.into()),
                     }
-                    Err(error) => Err(error.into()),
-                };
+                }
+                Err(error) => Err(error),
+            };
             finish(reservation, reply, result);
         });
         received.await.map_err(|_| Error("submission_unknown"))?

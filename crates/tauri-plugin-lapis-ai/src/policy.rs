@@ -1,5 +1,5 @@
 use crate::Result;
-use lapis_ai_runtime::PreparedLaunch;
+use lapis_ai_runtime::{PreparedLaunch, SessionProcessor};
 use serde::Serialize;
 use std::{path::PathBuf, time::Duration};
 /// Supplied by native IPC, never deserialized from renderer arguments.
@@ -18,6 +18,15 @@ pub struct Launch {
     pub directory: PathBuf,
     pub resume: Option<String>,
 }
+/// Metadata from a reserved native slot, never deserialized from IPC arguments.
+/// `session_id` is the host worker handle, not a provider or conversation ID.
+#[derive(Clone)]
+pub struct SessionBinding {
+    pub session_id: String,
+    pub request_id: String,
+    pub target_id: String,
+    pub admission: String,
+}
 pub trait HostPolicy: Send + Sync + 'static {
     /// Return the current host-owned window/vault admission generation.
     fn authorize(&self, context: &HostContext) -> Result<String>;
@@ -29,6 +38,15 @@ pub trait HostPolicy: Send + Sync + 'static {
         target: &str,
         resume_binding: Option<&str>,
     ) -> Result<Launch>;
+    /// Construct one processor for this admitted worker. Required capture must
+    /// return Some or an error; None explicitly retains the unprocessed profile.
+    fn processor(
+        &self,
+        _context: &HostContext,
+        _binding: &SessionBinding,
+    ) -> Result<Option<Box<dyn SessionProcessor>>> {
+        Ok(None)
+    }
 }
 #[derive(Clone)]
 pub struct Config {

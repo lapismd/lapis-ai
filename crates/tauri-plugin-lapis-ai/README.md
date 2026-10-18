@@ -11,6 +11,14 @@ grant `lapis-ai:acp-session`; default permissions are empty.
 Optional resume names an application binding that native policy must authorize
 and resolve; the renderer cannot directly select a provider session identity.
 
+Override `HostPolicy::processor` to return a native `SessionProcessor` for each
+worker. The factory receives `HostContext` and its native `SessionBinding`;
+startup facts and events pass through that processor before IPC exposure.
+Return an error when required capture is unavailable. The default `None`
+retains an unprocessed profile. The host fences stale admissions and drains
+in-flight processing; the application supplies privacy and durable storage.
+Full semantics live in the [adapter contract](https://lapismd.github.io/lapis-ai/current/contracts/tauri.html).
+
 Rust hosts revoke only affected admissions on plugin disable, vault closure or
 trust changes. Detach/reconnect retains workers and bounded unacknowledged
 events. Explicit close, window destruction and actual exit supervise teardown;
