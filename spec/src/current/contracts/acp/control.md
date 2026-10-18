@@ -323,3 +323,8 @@ permission contracts remain unchanged by release preparation.
 
 The GitHub ownership transfer updates package documentation links to
 `lapismd/lapis-ai`; the owning ACP requirements and runtime behavior are unchanged.
+
+Control V3 applies the identified Codex compact-effort profile described in
+[runner configuration](runner.md#effort-has-three-encodings-in-the-wild).
+LAI-CTRL-009 keeps exact session scopes, explicit configuration and no replay;
+profile resolution grants no additional tools, process or working-directory authority.

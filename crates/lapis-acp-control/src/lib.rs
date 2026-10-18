@@ -16,6 +16,7 @@
 
 #![forbid(unsafe_code)]
 
+mod codex_profile;
 pub mod fleet;
 mod fleet_wire;
 mod fleet_worker;

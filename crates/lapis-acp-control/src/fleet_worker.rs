@@ -111,10 +111,20 @@ impl Worker {
                     effort,
                     mode: mode.clone(),
                 };
-                let report = tokio::select! {
-                    result = lapis_acp_runner::apply(&mut warm.agent.connection, handler, &session.session.id, &session.session.raw, &preferences) => result.map_err(|e| classify(&e))?,
+                let codex = crate::codex_profile::preferences(
+                    warm.initialized.agent_name.as_deref(),
+                    &session.session.raw,
+                    &preferences,
+                );
+                let selected = codex.as_ref().unwrap_or(&preferences);
+                let mut report = tokio::select! {
+                    result = lapis_acp_runner::apply(&mut warm.agent.connection, handler, &session.session.id, &session.session.raw, selected) => result.map_err(|e| classify(&e))?,
                     () = lapis_acp_runner::persistent::cancellation(cancel) => return Err("cancelled"),
                 };
+                if codex.is_some() {
+                    // Both requested settings land only if the exact variant did.
+                    report.effort = report.model.clone();
+                }
                 session.mode_ready = mode.is_some() && report.mode.applied();
                 handler.events.emit(
                     "configured",

@@ -9,6 +9,11 @@
 | M4   | Done        | M3           | macOS ARM64 Metal, Linux aarch64 CPU, mixed-version and staged bundles | [Qualification](../../history/2026-10-16-qualification.md)                 | Qualify broader native and release profiles separately     |
 | M5   | In progress | M4           | Hosted CI, Changesets, Cargo release automation and spec Pages         | [Organization transfer](../../history/2026-10-16-organization-transfer.md) | Verify hosted product CI and retain version PR #1 unmerged |
 
+[Codex compact effort](../../history/2026-10-19-codex-effort.md) adds a
+private Control V3 compatibility profile for Notes local-file chat. Generic IDs,
+M0–M5 gates and publication authority stay unchanged; full wider qualification
+is deferred by the user while focused source and live consumer work advances.
+
 ## Consumer-driven native adapter
 
 This work does not depend on or change M5 release authorization. Desktop M10.1

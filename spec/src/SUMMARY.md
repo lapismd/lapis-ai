@@ -40,3 +40,5 @@
   - [Deferred native text groups](history/2026-10-18-native-batches.md)
 
 - [Retained native processing](history/2026-10-18-retained-processing.md)
+
+- [Codex compact effort](history/2026-10-19-codex-effort.md)

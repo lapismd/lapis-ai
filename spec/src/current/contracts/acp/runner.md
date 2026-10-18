@@ -230,6 +230,15 @@ keyed keeps the behaviour predictable, and the shortfall is reported so the
 operator learns the adapter has no settable effort rather than wondering why
 nothing changed.
 
+Control V3 has an explicit compatibility profile for the identified
+`@agentclientprotocol/codex-acp` adapter. When no keyed/independent effort
+surface exists, it may select an exact advertised compact variant such as
+`model[medium]`, within the caller's explicitly selected, advertised model
+family. Only known effort tokens are interpreted. Generic parsing remains
+opaque; other adapters and unknown suffixes retain unsupported outcomes. Both
+model and effort are confirmed only when the adapter accepts that exact variant.
+This private profile changes no wire or public Rust signatures (LAI-RUN-006/009).
+
 Matching is exact first and normalized second. Exact match is what keeps
 adapter-specific levels selectable when they exist in no portable vocabulary;
 normalization is what lets a caller asking for `off` reach an adapter that
