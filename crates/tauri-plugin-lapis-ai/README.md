@@ -17,6 +17,9 @@ startup facts and events pass through that processor before IPC exposure.
 Return an error when required capture is unavailable. The default `None`
 retains an unprocessed profile. The host fences stale admissions and drains
 in-flight processing; the application supplies privacy and durable storage.
+Hosts retaining native capture during renderer reload may override
+`HostPolicy::authorize_processing` for the exact original binding. Its default
+requires current admission; renderer commands and startup always require it.
 Full semantics live in the [adapter contract](https://lapismd.github.io/lapis-ai/current/contracts/tauri.html).
 
 Rust hosts revoke only affected admissions on plugin disable, vault closure or

@@ -70,3 +70,11 @@ and public package inventories are required; fixture callbacks do not qualify a
 packaged native consumer or Notes-owned durable publication. Optional group
 fields retain default wire compatibility, and native evidence records whole
 group consumption, acknowledgement and uncertain outcomes separately.
+
+LAI-TAURI-010 adds an optional Rust-only retained processing grant for exact
+native bindings during renderer suspension. Current admission still governs
+commands, factories and startup completion; registry revocation and supervised
+drain remain mandatory. Source qualification covers the complete Tauri host
+and workspace; Notes must separately qualify its retained native owner and
+durable conversation. The Changeset records the API addition without changing
+M0–M5, release or packaged-native acceptance gates.

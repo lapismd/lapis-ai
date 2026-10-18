@@ -30,6 +30,17 @@ pub struct SessionBinding {
 pub trait HostPolicy: Send + Sync + 'static {
     /// Return the current host-owned window/vault admission generation.
     fn authorize(&self, context: &HostContext) -> Result<String>;
+    /// Authorize capture for this exact reserved native worker. Defaults to
+    /// current renderer admission. A retained grant may outlive renderer
+    /// suspension, but never authorizes commands, construction or startup.
+    /// Return the binding's original generation; revocation must fail closed.
+    fn authorize_processing(
+        &self,
+        context: &HostContext,
+        _binding: &SessionBinding,
+    ) -> Result<String> {
+        self.authorize(context)
+    }
     fn targets(&self, context: &HostContext) -> Result<Vec<Target>>;
     /// Resolve a consumer binding only after checking its current admission.
     fn resolve(

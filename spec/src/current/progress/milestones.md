@@ -25,6 +25,12 @@ acceptance passes.
 
 ## jj-store consumer integration
 
+[Retained native processing](../../history/2026-10-18-retained-processing.md)
+adds a Rust-only exact-binding capture grant for renderer suspension. Five
+focused cases, all 34 host cases and full source qualification pass. NOTES-07 remains
+the sole active downstream task. Native Notes capture adoption and cold managed
+conversation acceptance remain separate. M0–M5 and publication are unchanged.
+
 [Native processor factory](../../history/2026-10-18-tauri-processing.md) adds the
 Tauri host policy hook and native scope guard over session processing. Nine
 focused cases, all 27 Tauri host cases, full source qualification (1,004 Rust

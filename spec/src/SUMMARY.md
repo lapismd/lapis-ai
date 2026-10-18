@@ -38,3 +38,5 @@
 - [Native Tauri processor factory](history/2026-10-18-tauri-processing.md)
 
   - [Deferred native text groups](history/2026-10-18-native-batches.md)
+
+- [Retained native processing](history/2026-10-18-retained-processing.md)
