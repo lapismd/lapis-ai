@@ -26,6 +26,12 @@ conversation policy. Rust hosts may start an ACP client with a `PreparedLaunch`
 after native credential resolution; the client fixes its control-version argv.
 The [adapter contract](tauri.md) governs this additional lifecycle boundary.
 
+LAI-RUNTIME-001/002 retain isolated clients, exact identities and unknown outcomes
+with the optional native frame processor in LAI-TAURI-007. A runtime-owned startup
+job drains admitted processing before cancellation cleanup or handoff. The host
+owns sanitation, durable capture and receipt recovery; the runtime adds no
+storage or application-history authority.
+
 ACP client drop defers supervised stdin closure and reap to the owning Tokio
 runtime. Cancelling startup must let the control helper retire its separately
 grouped provider rather than killing the helper first. Process shutdown retains

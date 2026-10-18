@@ -72,7 +72,7 @@ impl Journal {
         if self.events.len() >= self.limit || size > self.byte_limit.saturating_sub(self.bytes) {
             return Err(Error("output_coverage_lost"));
         }
-        self.sequence += 1;
+        self.sequence = self.next_sequence()?;
         self.bytes += size;
         self.events.push_back(SessionEvent {
             sequence: self.sequence,
@@ -80,6 +80,11 @@ impl Journal {
         });
         self.changed.send_modify(|revision| *revision += 1);
         Ok(())
+    }
+    pub fn next_sequence(&self) -> Result<u64> {
+        self.sequence
+            .checked_add(1)
+            .ok_or(Error("event_cursor_exhausted"))
     }
     pub fn finish(&mut self, failure: Option<&'static str>, mut unresolved: Vec<String>) {
         if self.closed {

@@ -16,6 +16,15 @@ latches failure and unresolved request IDs without replay. `close` supervises
 cleanup; dropping the last owner also starts cleanup. This session layer has no
 Tauri dependency, transcript persistence or application authorization policy.
 
+Use `AcpSession::start_with_processor` with your `Box<dyn SessionProcessor>` to
+sanitize and durably capture startup facts and events before exposure.
+`start_cancellable_with_processor` also accepts the native cancellation receiver.
+The callback receives an ordered `FrameInput`; return a processed frame only
+after the host's capture fence. Failures retire the worker without raw fallback
+or replay. Startup cancellation and close drain in-flight processing. The host
+still owns privacy rules, storage, receipt recovery and backend teardown; see the
+full [adapter contract](https://lapismd.github.io/lapis-ai/current/contracts/tauri.html).
+
 See the [usage guide](https://github.com/lapismd/lapis-ai/blob/main/docs/usage.md),
 [specification](https://lapismd.github.io/lapis-ai/) and
 [release guide](https://github.com/lapismd/lapis-ai/blob/main/docs/releasing.md).

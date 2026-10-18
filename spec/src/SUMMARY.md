@@ -34,3 +34,4 @@
 - [Host-prepared native clients](history/2026-10-17-host-clients.md)
 
 - [Filesystem capture acquisition](history/2026-10-17-capture-discovery.md)
+- [Native frame processing](history/2026-10-18-native-processing.md)

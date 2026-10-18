@@ -25,6 +25,12 @@ acceptance passes.
 
 ## jj-store consumer integration
 
+[Native frame processing](../../history/2026-10-18-native-processing.md) adds a
+host-injected pre-publication hook to the owned ACP session layer. Its nine focused
+runtime cases, full source qualification and six cold packaged ACP compatibility
+cases pass. Tauri policy factory wiring and downstream privacy/durable storage
+remain separate Notes M33 integration slices. M0–M5 and publication authorization are unchanged.
+
 [Host clients](../../history/2026-10-17-host-clients.md) extends the M3 client
 surface for host-prepared Control V3 launches, bounded agent discovery and
 independent compute command/events. M0–M4 and the existing Tauri qualification

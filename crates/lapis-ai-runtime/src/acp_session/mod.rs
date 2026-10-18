@@ -2,10 +2,13 @@
 mod actor;
 mod bootstrap;
 mod journal;
+mod processing;
 mod request;
 mod routing;
+mod startup;
 use crate::{Error, PreparedLaunch, Result};
 pub use journal::{SessionEvent, SessionSnapshot};
+pub use processing::{FrameInput, FramePublication, ProcessorFuture, SessionProcessor};
 pub use request::SessionRequest;
 use serde_json::Value;
 use std::{
@@ -73,41 +76,27 @@ impl AcpSession {
     pub async fn start_cancellable(
         plan: PreparedLaunch,
         options: SessionOptions,
-        mut cancel: watch::Receiver<bool>,
+        cancel: watch::Receiver<bool>,
     ) -> Result<Self> {
-        options.validate()?;
-        let mut journal = journal::Journal::new(options.event_limit, options.event_byte_limit);
-        let (client, facts, sequence) =
-            bootstrap::start(plan, &options, &mut journal, &mut cancel).await?;
-        let journal = Arc::new(Mutex::new(journal));
-        let (commands, queue) = mpsc::channel(32);
-        let (stop, cancel) = watch::channel(false);
-        let (finished, done) = watch::channel(false);
-        let id = options.handle.clone();
-        let routing = routing::Routing::new(
-            sequence,
-            facts["adapterSessionId"]
-                .as_str()
-                .ok_or(Error("invalid_adapter_session_identity"))?
-                .to_owned(),
-        );
-        tokio::spawn(actor::run(
-            client,
-            options,
-            journal.clone(),
-            queue,
-            cancel,
-            finished,
-            routing,
-        ));
-        Ok(Self(Arc::new(Inner {
-            id,
-            facts,
-            journal,
-            commands,
-            stop,
-            done,
-        })))
+        startup::start(plan, options, cancel, None).await
+    }
+    /// Process startup facts and events before exposure. The host owns durability.
+    pub async fn start_with_processor(
+        plan: PreparedLaunch,
+        options: SessionOptions,
+        processor: Box<dyn SessionProcessor>,
+    ) -> Result<Self> {
+        let (_owner, cancel) = watch::channel(false);
+        Self::start_cancellable_with_processor(plan, options, cancel, processor).await
+    }
+    /// Cancellation drains any admitted processing before startup cleanup finishes.
+    pub async fn start_cancellable_with_processor(
+        plan: PreparedLaunch,
+        options: SessionOptions,
+        cancel: watch::Receiver<bool>,
+        processor: Box<dyn SessionProcessor>,
+    ) -> Result<Self> {
+        startup::start(plan, options, cancel, Some(processor)).await
     }
     pub fn id(&self) -> &str {
         &self.0.id
