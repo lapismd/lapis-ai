@@ -1,5 +1,8 @@
 # Configuration and supervised clients
 
+MCP environment diagnostics follow LAI-CONFIG-003/RUNTIME-004: values are
+redacted even in nested protocol Debug output; exact wire delivery is unchanged.
+
 ## Requirements
 
 | ID              | Requirement                                                                                                                                                                                                                                                            |

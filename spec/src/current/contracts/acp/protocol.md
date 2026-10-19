@@ -246,7 +246,9 @@ and supported loading receive the same declarations. Warm initialization does
 not start a tool session. The file is bounded to 64 KiB and eight unique stdio
 servers; only absolute executable paths are accepted, with bounded
 arguments/environment and no reserved harness identity names. Errors disclose
-stable codes, not file contents or credentials. ACP continues to own no tool
+stable codes, not file contents or credentials. Environment-variable Debug
+output MUST redact values, including values nested in MCP declarations; wire
+serialization and exact environment delivery remain unchanged. ACP owns no tool
 policy, authentication, network or durable settings.
 
 Cargo publication metadata and coordinated versions follow the

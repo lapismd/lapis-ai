@@ -73,6 +73,12 @@ impl Default for Config {
         }
     }
 }
+impl Config {
+    /// Check an immutable host snapshot before allocating its native transport.
+    pub fn validate(&self, tools: &[Tool]) -> Result<(), Error> {
+        protocol::validate(self, tools)
+    }
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {

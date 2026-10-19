@@ -76,6 +76,11 @@ adoption remain separate. M0–M5 and release authorization are unchanged.
 
 ## Application-tool transport
 
+[Native host boundary](../../history/2026-10-19-native-tools-boundary.md) exposes
+pre-allocation snapshot validation and redacts MCP environment Debug values
+without changing exact wire delivery. The affected protocol/engine cases pass;
+mounted native bridge qualification remains Notes-owned TOOLS-01B/C.
+
 [Injectable MCP engine](../../history/2026-10-19-app-tools-engine.md) advances
 TOOLS-01A for Notes while JJ persistence stays deferred. Its standalone Rust
 byte-stream, cancellation and packaging checks qualify the engine only. Native

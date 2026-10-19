@@ -19,7 +19,7 @@ where
     W: AsyncWrite + Unpin + Send + 'static,
 {
     let tools = handler.tools();
-    protocol::validate(&config, &tools)?;
+    config.validate(&tools)?;
     let mut output = Writer::new(output, &config);
     let mut input = BufReader::new(input);
     let mut calls = Calls::default();

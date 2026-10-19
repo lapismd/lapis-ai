@@ -15,6 +15,8 @@ writer, server identity and tool handler. It can embed the engine in a bundled
 Rust helper. Construction does not create a process, network listener, file,
 credential, application capability or durable transcript.
 
+`Config::validate` exposes the same snapshot/budget check to native hosts before
+they allocate transport resources. It adds no launch or admission authority.
 The engine captures the tool list once and validates its unique names, schemas
 and bounded serialized size. It handles initialize, ping, tools/list,
 tools/call and cancellation notifications. Tools are available only after
