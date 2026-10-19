@@ -14,6 +14,9 @@ private Control V3 compatibility profile for Notes local-file chat. Generic IDs,
 M0–M5 gates and publication authority stay unchanged; full wider qualification
 is deferred by the user while focused source and live consumer work advances.
 
+[Renderer acknowledgement prefixes](../../history/2026-10-19-renderer-ack-batches.md)
+advances bounded local-file streaming in Notes; no milestone or release gate changes.
+
 ## Consumer-driven native adapter
 
 This work does not depend on or change M5 release authorization. Desktop M10.1

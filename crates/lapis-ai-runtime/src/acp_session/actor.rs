@@ -64,8 +64,12 @@ impl Actor {
                             journal.lock().map_err(|_| Error("session_unavailable"))?.next_sequence()?
                         };
                         let frame = processing.prepare(frame, FramePublication::Event { sequence }).await?;
-                        journal.lock().map_err(|_| Error("session_unavailable"))?.emit(frame)
+                        super::delivery::emit(&journal, frame, &mut stop, deadline).await
                     }.await;
+                    if matches!(emitted, Ok(false)) {
+                        unresolved_override = Some(unresolved_before);
+                        break None;
+                    }
                     if let Err(error) = emitted {
                         unresolved_override = Some(unresolved_before);
                         break Some(error.0);

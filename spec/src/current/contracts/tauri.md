@@ -52,6 +52,15 @@ unresolved requests and stops the process. No automatic continuation or retry is
 performed. These facts are not a durable transcript or a provider-session deletion
 claim. The consuming host still owns admission, generation fencing and history.
 
+An active actor may wait at most 100ms for consumed-event acknowledgement when
+the journal is full, retaining only its one already processed frame group and
+reading no further helper frames. It never re-runs processing or advances a
+cursor early. Capacity count/byte bounds remain exact; an oversized group or
+stalled consumer still retires with coverage loss. Close wakes the wait, original
+request deadlines take precedence, and unresolved identities remain retained if
+publication cannot finish. Startup has no live consumer and retains immediate
+overflow failure (LAI-TAURI-002/003/007/009).
+
 ## Tauri host boundary
 
 `tauri-plugin-lapis-ai` wraps the owned session layer. Its Rust `HostPolicy`
@@ -83,6 +92,14 @@ fail closed. Channel failure detaches delivery; bounded retention still retires 
 worker if coverage cannot be preserved. Cold packaged WebView acceptance remains
 distinct from Rust host-policy and channel-sink tests.
 
+The native channel sends contiguous journal snapshots at a 16ms cadence after
+the initial snapshot. New frames accumulate in the same bounded journal while
+delivery waits; no event is dropped, changed, acknowledged or given a new cursor.
+Cancellation wakes the delivery wait immediately, and current admission is
+revalidated before publication. Quiet periods do not create repeated snapshots.
+This reduces WebView IPC pressure under LAI-TAURI-003/004/006 without changing
+journal count/byte caps, native request deadlines or overflow retirement.
+
 ## Renderer client
 
 The private migration package `@lapismd/ai` exposes built public exports: a
@@ -101,6 +118,14 @@ the cursor advances or acknowledgement is sent. A failed callback, lost channel,
 invalid cursor or unknown submission remains observable without replay. Reattach
 uses the last consumed cursor and fences obsolete deliveries. Lost open replies
 are recoverable by listing native request identities, never by retrying open.
+
+LAI-TAURI-006 permits one acknowledgement for a bounded prefix of already queued,
+individually validated and consumed snapshots. The renderer drains at most 32
+snapshots per acknowledgement, retaining their ordering and complete payloads.
+Buffered count/byte limits include the unacknowledged in-flight prefix. No cursor
+advances before its consumer finishes; detach fences the entire pending prefix.
+Invalid input, consumer or acknowledgement failure retains the existing unknown
+outcome and no-replay behavior. No public type, wire, native cap or grant changes.
 
 The private client shares the coordinated version for local public-build
 consumption. It has no npm publication or tag lane. Native/model qualification

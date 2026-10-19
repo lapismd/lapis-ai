@@ -57,6 +57,14 @@ session adapter retains its fixed argv. Readiness is available to native hosts.
 Agent discovery and metadata also accept prepared launches with independent
 input/output bounds and host deadlines (LAI-RUNTIME-001–004).
 
+When a packed helper-output burst fills the frame queue, the reader may retain
+its one already parsed frame for at most 100ms while the consumer drains. It
+reads no additional frame during that handoff. Queue/frame caps and request
+deadlines remain unchanged. A closed or still-full queue latches
+`output_coverage_lost`; consumer cancellation and supervised shutdown still
+release the reader. This implements bounded backpressure under LAI-RUNTIME-001
+without suppressing genuine coverage loss or replaying uncertain work.
+
 Compute exposes an independent bounded command sender and one ordered event
 receiver, so progress and Stop do not wait for a long operation's completion.
 Native hosts may obtain a non-serializable, redacted connection credential for

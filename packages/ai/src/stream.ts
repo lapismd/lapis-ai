@@ -15,6 +15,7 @@ export class AcpStream {
   private stopped = false;
   private queue: { message: StreamMessage; bytes: number }[] = [];
   private bytes = 0;
+  private inFlight = 0;
   private running?: Promise<void>;
   private readonly maxMessages: number;
   private readonly maxBytes: number;
@@ -73,7 +74,7 @@ export class AcpStream {
       return;
     }
     if (
-      this.queue.length >= this.maxMessages ||
+      this.queue.length + this.inFlight >= this.maxMessages ||
       bytes > this.maxBytes - this.bytes
     ) {
       this.fail(new AcpError("renderer_coverage_lost"));
@@ -85,39 +86,50 @@ export class AcpStream {
   }
   private kick(): void {
     if (this.running || !this.token || this.stopped) return;
-    this.running = this.pump().finally(() => {
-      this.running = undefined;
-      if (this.queue.length) this.kick();
-    });
+    this.running = Promise.resolve()
+      .then(() => this.pump())
+      .finally(() => {
+        this.running = undefined;
+        if (this.queue.length) this.kick();
+      });
   }
   private async pump(): Promise<void> {
     while (!this.stopped && this.queue.length) {
-      const item = this.queue.shift()!;
+      const prefix: { message: StreamMessage; bytes: number }[] = [];
+      const count = Math.min(this.queue.length, 32);
       try {
-        const { message } = item;
-        if (
-          message.sessionId !== this.sessionId ||
-          message.subscriptionId !== this.token
-        ) {
-          throw new AcpError("subscription_scope_mismatch");
+        for (let index = 0; index < count && !this.stopped; index++) {
+          const item = this.queue.shift()!;
+          prefix.push(item);
+          this.inFlight += 1;
+          const { message } = item;
+          if (
+            message.sessionId !== this.sessionId ||
+            message.subscriptionId !== this.token
+          )
+            throw new AcpError("subscription_scope_mismatch");
+          snapshot(message.snapshot, this.cursor, this.sessionId);
+          try {
+            await this.options.consume(message.snapshot);
+          } catch {
+            throw new AcpError("consumer_failed");
+          }
+          this.cursor = message.snapshot.sequence;
         }
-        snapshot(message.snapshot, this.cursor, this.sessionId);
-        try {
-          await this.options.consume(message.snapshot);
-        } catch {
-          throw new AcpError("consumer_failed");
-        }
-        this.cursor = message.snapshot.sequence;
         // Detach fences pending acknowledgements while preserving consumed state.
-        if (this.stopped) break;
+        if (this.stopped) continue;
         await this.transport.ack(this.sessionId, this.token!, this.cursor);
-        if (!this.stopped) this.consumed(message.snapshot);
+        for (const { message } of prefix) {
+          if (this.stopped) break;
+          this.consumed(message.snapshot);
+        }
       } catch (error) {
         this.fail(
           error instanceof AcpError ? error : new AcpError("stream_unknown"),
         );
       } finally {
-        this.bytes -= item.bytes;
+        this.bytes -= prefix.reduce((total, item) => total + item.bytes, 0);
+        this.inFlight -= prefix.length;
       }
     }
   }

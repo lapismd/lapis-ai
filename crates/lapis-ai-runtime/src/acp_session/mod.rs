@@ -1,6 +1,7 @@
 //! Rust-owned sessions; applications retain admission, credentials and history.
 mod actor;
 mod bootstrap;
+mod delivery;
 mod journal;
 mod processed;
 mod processing;

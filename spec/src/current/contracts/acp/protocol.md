@@ -210,6 +210,13 @@ rather than a guess.
 
 ## Interactive session integration
 
+`SessionHandler::session_update_async` optionally awaits bounded delivery before
+the next update is read. Its default calls the existing synchronous hook, so
+existing handlers retain their behavior. The connection includes this wait in
+the original absolute request budget; session validation, activity order and
+permission identities remain unchanged. It adds no buffering, replay or wire
+fields (LAI-PROTO-001/003/007/008).
+
 Interactive loading calls session/load only after loadSession was advertised.
 Loading never prompts. Permission callback waits remain inside the overall
 request bound, including when no new frame arrives.

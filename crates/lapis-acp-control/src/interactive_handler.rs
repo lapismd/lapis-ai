@@ -1,5 +1,4 @@
 //! Bounded streamed activity and exact permission lifetimes.
-use crate::interactive_wire::{MAX_FRAME, frame};
 use lapis_acp_protocol::handler::SessionHandler;
 use lapis_acp_protocol::permission::{PermissionDecision, PermissionRequest};
 use lapis_acp_protocol::update::SessionUpdate;
@@ -29,28 +28,6 @@ pub struct Events {
     pub coverage_lost: Arc<AtomicBool>,
     pub scope: Option<String>,
     pub version: u64,
-}
-impl Events {
-    /// Queue a complete frame or cancel on bounded backpressure.
-    pub fn emit(&self, kind: &str, id: &str, mut body: Value) {
-        if kind == "record" && self.coverage_lost.load(Ordering::Acquire) {
-            body["record"]["status"] = json!("outcome_unknown");
-            body["record"]["error"] = json!("activity_coverage_lost");
-            body["sessionUsable"] = json!(false);
-        }
-        body["sequence"] = json!(self.sequence.fetch_add(1, Ordering::Relaxed) + 1);
-        if let Some(scope) = &self.scope {
-            body["sessionId"] = json!(scope);
-        }
-        let mut value = frame(kind, Some(id), body);
-        value["version"] = json!(self.version);
-        if serde_json::to_vec(&value).map_or(true, |bytes| bytes.len() > MAX_FRAME)
-            || self.output.try_send(value).is_err()
-        {
-            self.coverage_lost.store(true, Ordering::Release);
-            self.cancel.send_replace(true);
-        }
-    }
 }
 struct PermissionLifetime {
     permissions: Permissions,
@@ -102,6 +79,11 @@ impl SessionHandler for Handler {
         self.events
             .emit("activity", &self.request_id, json!({"update":update.raw()}));
     }
+    async fn session_update_async(&mut self, update: SessionUpdate) {
+        self.events
+            .emit_wait("activity", &self.request_id, json!({"update":update.raw()}))
+            .await;
+    }
     async fn permission(&mut self, request: PermissionRequest) -> PermissionDecision {
         self.pending_rpc = Some(request.id.clone());
         let id = format!(
@@ -130,11 +112,13 @@ impl SessionHandler for Handler {
             permissions: self.permissions.clone(),
             id: id.clone(),
         };
-        self.events.emit(
-            "permission",
-            &self.request_id,
-            json!({"permissionId":id,"request":request.raw}),
-        );
+        self.events
+            .emit_wait(
+                "permission",
+                &self.request_id,
+                json!({"permissionId":id,"request":request.raw}),
+            )
+            .await;
         let mut cancel = self.events.cancel.subscribe();
         let decision = tokio::select! {
             result=tokio::time::timeout(self.timeout,receiver)=>match result {
@@ -142,12 +126,14 @@ impl SessionHandler for Handler {
             },
             ()=lapis_acp_runner::persistent::cancellation(&mut cancel)=>PermissionDecision::Cancel,
         };
-        self.events.emit(
-            "permission_resolved",
-            &self.request_id,
-            json!({"permissionId":id,
+        self.events
+            .emit_wait(
+                "permission_resolved",
+                &self.request_id,
+                json!({"permissionId":id,
             "optionId":match &decision {PermissionDecision::Select(option)=>Some(option),_=>None}}),
-        );
+            )
+            .await;
         self.pending_rpc = None;
         drop(lifetime);
         decision

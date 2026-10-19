@@ -42,3 +42,5 @@
 - [Retained native processing](history/2026-10-18-retained-processing.md)
 
 - [Codex compact effort](history/2026-10-19-codex-effort.md)
+
+- [Renderer acknowledgement prefixes](history/2026-10-19-renderer-ack-batches.md)

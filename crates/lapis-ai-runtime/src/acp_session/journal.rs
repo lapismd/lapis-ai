@@ -46,6 +46,7 @@ pub struct Journal {
     failure: Option<&'static str>,
     unresolved: Vec<String>,
     changed: watch::Sender<u64>,
+    capacity: watch::Sender<u64>,
     cleanup_failed: bool,
 }
 impl Journal {
@@ -61,11 +62,21 @@ impl Journal {
             failure: None,
             unresolved: Vec::new(),
             changed: watch::channel(0).0,
+            capacity: watch::channel(0).0,
             cleanup_failed: false,
         }
     }
     pub fn subscribe(&self) -> watch::Receiver<u64> {
         self.changed.subscribe()
+    }
+    pub fn capacity_changed(&self) -> watch::Receiver<u64> {
+        self.capacity.subscribe()
+    }
+    pub fn can_emit(&self, size: usize) -> Result<bool> {
+        if size > self.byte_limit {
+            return Err(Error("output_coverage_lost"));
+        }
+        Ok(self.events.len() < self.limit && size <= self.byte_limit.saturating_sub(self.bytes))
     }
     pub fn cleanup_result(&self) -> Result<()> {
         if self.cleanup_failed {
@@ -81,7 +92,7 @@ impl Journal {
     }
     pub fn emit(&mut self, batch: FrameBatch) -> Result<()> {
         let size = batch.size()?;
-        if self.events.len() >= self.limit || size > self.byte_limit.saturating_sub(self.bytes) {
+        if !self.can_emit(size)? {
             return Err(Error("output_coverage_lost"));
         }
         self.sequence = self.next_sequence()?;
@@ -168,6 +179,7 @@ impl Journal {
             }
         }
         self.acknowledged = sequence;
+        self.capacity.send_replace(sequence);
         Ok(())
     }
 }

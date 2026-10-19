@@ -5,6 +5,7 @@ use std::sync::{
     Arc,
     atomic::{AtomicU64, Ordering},
 };
+use std::time::Duration;
 use tokio::sync::watch;
 use uuid::Uuid;
 
@@ -57,6 +58,7 @@ impl AcpHost {
                 {
                     break;
                 }
+                changed.borrow_and_update();
                 let Ok(snapshot) = session.snapshot(cursor) else {
                     break;
                 };
@@ -89,6 +91,11 @@ impl AcpHost {
                     break;
                 }
                 tokio::select! { biased; _ = cancelled.changed() => break, result = changed.changed() => if result.is_err() { break; } }
+                tokio::select! {
+                    biased;
+                    _ = cancelled.changed() => break,
+                    _ = tokio::time::sleep(Duration::from_millis(16)) => {}
+                }
             }
         });
         Ok(subscription)

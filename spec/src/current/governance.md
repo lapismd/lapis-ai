@@ -1,5 +1,9 @@
 # Governance
 
+The renderer acknowledgement optimization preserves LAI-GOV-100 source-first
+ownership and budgets. LAI-TAURI-006 retains consumed-only bounded delivery;
+native consumer evidence and deferred wider qualification stay distinct.
+
 ## Requirements
 
 | ID          | Requirement                                                                                                                                                                                                             |

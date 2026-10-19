@@ -12,6 +12,15 @@ have no analogue here and are not partially reimplemented.
 
 ## Requirements
 
+Interactive v2/v3 workers await output-queue handoff for at most 100ms while
+retaining only the current frame. The asynchronous update hook propagates this
+backpressure to the adapter read loop; queue/frame caps do not grow. Timeout,
+closed output or cancellation of a pending handoff latches coverage loss and
+cancels the worker. A later terminal record stays unknown and unusable. Exact
+scopes, permission IDs and original absolute budgets remain enforced. Legacy
+synchronous emission still fails immediately on a full queue
+(LAI-CTRL-003/008/009).
+
 | ID           | Requirement                                                                                                                                                                                                                                                |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | LAI-CTRL-001 | The controlling application MUST drive `lapis-acp` over a versioned newline-delimited JSON control protocol with no authentication and no network listener.                                                                                                |

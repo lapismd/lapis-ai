@@ -110,7 +110,18 @@ impl NativeProcess {
                         serde_json::from_slice(&bytes).map_err(|_| Error("helper_protocol_failed"))
                     };
                 let fatal = value.is_err();
-                if tx.try_send(value).is_err() {
+                // A ready pipe can fill the queue in one scheduler turn. Give
+                // the bounded consumer time to drain without growing retention
+                // or waiting indefinitely for a stalled consumer.
+                let sent = match tx.try_send(value) {
+                    Ok(()) => true,
+                    Err(mpsc::error::TrySendError::Full(value)) => matches!(
+                        tokio::time::timeout(Duration::from_millis(100), tx.send(value)).await,
+                        Ok(Ok(()))
+                    ),
+                    Err(mpsc::error::TrySendError::Closed(_)) => false,
+                };
+                if !sent {
                     failed.send_replace(Some("output_coverage_lost"));
                     break;
                 }

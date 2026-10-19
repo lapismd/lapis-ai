@@ -42,19 +42,23 @@ pub async fn run(
             known_sessions: Default::default(),
         };
         if *job.cancel.borrow() || *events.cancel.borrow() {
-            events.emit(
-                "record",
-                &id,
-                json!({"record":{"version":1,"taskId":id,"status":"cancelled"},"quiescent":true,
+            events
+                .emit_wait(
+                    "record",
+                    &id,
+                    json!({"record":{"version":1,"taskId":id,"status":"cancelled"},"quiescent":true,
                     "sessionUsable":session.is_some() && !*events.cancel.borrow()}),
-            );
+                )
+                .await;
         } else {
             match job.command {
                 Command::Open {
                     load_session_id, ..
                 } => {
                     if session.is_some() {
-                        events.emit("error", &id, json!({"code":"session_already_open"}));
+                        events
+                            .emit_wait("error", &id, json!({"code":"session_already_open"}))
+                            .await;
                     } else {
                         match WarmSession::open(
                             &config,
@@ -65,10 +69,10 @@ pub async fn run(
                         .await
                         {
                             Ok(value) => {
-                                events.emit("opened", &id, value.facts());
+                                events.emit_wait("opened", &id, value.facts()).await;
                                 session = Some(value);
                             }
-                            Err(code) => events.emit("error", &id, json!({"code":code})),
+                            Err(code) => events.emit_wait("error", &id, json!({"code":code})).await,
                         }
                     }
                 }
@@ -80,11 +84,13 @@ pub async fn run(
                 } => {
                     if let Some(value) = session.as_mut() {
                         match value.configure(&SessionConfiguration{model,effort,mode},&mut handler).await {
-                            Ok(report)=>events.emit("configured",&id,json!({"configuration":report_value(&report),"modeReady":value.mode_ready})),
-                            Err(code)=>{ events.emit("error",&id,json!({"code":code})); if let Some(value)=session.take(){value.close(&config).await;} },
+                            Ok(report)=>events.emit_wait("configured",&id,json!({"configuration":report_value(&report),"modeReady":value.mode_ready})).await,
+                            Err(code)=>{ events.emit_wait("error",&id,json!({"code":code})).await; if let Some(value)=session.take(){value.close(&config).await;} },
                         }
                     } else {
-                        events.emit("error", &id, json!({"code":"session_not_open"}));
+                        events
+                            .emit_wait("error", &id, json!({"code":"session_not_open"}))
+                            .await;
                     }
                 }
                 Command::Prompt {
@@ -95,9 +101,13 @@ pub async fn run(
                 } => {
                     if let Some(value) = session.as_mut() {
                         if !value.mode_ready {
-                            events.emit("error", &id, json!({"code":"execution_mode_required"}));
+                            events
+                                .emit_wait("error", &id, json!({"code":"execution_mode_required"}))
+                                .await;
                         } else {
-                            events.emit("started", &id, json!({"sessionId":value.session.id}));
+                            events
+                                .emit_wait("started", &id, json!({"sessionId":value.session.id}))
+                                .await;
                             let budget = lapis_acp_protocol::budget::TurnBudget::new(
                                 config.idle,
                                 Duration::from_millis(max_duration_ms).min(config.absolute_cap),
@@ -127,11 +137,13 @@ pub async fn run(
                             if !quiescent && let Some(value) = session.take() {
                                 quiescent = value.close(&config).await;
                             }
-                            events.emit("record",&id,json!({"record":{"version":1,"taskId":id,"status":status,
-                                "stopReason":outcome.stop_reason,"error":code},"quiescent":quiescent,"sessionUsable":session.is_some()}));
+                            events.emit_wait("record",&id,json!({"record":{"version":1,"taskId":id,"status":status,
+                                "stopReason":outcome.stop_reason,"error":code},"quiescent":quiescent,"sessionUsable":session.is_some()})).await;
                         }
                     } else {
-                        events.emit("error", &id, json!({"code":"session_not_open"}));
+                        events
+                            .emit_wait("error", &id, json!({"code":"session_not_open"}))
+                            .await;
                     }
                 }
                 _ => {}
@@ -149,5 +161,7 @@ pub async fn run(
     } else {
         true
     };
-    events.emit("closed", "close", json!({"confirmedStopped":stopped}));
+    events
+        .emit_wait("closed", "close", json!({"confirmedStopped":stopped}))
+        .await;
 }
