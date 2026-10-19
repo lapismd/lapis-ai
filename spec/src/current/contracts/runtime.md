@@ -75,3 +75,7 @@ Source acquisition is independently owned by the bounded
 [capture library](capture.md), without an execution/runtime edge. Its profile
 inventory and read-only metadata discovery neither spawn nor authorize an ACP
 worker, and do not change LAI-RUNTIME-001–004.
+
+[Application-tool transport](app-tools.md) owns the injectable MCP engine. It
+adds no ACP launch, credential resolution or application authority under
+LAI-RUNTIME-001–004; native bridge integration remains a consumer gate.

@@ -73,3 +73,11 @@ two native-host and twelve renderer cases pass. Full source qualification
 passes (1,013 Rust tests, two inherited ignored; 39 renderer/45 governance).
 Cold native batch acceptance remains pending; Notes privacy/durable storage and JJ backend
 adoption remain separate. M0–M5 and release authorization are unchanged.
+
+## Application-tool transport
+
+[Injectable MCP engine](../../history/2026-10-19-app-tools-engine.md) advances
+TOOLS-01A for Notes while JJ persistence stays deferred. Its standalone Rust
+byte-stream, cancellation and packaging checks qualify the engine only. Native
+authentication, host policy/registry wiring, actual Codex reads/guarded edits and
+cold consumer cleanup remain TOOLS-01B/C. M0–M5 and publication gates stay.

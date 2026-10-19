@@ -54,6 +54,10 @@ const config = defineConfig(tableRequirements(), {
       ],
       rules: [
         {
+          pattern: "^crates/lapis-ai-app-tools/",
+          chapters: ["spec/src/current/contracts/app-tools.md"],
+        },
+        {
           pattern: "^crates/lapis-ai-capture/",
           chapters: ["spec/src/current/contracts/capture.md"],
         },

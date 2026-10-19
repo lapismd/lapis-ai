@@ -11,7 +11,7 @@ merged by automation. No package or tag is published during this setup.
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | LAI-REL-001 | Cargo publication MUST include portable metadata, registry-versioned internal dependencies, notices, licenses and required fixture sources. Test helper binaries MUST require an explicit development feature and MUST NOT install by default.                                         |
 | LAI-REL-002 | CI MUST qualify exact committed revisions with explicit Git base/head ranges, retain local Jujutsu checks and run formatting, specifications, boundaries, release/package checks, Clippy, tests, builds and supported native acceptance.                                               |
-| LAI-REL-003 | Changesets MUST coordinate the private npm coordinator and renderer client, all thirteen Cargo versions, internal version ranges, lockfiles and changelog. Version preparation MUST NOT fabricate specification or milestone evidence.                                                 |
+| LAI-REL-003 | Changesets MUST coordinate the private npm coordinator and renderer client, all fourteen Cargo versions, internal version ranges, lockfiles and changelog. Version preparation MUST NOT fabricate specification or milestone evidence.                                                 |
 | LAI-REL-004 | A same-repository Changesets or Dependabot PR MAY omit same-change spec/evidence bookkeeping only after exact bot, branch, base, repository and revision checks. Every product, packaging and canonical integrity gate MUST remain required.                                           |
 | LAI-REL-005 | Cargo release MUST qualify an immutable version tag on main history, reject pending Changesets and mismatched registry contents, and publish only explicitly admitted crates. Credentials MUST remain in protected release jobs; normal automation MUST use scoped trusted publishing. |
 | LAI-REL-006 | GitHub Pages MUST build the canonical mdBook for pull requests and deploy only main through the GitHub Pages environment with the `/lapis-ai/` site prefix.                                                                                                                            |
@@ -19,7 +19,7 @@ merged by automation. No package or tag is published during this setup.
 
 ## Publication scope
 
-`release.toml` declares twelve crates.io packages and one native-only package.
+`release.toml` declares thirteen crates.io packages and one native-only package.
 The initial registry API check found all Lapis names unallocated. The exact
 Mesh source version `0.76.0-rc9` is absent from crates.io, so `lapis-compute`
 retains `publish = false`; the SDK pin is unchanged. GitHub native bundles
@@ -52,3 +52,7 @@ formatter, in addition to synchronized versions and preserved canonical evidence
 The coordinated registry cohort includes the independent `lapis-ai-capture`
 source library. It inherits the same workspace version and publication gates;
 adding it does not publish a package or merge a release change.
+
+The cohort includes `lapis-ai-app-tools`, an injectable library with no new
+helper binary or native access. This source addition does not publish it; its
+namespace/distribution and native consumer qualification remain separate gates.

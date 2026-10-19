@@ -82,3 +82,7 @@ drain remain mandatory. Source qualification covers the complete Tauri host
 and workspace; Notes must separately qualify its retained native owner and
 durable conversation. The Changeset records the API addition without changing
 M0–M5, release or packaged-native acceptance gates.
+
+The app-tool transport crate is independently checked under LAI-TOOLS-001–004.
+LAI-GOV-100/101 retain source boundaries, line budgets and separate consumer
+acceptance; adding this crate does not authorize publication.

@@ -4,6 +4,7 @@
   - [Governance](current/governance.md)
   - [Configuration and clients](current/contracts/runtime.md)
   - [Session-source acquisition](current/contracts/capture.md)
+  - [Injectable application-tool transport](current/contracts/app-tools.md)
   - [Native services](current/contracts/services.md)
   - [CI and release](current/contracts/release.md)
   - [Tauri adapter contract](current/contracts/tauri.md)
@@ -44,3 +45,4 @@
 - [Codex compact effort](history/2026-10-19-codex-effort.md)
 
 - [Renderer acknowledgement prefixes](history/2026-10-19-renderer-ack-batches.md)
+  - [Injectable application-tool engine](history/2026-10-19-app-tools-engine.md)

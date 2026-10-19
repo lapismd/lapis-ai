@@ -16,7 +16,7 @@ compute retain their consuming application gates.
 
 ## Packages and delivery
 
-All twelve Cargo packages share one version. The private npm package is a development
+All fourteen Cargo packages share one version. The private npm package is a development
 and Changesets coordinator. The first registry publication is pending.
 
 | Package              | Responsibility                                             | Delivery                  |
@@ -30,6 +30,7 @@ and Changesets coordinator. The first registry publication is pending.
 | `lapis-agent`        | Provider adapters, models, permissions and MCP tools       | Cargo + native executable |
 | `lapis-agent-tools`  | Permissioned workspace tools over MCP stdio                | Cargo + native executable |
 | `lapis-ai-config`    | Inert TOML and secret-reference resolution                 | Cargo library             |
+| `lapis-ai-app-tools` | Injectable bounded MCP stdio transport for app-owned tools | Cargo library             |
 | `lapis-ai-capture`   | Read-only bounded external-session source discovery        | Cargo library             |
 | `lapis-ai-runtime`   | Supervised helper clients and resource verification        | Cargo library             |
 | `lapis-compute`      | Authenticated local inference and admitted paired compute  | Native executable only    |
@@ -150,3 +151,6 @@ lane. See [the client guide](packages/ai/README.md) for consumption and recovery
 Native source discovery is independently reusable through `lapis-ai-capture`.
 See [the capture guide](docs/capture.md). Hosts retain activity admission,
 redaction and durable publication; registering a profile grants none of these.
+
+For host-injected MCP tools, see [the application-tool guide](docs/app-tools.md).
+The engine supplies no native execution or application authorization.

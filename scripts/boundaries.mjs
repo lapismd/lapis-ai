@@ -5,6 +5,7 @@ const acp = /^lapis-acp(?:-|$)/;
 const forbidden =
   /^(nostr.*|reqwest|axum|hyper|rustls|rusqlite|sqlx.*|turso|tauri.*)$/;
 export const allowed = {
+  "lapis-ai-app-tools": [],
   "lapis-ai-capture": [],
   "tauri-plugin-lapis-ai": ["lapis-ai-runtime"],
   "lapis-acp-protocol": [],
@@ -50,7 +51,8 @@ export function boundaryErrors(packages, root = process.cwd()) {
       if (
         (acp.test(pkg.name) ||
           pkg.name === "lapis-ai-config" ||
-          pkg.name === "lapis-ai-capture") &&
+          pkg.name === "lapis-ai-capture" ||
+          pkg.name === "lapis-ai-app-tools") &&
         forbidden.test(dep.name)
       )
         errors.push(`${pkg.name}: excluded ${dep.name}`);
