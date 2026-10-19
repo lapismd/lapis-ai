@@ -74,11 +74,13 @@ pub fn inspect_codex(
     let payload = &value["payload"];
     let surface_matches = match profile {
         SourceProfile::CodexCliJsonlV1 => {
-            matches!(payload["source"].as_str(), Some("cli" | "exec"))
+            (matches!(payload["source"].as_str(), Some("cli" | "exec"))
                 && matches!(
                     payload["originator"].as_str(),
                     Some("codex_cli_rs" | "codex_exec" | "Codex Desktop")
-                )
+                ))
+                || (payload["source"].as_str() == Some("vscode")
+                    && payload["originator"].as_str() == Some("lapis-acp"))
         }
         SourceProfile::CodexDesktopJsonlV1 => {
             payload["source"].as_str() == Some("vscode")

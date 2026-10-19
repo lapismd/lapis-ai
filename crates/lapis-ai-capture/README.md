@@ -16,3 +16,8 @@ consumer's automatic capture profile.
 
 See the [capture guide](../../docs/capture.md) and
 [canonical contract](../../spec/src/current/contracts/capture.md).
+
+Codex CLI 0.156.1 files launched by Lapis ACP use the exact `vscode` /
+`lapis-acp` header pair and share the CLI profile. This does not admit other
+adapter labels or newer Desktop alpha versions. Imported data remains
+untrusted source evidence, never execution authority.

@@ -25,3 +25,10 @@ bounded explicit sidecar extension as a discovery hint. Hints are metadata,
 never source/activity admission. The neutral crate has no JJ-specific sidecar
 name. JJ normalization, source leases, cursor acknowledgements, sanitized spools
 and original publication receipts remain in the publishing consumer.
+
+The Codex CLI 0.156.1 profile also accepts the exact native Lapis ACP pair
+`source=vscode` and `originator=lapis-acp`. This is the same pinned CLI record
+format launched through the owned ACP adapter; it grants no runtime authority.
+Other adapter labels and versions remain excluded. In particular, observing a
+new Desktop alpha header does not qualify its body parser. Existing physical
+identity, complete-header, privacy and consumer-lifecycle gates are unchanged.

@@ -47,3 +47,5 @@
 - [Renderer acknowledgement prefixes](history/2026-10-19-renderer-ack-batches.md)
   - [Injectable application-tool engine](history/2026-10-19-app-tools-engine.md)
   - [Native tool snapshot and diagnostics](history/2026-10-19-native-tools-boundary.md)
+
+- [Pinned Codex Lapis ACP source headers](history/2026-10-19-codex-lapis-acp-source.md)

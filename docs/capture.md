@@ -44,3 +44,8 @@ header and the selected product version. The result is raw native input, with no
 serialization or logging representation. Revalidate the discovery candidate
 around inspection, then apply the host privacy boundary before persistence or
 renderer delivery. The consumer owns evidence hashes and source cursors.
+
+Codex CLI 0.156.1 files launched by Lapis ACP use the exact `vscode` /
+`lapis-acp` header pair and share the CLI profile. This does not admit other
+adapter labels or newer Desktop alpha versions. Imported data remains
+untrusted source evidence, never execution authority.

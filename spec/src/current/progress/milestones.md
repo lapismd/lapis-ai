@@ -60,6 +60,10 @@ and cold native qualification are separate from this shared source slice.
 
 ## Reusable session acquisition
 
+[Pinned Lapis ACP headers](../../history/2026-10-19-codex-lapis-acp-source.md)
+adds only the observed Codex CLI 0.156.1 adapter pair. Other source/version
+qualification and original M0–M5 gates remain unchanged.
+
 [Filesystem acquisition](../../history/2026-10-17-capture-discovery.md) qualifies
 the independent approved-root scanner, versioned product inventory and bounded
 Codex file inspection. The complete workspace suite, strict checks, build and

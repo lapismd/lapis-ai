@@ -3,6 +3,12 @@
 MCP environment diagnostics follow LAI-CONFIG-003/RUNTIME-004: values are
 redacted even in nested protocol Debug output; exact wire delivery is unchanged.
 
+The pinned Lapis ACP source-header addition in
+[the capture contract](capture.md) preserves LAI-CONFIG-003 and
+LAI-RUNTIME-001/002/004: parsing file evidence launches no worker, reads no
+configuration or credentials and grants no runtime admission. Host execution and
+unknown-outcome semantics remain unchanged.
+
 ## Requirements
 
 | ID              | Requirement                                                                                                                                                                                                                                                            |

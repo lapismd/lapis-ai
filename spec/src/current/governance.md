@@ -4,6 +4,11 @@ The renderer acknowledgement optimization preserves LAI-GOV-100 source-first
 ownership and budgets. LAI-TAURI-006 retains consumed-only bounded delivery;
 native consumer evidence and deferred wider qualification stay distinct.
 
+The pinned Codex Lapis ACP source profile keeps LAI-GOV-100 source ownership:
+shared header admission changes in `lapis-ai-capture`; Notes adapts its existing
+native importer. Exact source/consumer checks remain separate from the user’s
+deferred wider qualification. Original M0–M5 gates and release authority stay.
+
 ## Requirements
 
 | ID          | Requirement                                                                                                                                                                                                             |
