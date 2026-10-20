@@ -1,4 +1,5 @@
 use super::processed::{FrameBatch, TextIdentity};
+use super::request::SessionRequest;
 use crate::{Error, Result};
 use serde_json::Value;
 use std::{future::Future, pin::Pin};
@@ -18,12 +19,24 @@ pub struct FrameInput<'a> {
 }
 pub type ProcessorFuture<'a> = Pin<Box<dyn Future<Output = Result<Value>> + Send + 'a>>;
 pub type BatchProcessorFuture<'a> = Pin<Box<dyn Future<Output = Result<FrameBatch>> + Send + 'a>>;
+/// Immutable, validated outgoing input; it grants no launch or store authority.
+pub struct RequestInput<'a> {
+    pub session_id: &'a str,
+    pub request_id: &'a str,
+    pub request: &'a SessionRequest,
+}
+pub type RequestProcessorFuture<'a> = Pin<Box<dyn Future<Output = Result<()>> + Send + 'a>>;
 /// One owned processor per worker, invoked serially before any frame is exposed.
 ///
 /// Hosts own privacy and durable receipt recovery. Return only after required
 /// capture is durable; never detach persistence work. Failure retires the worker
 /// without raw fallback or replay. Identity and permission IDs must remain exact.
 pub trait SessionProcessor: Send + 'static {
+    /// Finish host-owned preparation before any provider command is sent.
+    /// Existing processors preserve their outgoing-request behavior by default.
+    fn prepare_request<'a>(&'a mut self, _input: RequestInput<'a>) -> RequestProcessorFuture<'a> {
+        Box::pin(async { Ok(()) })
+    }
     fn process<'a>(&'a mut self, _input: FrameInput<'a>) -> ProcessorFuture<'a> {
         Box::pin(async { Err(Error("single_frame_processing_unavailable")) })
     }
@@ -93,6 +106,18 @@ impl Processing {
         }
         self.previous = TextIdentity::of(&output.frame);
         Ok(output)
+    }
+    pub async fn prepare_request(&mut self, id: &str, request: &SessionRequest) -> Result<()> {
+        if let Some(processor) = self.processor.as_mut() {
+            processor
+                .prepare_request(RequestInput {
+                    session_id: &self.session_id,
+                    request_id: id,
+                    request,
+                })
+                .await?;
+        }
+        Ok(())
     }
 }
 fn identity_preserved(raw: &Value, output: &Value) -> bool {

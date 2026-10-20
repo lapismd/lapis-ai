@@ -12,7 +12,8 @@ use crate::{Error, PreparedLaunch, Result};
 pub use journal::{SessionEvent, SessionSnapshot};
 pub use processed::FrameBatch;
 pub use processing::{
-    BatchProcessorFuture, FrameInput, FramePublication, ProcessorFuture, SessionProcessor,
+    BatchProcessorFuture, FrameInput, FramePublication, ProcessorFuture, RequestInput,
+    RequestProcessorFuture, SessionProcessor,
 };
 pub use request::SessionRequest;
 use serde_json::Value;

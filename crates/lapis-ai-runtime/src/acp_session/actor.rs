@@ -82,6 +82,20 @@ impl Actor {
                         let _ = input.reply.send(Err(error));
                         continue;
                     }
+                    // The actor owns this future even if submit's receiver
+                    // disappears. Never cancel admitted host persistence.
+                    if let Err(error) = processing.prepare_request(&input.id, &input.request).await {
+                        let _ = input.reply.send(Err(error));
+                        break Some(error.0);
+                    }
+                    if *stop.borrow() {
+                        let _ = input.reply.send(Err(Error("session_closed")));
+                        break None;
+                    }
+                    if routing.pending.get(&input.id).is_none_or(|pending| Instant::now() >= pending.deadline) {
+                        let _ = input.reply.send(Err(Error("outcome_unknown")));
+                        break Some("outcome_unknown");
+                    }
                     let result = input.request.send(&commands, &input.id, &options.handle).await;
                     let failed = result.err();
                     let _ = input.reply.send(result);

@@ -49,3 +49,5 @@
   - [Native tool snapshot and diagnostics](history/2026-10-19-native-tools-boundary.md)
 
 - [Pinned Codex Lapis ACP source headers](history/2026-10-19-codex-lapis-acp-source.md)
+
+- [Native outgoing request preparation](history/2026-10-20-request-preparation.md)

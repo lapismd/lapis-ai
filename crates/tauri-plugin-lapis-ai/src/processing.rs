@@ -3,7 +3,8 @@ use crate::{
     registry::{Registry, Scope},
 };
 use lapis_ai_runtime::{
-    self as runtime, BatchProcessorFuture, FrameInput, ProcessorFuture, SessionProcessor,
+    self as runtime, BatchProcessorFuture, FrameInput, ProcessorFuture, RequestInput,
+    RequestProcessorFuture, SessionProcessor,
 };
 use std::sync::{Arc, Mutex};
 
@@ -67,6 +68,21 @@ struct ScopedProcessor {
     inner: Box<dyn SessionProcessor>,
 }
 impl ScopedProcessor {
+    fn check_request(&self, id: &str) -> runtime::Result<()> {
+        if id == self.binding.session_id
+            && admitted(
+                &*self.policy,
+                &self.state,
+                &self.context,
+                &self.scope,
+                &self.binding,
+            )
+        {
+            Ok(())
+        } else {
+            Err(runtime::Error("admission_revoked"))
+        }
+    }
     fn check(&self, id: &str) -> runtime::Result<()> {
         if id == self.binding.session_id
             && self
@@ -82,6 +98,13 @@ impl ScopedProcessor {
     }
 }
 impl SessionProcessor for ScopedProcessor {
+    fn prepare_request<'a>(&'a mut self, input: RequestInput<'a>) -> RequestProcessorFuture<'a> {
+        Box::pin(async move {
+            self.check_request(input.session_id)?;
+            self.inner.prepare_request(input).await?;
+            self.check_request(&self.binding.session_id)
+        })
+    }
     fn process_batch<'a>(&'a mut self, input: FrameInput<'a>) -> BatchProcessorFuture<'a> {
         Box::pin(async move {
             self.check(input.session_id)?;

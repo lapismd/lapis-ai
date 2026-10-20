@@ -11,7 +11,8 @@ mod resources;
 pub use acp::{AcpClient, AcpCommands};
 pub use acp_session::{
     AcpSession, BatchProcessorFuture, FrameBatch, FrameInput, FramePublication, ProcessorFuture,
-    SessionEvent, SessionOptions, SessionProcessor, SessionRequest, SessionSnapshot,
+    RequestInput, RequestProcessorFuture, SessionEvent, SessionOptions, SessionProcessor,
+    SessionRequest, SessionSnapshot,
 };
 pub use agent::AgentClient;
 pub use compute::ComputeClient;

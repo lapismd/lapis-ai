@@ -90,3 +90,12 @@ TOOLS-01A for Notes while JJ persistence stays deferred. Its standalone Rust
 byte-stream, cancellation and packaging checks qualify the engine only. Native
 authentication, host policy/registry wiring, actual Codex reads/guarded edits and
 cold consumer cleanup remain TOOLS-01B/C. M0–M5 and publication gates stay.
+
+## Managed conversation request preparation
+
+[Native outgoing preparation](../../history/2026-10-20-request-preparation.md)
+adds LAI-TAURI-011 for the Desktop managed-conversation integration. The actor
+fences provider dispatch behind a drained Rust callback; the Tauri wrapper uses
+current command admission, independently of retained incoming capture. M0–M5
+and publication authority stay unchanged. Native Desktop adoption and its full
+renderer/context/restart gates remain separate.

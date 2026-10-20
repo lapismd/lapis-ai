@@ -98,6 +98,7 @@
 | LAI-TAURI-008   | Implemented | [Native processor factory](../history/2026-10-18-tauri-processing.md)        |
 | LAI-TAURI-009   | Implemented | [Native text groups](../history/2026-10-18-native-batches.md)                |
 | LAI-TAURI-010   | Implemented | [Retained native processing](../history/2026-10-18-retained-processing.md)   |
+| LAI-TAURI-011   | Implemented | [Native request preparation](../history/2026-10-20-request-preparation.md)   |
 | LAI-TOOLS-001   | Implemented | [MCP engine](../history/2026-10-19-app-tools-engine.md)                      |
 | LAI-TOOLS-002   | Implemented | [MCP engine](../history/2026-10-19-app-tools-engine.md)                      |
 | LAI-TOOLS-003   | Implemented | [MCP engine](../history/2026-10-19-app-tools-engine.md)                      |

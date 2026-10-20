@@ -88,3 +88,10 @@ worker, and do not change LAI-RUNTIME-001–004.
 [Application-tool transport](app-tools.md) owns the injectable MCP engine. It
 adds no ACP launch, credential resolution or application authority under
 LAI-RUNTIME-001–004; native bridge integration remains a consumer gate.
+
+LAI-TAURI-011 adds optional Rust-owned preparation of validated outgoing
+requests before helper dispatch. LAI-RUNTIME-001/002 retain isolated processes,
+exact identities and unknown outcomes: the actor owns and drains preparation,
+then rechecks close/deadline. The host owns sanitation, storage and receipts;
+this callback adds no wire field, launch authority or automatic replay. Native
+Tauri command admission remains current even when inbound capture is retained.
