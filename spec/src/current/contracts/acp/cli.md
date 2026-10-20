@@ -1,5 +1,10 @@
 # CLI and exit codes
 
+Trusted MCP launch files now accept bounded literal-loopback HTTP declarations
+alongside stdio. This extends LAI-CLI-004's existing `--tools`/`JJ_ACP_TOOLS`
+input, with no new task/control fields. LAI-CLI-002/005 retain stable refusals
+and credential-free CLI output. Native endpoint authentication remains host-owned.
+
 The owned-session consumer regression drives the compiled control-v3 binary
 through `lapis-ai-runtime`. This adds test-only composition and confirms the
 unchanged LAI-CLI-008 boundary; runtime adapters do not enter CLI production code.

@@ -239,13 +239,23 @@ block, then the unchanged authored text. It performs no URI or file access.
 
 ## Trusted coding-tool declarations
 
-The controlling application may select a bounded JSON file of stdio MCP
+The controlling application may select a bounded JSON file of MCP
 declarations through `--tools` or `JJ_ACP_TOOLS`. This is trusted launch
 configuration, independent of tasks and v2/v3 control input. Session creation
 and supported loading receive the same declarations. Warm initialization does
-not start a tool session. The file is bounded to 64 KiB and eight unique stdio
-servers; only absolute executable paths are accepted, with bounded
-arguments/environment and no reserved harness identity names. Errors disclose
+not start a tool session. The file is bounded to 64 KiB and eight unique
+servers across stdio and HTTP. Stdio accepts only absolute executable paths,
+with bounded arguments/environment and no reserved harness identity names.
+HTTP accepts only explicitly ported literal loopback HTTP URLs without user
+information, queries or fragments, and bounded, uniquely named headers.
+TOML Authorization/Cookie header values require environment references. Header
+Debug output redacts every value. HTTP declarations serialize the ACP `type`,
+`name`, `url` and `headers` shape; existing stdio wire fields remain unchanged.
+`McpServer` remains the stdio builder; `McpServerConfig` adds typed mixed
+declarations to session/runner configuration, with explicit `From` conversion.
+No HTTP listener or request is created by parsing or encoding a declaration.
+Host-owned HTTP tool authentication and policy remain consumer prerequisites.
+Errors disclose
 stable codes, not file contents or credentials. Environment-variable Debug
 output MUST redact values, including values nested in MCP declarations; wire
 serialization and exact environment delivery remain unchanged. ACP owns no tool

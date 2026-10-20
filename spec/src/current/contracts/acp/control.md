@@ -1,5 +1,11 @@
 # Controlling application boundary
 
+Typed HTTP MCP declarations travel only in the existing trusted
+`InvocationConfig`, through new/load and warm sessions. LAI-CTRL-001 retains the
+application boundary: no task or control frame can select a tool URL, headers,
+executable or credentials. Control versions and unknown-outcome behavior are
+unchanged; declaration encoding starts no listener or network request.
+
 `lapis-acp` has no message bus, no relay, no subscription and no author gate. Work
 arrives from a controlling application that spawned the process, over stdin, and
 results leave over stdout. There is no listener, no port, no token and no

@@ -2,8 +2,8 @@
 
 use std::time::Duration;
 
+use lapis_acp_protocol::McpServerConfig;
 use lapis_acp_protocol::budget::TurnBudget;
-use lapis_acp_protocol::content::McpServer;
 use lapis_acp_protocol::envelope::method;
 use lapis_acp_protocol::handler::SessionHandler;
 use lapis_acp_protocol::initialize::{ClientCapabilities, ClientInfo};
@@ -53,7 +53,7 @@ pub struct TurnRequest<'a> {
     /// Optional session title.
     pub session_title: Option<&'a str>,
     /// MCP servers to hand to the agent.
-    pub mcp_servers: Vec<McpServer>,
+    pub mcp_servers: Vec<McpServerConfig>,
     /// Idle and absolute bounds for the turn.
     pub budget: TurnBudget,
     /// How long to wait for a cooperative stop after requesting cancellation.

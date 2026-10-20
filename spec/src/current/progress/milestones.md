@@ -80,6 +80,12 @@ adoption remain separate. M0–M5 and release authorization are unchanged.
 
 ## Application-tool transport
 
+[Trusted HTTP declarations](../../history/2026-10-20-http-mcp-declarations.md)
+add typed host-owned HTTP MCP configuration beside retained stdio for desktop
+Cursor integration. Parsing/encoding and real launcher delivery are distinct
+from the pending authenticated HTTP tool host and desktop M10.2–M10.4 acceptance.
+Original M0–M5 status and publication authority remain unchanged.
+
 [Native host boundary](../../history/2026-10-19-native-tools-boundary.md) exposes
 pre-allocation snapshot validation and redacts MCP environment Debug values
 without changing exact wire delivery. The affected protocol/engine cases pass;

@@ -1,6 +1,6 @@
 //! Parse trusted launch tool declarations, never untrusted task/control frames.
 use lapis_acp_control::task::{TaskRejection, code};
-use lapis_acp_protocol::{EnvVar, McpServer};
+use lapis_acp_protocol::{EnvVar, McpServer, McpServerConfig};
 use serde::Deserialize;
 use std::{fs::File, io::Read, path::Path};
 #[derive(Deserialize)]
@@ -10,6 +10,12 @@ struct Tool {
     command: String,
     args: Vec<String>,
     env: Vec<Variable>,
+}
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum Declaration {
+    Stdio(Tool),
+    Http(super::http_tools::HttpTool),
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -23,7 +29,7 @@ fn refusal() -> TaskRejection {
         "invalid trusted tool configuration",
     )
 }
-pub(crate) fn read(path: Option<&str>) -> Result<Vec<McpServer>, TaskRejection> {
+pub(crate) fn read(path: Option<&str>) -> Result<Vec<McpServerConfig>, TaskRejection> {
     let Some(path) = path else {
         return Ok(vec![]);
     };
@@ -37,7 +43,7 @@ pub(crate) fn read(path: Option<&str>) -> Result<Vec<McpServer>, TaskRejection> 
         return Err(refusal());
     }
     let data = crate::toml_tools::normalize(path, &data).map_err(|_| refusal())?;
-    let tools: Vec<Tool> = serde_json::from_slice(&data).map_err(|_| refusal())?;
+    let tools: Vec<Declaration> = serde_json::from_slice(&data).map_err(|_| refusal())?;
     if tools.len() > 8 {
         return Err(refusal());
     }
@@ -45,6 +51,12 @@ pub(crate) fn read(path: Option<&str>) -> Result<Vec<McpServer>, TaskRejection> 
     tools
         .into_iter()
         .map(|tool| {
+            let tool = match tool {
+                Declaration::Stdio(tool) => tool,
+                Declaration::Http(tool) => {
+                    return super::http_tools::validate(tool, &mut names).map_err(|_| refusal());
+                }
+            };
             if tool.name.is_empty()
                 || tool.name.len() > 64
                 || !tool
@@ -72,7 +84,7 @@ pub(crate) fn read(path: Option<&str>) -> Result<Vec<McpServer>, TaskRejection> 
             {
                 return Err(refusal());
             }
-            Ok(McpServer {
+            Ok(McpServerConfig::from(McpServer {
                 name: tool.name,
                 command: tool.command,
                 args: tool.args,
@@ -81,7 +93,7 @@ pub(crate) fn read(path: Option<&str>) -> Result<Vec<McpServer>, TaskRejection> 
                     .into_iter()
                     .map(|v| EnvVar::new(v.name, v.value))
                     .collect(),
-            })
+            }))
         })
         .collect()
 }

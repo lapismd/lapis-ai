@@ -1,5 +1,12 @@
 # Governance
 
+Trusted HTTP MCP declarations extend the existing launch-only tool boundary
+under LAI-GOV-100. The typed Rust addition preserves the stdio builder/wire;
+session and runner vectors accept `McpServerConfig` with explicit conversion.
+Validation/evidence distinguish declaration delivery from a functioning HTTP
+tool host, desktop provider acceptance and M10.2–M10.4 completion. The coordinated
+minor Changeset records the interface addition without preparing a release.
+
 The renderer acknowledgement optimization preserves LAI-GOV-100 source-first
 ownership and budgets. LAI-TAURI-006 retains consumed-only bounded delivery;
 native consumer evidence and deferred wider qualification stay distinct.

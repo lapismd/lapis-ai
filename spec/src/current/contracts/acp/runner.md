@@ -1,5 +1,11 @@
 # Session and turn lifecycle
 
+Trusted turn configuration accepts mixed typed MCP declarations. The existing
+new/load flow preserves HTTP headers and stdio fields without interpreting
+either transport. LAI-RUN-001 process ownership, permissions, deadlines and
+supervised cleanup are unchanged; the application owns HTTP admission and
+endpoint lifetime.
+
 `lapis-acp-runner` executes prepared turns. It does not decide what to run, when to
 run it, or what to do with the result; intake and disposition belong to
 `lapis-acp-control` and to the controlling application above it.

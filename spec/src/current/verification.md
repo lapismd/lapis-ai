@@ -55,7 +55,7 @@
 | LAI-PACKAGE-002 | Implemented | [Qualification](../history/2026-10-16-qualification.md)                      |
 | LAI-PROTO-001   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
 | LAI-PROTO-002   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
-| LAI-PROTO-003   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
+| LAI-PROTO-003   | Implemented | [Foundation](../history/2026-10-16-foundation.md); [HTTP MCP][http-mcp]      |
 | LAI-PROTO-004   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
 | LAI-PROTO-005   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
 | LAI-PROTO-006   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
@@ -103,3 +103,5 @@
 | LAI-TOOLS-002   | Implemented | [MCP engine](../history/2026-10-19-app-tools-engine.md)                      |
 | LAI-TOOLS-003   | Implemented | [MCP engine](../history/2026-10-19-app-tools-engine.md)                      |
 | LAI-TOOLS-004   | Planned     | [MCP engine; native host pending](../history/2026-10-19-app-tools-engine.md) |
+
+[http-mcp]: ../history/2026-10-20-http-mcp-declarations.md
