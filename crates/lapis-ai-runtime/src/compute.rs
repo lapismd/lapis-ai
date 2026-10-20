@@ -185,8 +185,10 @@ impl ComputeClient {
             .map_err(|_| Error("invalid_inference_response"))
     }
     pub async fn shutdown(&mut self) -> Result<()> {
-        let sent = self.commands().stop().await;
-        let stopped = self.process.shutdown(Duration::from_secs(20)).await;
-        stopped.and(sent)
+        // Another owned command sender may already have stopped the helper.
+        // Successful reap is the shutdown proof; a closed input pipe is not a
+        // failed cleanup when its process has exited successfully.
+        let _sent = self.commands().stop().await;
+        self.process.shutdown(Duration::from_secs(20)).await
     }
 }

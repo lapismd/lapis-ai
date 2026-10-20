@@ -1,5 +1,10 @@
 # Configuration and supervised clients
 
+LAI-RUNTIME-001/003 permit an independent compute command sender to stop active
+work before final client cleanup. Successful supervised reap confirms shutdown
+even when that prior stop closed the helper input. Reap failures remain failures;
+this cannot establish completion of an interrupted model operation.
+
 MCP environment diagnostics follow LAI-CONFIG-003/RUNTIME-004: values are
 redacted even in nested protocol Debug output; exact wire delivery is unchanged.
 

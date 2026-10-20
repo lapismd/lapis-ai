@@ -75,6 +75,9 @@ async fn compute_progress_and_stop_are_independent_of_operation_completion() {
     let progress = client.next_event(Duration::from_secs(2)).await.unwrap();
     assert_eq!(progress["requestId"], "download-once");
     assert_eq!(progress["progress"], 42);
+    sender.stop().await.unwrap();
+    // The command sender can stop an active operation before final ownership cleanup.
+    assert!(client.next_event(Duration::from_secs(2)).await.is_err());
     client.shutdown().await.unwrap();
 }
 

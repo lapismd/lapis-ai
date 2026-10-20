@@ -54,3 +54,5 @@
 - [Native outgoing request preparation](history/2026-10-20-request-preparation.md)
 
 - [Session-owned ACP reasoning effort](history/2026-10-20-session-effort.md)
+
+- [Compute stop cleanup](history/2026-10-21-compute-stop.md)

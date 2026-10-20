@@ -109,3 +109,7 @@ renderer/context/restart gates remain separate.
 [Session effort](../../history/2026-10-20-session-effort.md) exposes the bundled
 agent’s existing reasoning control per ACP session. M0–M5 retain their gates;
 Desktop native/provider and optional compute acceptance remain separate.
+
+[Compute cleanup](../../history/2026-10-21-compute-stop.md) preserves supervised
+shutdown after an independently requested stop. M0–M5 and provider/model gates
+retain their existing status.
