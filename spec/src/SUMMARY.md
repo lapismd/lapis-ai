@@ -52,3 +52,5 @@
 - [Pinned Codex Lapis ACP source headers](history/2026-10-19-codex-lapis-acp-source.md)
 
 - [Native outgoing request preparation](history/2026-10-20-request-preparation.md)
+
+- [Session-owned ACP reasoning effort](history/2026-10-20-session-effort.md)

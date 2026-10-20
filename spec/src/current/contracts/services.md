@@ -1,5 +1,12 @@
 # Native services and packaging
 
+LAI-LOCAL-001 exposes the bundled agent's existing reasoning-effort control as
+an ACP thought-level configuration option. Each session owns its selected
+effort, inherited initially from launch configuration; only idle sessions can
+change it. Unknown values and unsupported provider values refuse without
+changing state. Prompts capture the session's effort into their own configuration
+while retaining the original provider/token source and permission policy.
+
 ## Requirements
 
 | ID              | Requirement                                                                                                                                                                                                               |

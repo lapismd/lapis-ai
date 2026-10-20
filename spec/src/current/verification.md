@@ -50,7 +50,7 @@
 | LAI-GOV-102     | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
 | LAI-GOV-103     | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
 | LAI-GOV-104     | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
-| LAI-LOCAL-001   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
+| LAI-LOCAL-001   | Implemented | [Session effort](../history/2026-10-20-session-effort.md)                    |
 | LAI-PACKAGE-001 | Implemented | [Qualification](../history/2026-10-16-qualification.md)                      |
 | LAI-PACKAGE-002 | Implemented | [Qualification](../history/2026-10-16-qualification.md)                      |
 | LAI-PROTO-001   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
