@@ -19,6 +19,7 @@ pub use compute::ComputeClient;
 pub use compute_commands::ComputeCommands;
 pub use compute_connection::ComputeConnection;
 pub use lapis_ai_config::{Component, Config, Environment, Resolver};
+pub use lapis_ai_config::{ComputeFailure, ComputeInventory, ComputeModel};
 pub use launch::PreparedLaunch;
 pub use limits::{AcpOptions, ProcessLimits};
 mod compute_commands;

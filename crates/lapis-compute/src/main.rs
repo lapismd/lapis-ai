@@ -1,5 +1,6 @@
 //! Owned compute process: JSON control over stdio, authenticated inference over loopback.
 mod engine;
+mod failure;
 mod gateway;
 mod models;
 mod peers;
@@ -128,21 +129,30 @@ async fn run() -> anyhow::Result<()> {
                 let shared = shared.clone();
                 let action = request["action"].as_str().unwrap().to_owned();
                 operation = Some(tokio::spawn(async move {
+                    progress::begin(&id, &action);
                     let result = match action.as_str() {
                         "prepare" => engine::prepare().await,
                         "download" => engine::download(&shared).await,
                         "import" => models::import(&path).await.map(|model| {
                             emit(json!({"type":"imported","requestId":id,"model":model}));
                         }),
-                        "remove" => models::remove(&model).await,
+                        "remove" => {
+                            if shared.engine.lock().await.is_some() {
+                                Err(anyhow::anyhow!("model is running"))
+                            } else {
+                                models::remove(&model).await
+                            }
+                        }
                         _ => engine::start(&shared).await,
                     };
+                    progress::end();
                     emit(match result {
                         Ok(()) => {
                             json!({"type":"completed","requestId":id,"action":action,"model":model})
                         }
-                        Err(_) => {
-                            json!({"type":"error","requestId":id,"code":"compute_operation_failed"})
+                        Err(error) => {
+                            let failure = failure::classify(&action, &error);
+                            json!({"type":"error","requestId":id,"code":failure.code,"message":failure.message})
                         }
                     });
                 }));

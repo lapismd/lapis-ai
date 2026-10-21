@@ -119,3 +119,8 @@ Desktop native/provider and optional compute acceptance remain separate.
 [Compute cleanup](../../history/2026-10-21-compute-stop.md) preserves supervised
 shutdown after an independently requested stop. M0–M5 and provider/model gates
 retain their existing status.
+
+[Compute inventory](../../history/2026-10-21-compute-library.md) extends M3 with
+process-free installed-model facts, correlated progress and safe operation
+failures. Original M0–M5 status and publication gates remain unchanged; Desktop
+model inference and two-device pairing remain consumer acceptance.

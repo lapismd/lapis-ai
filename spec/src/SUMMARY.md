@@ -57,3 +57,4 @@
 
 - [Compute stop cleanup](history/2026-10-21-compute-stop.md)
 - [Read-only local session pages](history/2026-10-21-local-session-pages.md)
+- [Managed compute inventory and progress](history/2026-10-21-compute-library.md)

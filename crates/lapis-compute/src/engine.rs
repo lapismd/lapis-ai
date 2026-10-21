@@ -3,41 +3,58 @@ use crate::{Shared, emit};
 use mesh_llm_sdk::{MeshDiscoveryMode, serve};
 use serde_json::json;
 use std::time::Duration;
-fn prepared_runtime() -> anyhow::Result<bool> {
+fn prepared_runtime() -> anyhow::Result<Option<Vec<std::path::PathBuf>>> {
     use mesh_llm_sdk::native_runtime::*;
     let cache = default_native_runtime_cache()?;
     let bundled = std::env::var_os("MESH_LLM_NATIVE_RUNTIME_BUNDLE_DIR")
         .map(std::path::PathBuf::from)
         .into_iter()
         .collect::<Vec<_>>();
-    Ok(discover_local_native_runtimes(&bundled, &cache)?
+    discover_local_native_runtimes(&bundled, &cache)?
         .iter()
-        .any(|runtime| {
+        .find(|runtime| {
             native_runtime_versions_match_current_sdk(
                 &runtime.mesh_version,
                 &runtime.manifest.runtime.skippy_abi,
             ) && runtime.load_plan().is_ok()
-        }))
+        })
+        .map(|runtime| runtime.load_plan().map(|p| p.libraries))
+        .transpose()
 }
 pub async fn prepare() -> anyhow::Result<()> {
-    if prepared_runtime()? {
-        return Ok(());
+    if prepared_runtime()?.is_none() {
+        use mesh_llm_sdk::native_runtime::*;
+        let runtime = install_native_runtime(NativeRuntimeInstallOptions {
+            skippy_abi_version: Some(current_skippy_abi_version()),
+            progress: Some(std::sync::Arc::new(|event| {
+                crate::progress::report(
+                    &event.native_runtime_id,
+                    None,
+                    Some(event.downloaded_bytes),
+                    event.total_bytes,
+                    "preparing",
+                )
+            })),
+            ..Default::default()
+        })
+        .await?
+        .runtime;
+        anyhow::ensure!(
+            native_runtime_versions_match_current_sdk(
+                &runtime.mesh_version,
+                &runtime.manifest.runtime.skippy_abi
+            ),
+            "runtime mismatch"
+        );
+        runtime.load_plan()?;
     }
-    use mesh_llm_sdk::native_runtime::*;
-    let runtime = install_native_runtime(NativeRuntimeInstallOptions {
-        skippy_abi_version: Some(current_skippy_abi_version()),
-        ..Default::default()
-    })
-    .await?
-    .runtime;
-    anyhow::ensure!(
-        native_runtime_versions_match_current_sdk(
-            &runtime.mesh_version,
-            &runtime.manifest.runtime.skippy_abi
-        ),
-        "runtime mismatch"
-    );
-    runtime.load_plan()?;
+    let files = prepared_runtime()?
+        .ok_or_else(|| anyhow::anyhow!("native runtime preparation required"))?;
+    let mut receipt = tempfile::NamedTempFile::new_in(".")?;
+    use std::io::Write;
+    receipt.write_all(&serde_json::to_vec(&files)?)?;
+    receipt.as_file().sync_all()?;
+    receipt.persist("runtime-ready.json")?;
     Ok(())
 }
 pub async fn download(shared: &Shared) -> anyhow::Result<()> {
@@ -69,7 +86,10 @@ pub async fn start(shared: &Shared) -> anyhow::Result<()> {
         .ok_or_else(|| anyhow::anyhow!("model required"))?;
     let installed = crate::models::installed(&model)?;
     // Startup verifies a previously prepared/bundled artifact; it never installs one.
-    anyhow::ensure!(prepared_runtime()?, "native runtime preparation required");
+    anyhow::ensure!(
+        prepared_runtime()?.is_some(),
+        "native runtime preparation required"
+    );
     // Embedded serving loads only local artifacts. The general host initializer
     // can install a runtime, so it must not run during explicit model startup.
     // The gateway preserves logical identity; native startup uses installed weights.

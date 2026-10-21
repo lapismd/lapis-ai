@@ -89,6 +89,19 @@ Native hosts may obtain a non-serializable, redacted connection credential for
 local or explicitly admitted peer agent launches. Tokens are zeroized on drop.
 Existing convenience methods remain supported; hosts choose one event owner.
 
+LAI-RUNTIME-003 additionally exposes a bounded, process-free managed model
+inventory from an explicitly selected helper directory. It reports installed
+and missing weights, deduplicated sizes and preparation receipts without paths,
+credentials, directory creation or inference. Existing installed-model receipts
+remain readable. Legacy GGUF receipts may recover general.name from at most
+64 KiB of validated managed-file metadata; malformed or oversized headers use
+a neutral imported-model label, without changing content identities or receipts.
+Missing files never imply installed weights; invalid indexes
+remain failures rather than empty libraries. Helper progress is correlated with
+the explicit operation and includes stage and known byte counts. Terminal
+failures carry allowlisted actionable categories, never raw dependency errors;
+hosts distinguish acknowledged failure from transport loss or uncertain effects.
+
 Source acquisition is independently owned by the bounded
 [capture library](capture.md), without an execution/runtime edge. Its profile
 inventory and read-only metadata discovery neither spawn nor authorize an ACP

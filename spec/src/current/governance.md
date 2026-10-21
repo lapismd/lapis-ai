@@ -1,5 +1,11 @@
 # Governance
 
+The compute-library API uses inert configuration-owned facts re-exported by the
+runtime client. The helper's existing dependency edge to configuration remains
+unchanged; no dependency allowlist or source budget is relaxed. LAI-GOV-100/101
+require separate source and Desktop model evidence. Its minor Changeset records
+the additive API without authorizing publication or changing M0–M5 gates.
+
 The local-session acquisition addition extends LAI-CAPTURE-003 and the explicit
 LAI-ARCH-001 dependency matrix. It changes no release authorization, original
 M0–M5 completion gate, imported source pin or baseline allowance. Its new source
