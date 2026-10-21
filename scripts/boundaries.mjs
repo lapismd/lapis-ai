@@ -53,7 +53,13 @@ export function boundaryErrors(packages, root = process.cwd()) {
           pkg.name === "lapis-ai-config" ||
           pkg.name === "lapis-ai-capture" ||
           pkg.name === "lapis-ai-app-tools") &&
-        forbidden.test(dep.name)
+        forbidden.test(dep.name) &&
+        !(
+          pkg.name === "lapis-ai-capture" &&
+          dep.name === "rusqlite" &&
+          dep.optional === true &&
+          pkg.features?.["opencode-sqlite"]?.includes("dep:rusqlite")
+        )
       )
         errors.push(`${pkg.name}: excluded ${dep.name}`);
       if (names.has(dep.name) && !allowed[pkg.name].includes(dep.name))

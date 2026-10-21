@@ -1,5 +1,9 @@
 # Configuration and supervised clients
 
+LAI-CAPTURE-003's transient local JSONL/SQLite acquisition changes no
+LAI-CONFIG-003 or LAI-RUNTIME-001/002/004 behavior: it runs no helper, reads no
+runtime configuration or credentials, and grants no execution or replay rights.
+
 LAI-RUNTIME-001/003 permit an independent compute command sender to stop active
 work before final client cleanup. Successful supervised reap confirms shutdown
 even when that prior stop closed the helper input. Reap failures remain failures;

@@ -5,6 +5,7 @@
 | LAI-AGENT-001   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
 | LAI-CAPTURE-001 | Implemented | [Capture acquisition](../history/2026-10-17-capture-discovery.md)            |
 | LAI-CAPTURE-002 | Implemented | [Capture acquisition](../history/2026-10-17-capture-discovery.md)            |
+| LAI-CAPTURE-003 | Implemented | [Local session pages](../history/2026-10-21-local-session-pages.md)          |
 | LAI-AGENT-002   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
 | LAI-AGENT-003   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |
 | LAI-AGENT-004   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                            |

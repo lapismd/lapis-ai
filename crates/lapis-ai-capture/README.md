@@ -4,6 +4,13 @@ Read-only discovery of external agent sessions from explicitly approved native
 locations. It provides versioned source profiles, physical root/file binding and bounded Codex header inspection, plus
 a resumable metadata scanner for Codex and Cursor layouts.
 
+Enable `session-pages` for bounded transient JSONL reads, or `opencode-sqlite`
+for pinned read-only OpenCode metadata/message pages as well. Both are off by
+default. The host admits roots and applies privacy before displaying any raw
+value. The SQLite adapter exposes no connection or SQL execution API; it never
+starts a harness or edits its database. Default consumers keep their original
+Serde-only dependency graph.
+
 Resolve locations with `discovery::resolve_codex_roots`, open an
 `ApprovedCodexRoot`, then call `CodexDirectoryScanner::step` with explicit work
 and candidate limits. A candidate is metadata only: the host still admits

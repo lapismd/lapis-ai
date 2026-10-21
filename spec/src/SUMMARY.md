@@ -56,3 +56,4 @@
 - [Session-owned ACP reasoning effort](history/2026-10-20-session-effort.md)
 
 - [Compute stop cleanup](history/2026-10-21-compute-stop.md)
+- [Read-only local session pages](history/2026-10-21-local-session-pages.md)

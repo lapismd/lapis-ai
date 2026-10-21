@@ -1,5 +1,10 @@
 # Governance
 
+The local-session acquisition addition extends LAI-CAPTURE-003 and the explicit
+LAI-ARCH-001 dependency matrix. It changes no release authorization, original
+M0–M5 completion gate, imported source pin or baseline allowance. Its new source
+and consumer evidence retain separate scope.
+
 Trusted HTTP MCP declarations extend the existing launch-only tool boundary
 under LAI-GOV-100. The typed Rust addition preserves the stdio builder/wire;
 session and runner vectors accept `McpServerConfig` with explicit conversion.

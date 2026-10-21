@@ -60,6 +60,12 @@ and cold native qualification are separate from this shared source slice.
 
 ## Reusable session acquisition
 
+[Local session pages](../../history/2026-10-21-local-session-pages.md) adds
+transient JSONL reads and pinned, read-only OpenCode SQLite source transactions.
+Notes owns its rebuildable metadata index, admission, privacy and progressive
+UI. M0–M5 and publication authority remain unchanged; source and consumer
+qualification are recorded separately.
+
 [Pinned Lapis ACP headers](../../history/2026-10-19-codex-lapis-acp-source.md)
 adds only the observed Codex CLI 0.156.1 adapter pair. Other source/version
 qualification and original M0–M5 gates remain unchanged.

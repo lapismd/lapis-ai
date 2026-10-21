@@ -27,6 +27,15 @@ unauthorized internal edges, production testkit imports, sibling paths and
 forbidden dependencies in ACP or the inert configuration crate. Runtime clients
 may use authenticated loopback HTTP for compute; ACP itself remains stdio-only.
 
+The independent acquisition crate may use `rusqlite` only for host-selected,
+read-only OpenCode source transactions under LAI-CAPTURE-003, behind the explicit
+default-off `opencode-sqlite` feature. Default acquisition retains Serde-only
+dependencies; `session-pages` separately enables transient SHA-256 JSONL reads. Its public API
+exposes metadata and raw bounded pages, never a connection or SQL execution.
+Other database/network/runtime exclusions remain enforced, and no ACP or
+configuration crate gains this dependency. Application index persistence stays
+host-owned.
+
 `scripts/architecture.mjs` checks new production Rust and scripts at 300 counted
 lines and tests at 500. The maintained agent import has exact frozen exceptions
 in `scripts/architecture-baseline.json`; their original measured sizes and

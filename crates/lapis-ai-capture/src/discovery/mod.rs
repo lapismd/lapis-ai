@@ -95,6 +95,25 @@ pub struct ApprovedCodexRoot {
     identity: PhysicalId,
 }
 impl ApprovedCodexRoot {
+    /// Select a known file under this admitted root without rescanning unrelated directories.
+    pub fn candidate(&self, path: &Path) -> CaptureResult<CodexSourceCandidate> {
+        if !self.revalidate()? || !self.contains_exact(path) {
+            return Err("source selection outside approved root".into());
+        }
+        let metadata = fs::symlink_metadata(path)?;
+        if !metadata.is_file() || metadata.file_type().is_symlink() {
+            return Err("source selection is not a regular file".into());
+        }
+        let candidate = CodexSourceCandidate {
+            root: self.clone(),
+            path: path.to_owned(),
+            identity: PhysicalId::from(&metadata)?,
+        };
+        if !candidate.revalidate()? {
+            return Err("source selection changed".into());
+        }
+        Ok(candidate)
+    }
     pub fn open(logical: &Path) -> CaptureResult<Option<Self>> {
         valid_path(logical)?;
         let physical = match fs::canonicalize(logical) {
