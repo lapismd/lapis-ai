@@ -1,10 +1,11 @@
 pub use crate::registry::SessionInfo;
 use crate::{
-    Config, Error, HostContext, HostPolicy, Result, Target,
+    Config, Error, ExecutionBackend, ExecutionSession, HostContext, HostExecution, HostPolicy,
+    Result, Target,
     policy::label,
     registry::{Registry, Scope, Slot},
 };
-use lapis_ai_runtime::{AcpSession, SessionRequest, SessionSnapshot};
+use lapis_ai_runtime::{SessionRequest, SessionSnapshot};
 use std::{
     sync::{Arc, Mutex},
     time::Duration,
@@ -15,6 +16,7 @@ pub struct AcpHost {
     pub(crate) state: Arc<Mutex<Registry>>,
     pub(crate) config: Config,
     pub(crate) runtime: tokio::runtime::Handle,
+    pub(crate) backend: Arc<dyn ExecutionBackend>,
 }
 impl AcpHost {
     pub fn new(policy: Arc<dyn HostPolicy>, config: Config) -> Result<Self> {
@@ -26,6 +28,23 @@ impl AcpHost {
         policy: Arc<dyn HostPolicy>,
         config: Config,
         runtime: tokio::runtime::Handle,
+    ) -> Result<Self> {
+        Self::with_runtime_and_backend(policy, config, runtime, Arc::new(HostExecution))
+    }
+    pub fn with_backend(
+        policy: Arc<dyn HostPolicy>,
+        config: Config,
+        backend: Arc<dyn ExecutionBackend>,
+    ) -> Result<Self> {
+        let runtime =
+            tokio::runtime::Handle::try_current().map_err(|_| Error("runtime_unavailable"))?;
+        Self::with_runtime_and_backend(policy, config, runtime, backend)
+    }
+    pub fn with_runtime_and_backend(
+        policy: Arc<dyn HostPolicy>,
+        config: Config,
+        runtime: tokio::runtime::Handle,
+        backend: Arc<dyn ExecutionBackend>,
     ) -> Result<Self> {
         if !(1..=64).contains(&config.maximum_sessions)
             || config.request_timeout.is_zero()
@@ -40,6 +59,7 @@ impl AcpHost {
             state: Arc::new(Mutex::new(Registry::new())),
             config,
             runtime,
+            backend,
         })
     }
     pub(crate) fn scope(&self, context: &HostContext) -> Result<Scope> {
@@ -82,7 +102,11 @@ impl AcpHost {
         sessions.sort_by(|left, right| left.session_id.cmp(&right.session_id));
         Ok(sessions)
     }
-    pub(crate) fn session(&self, context: &HostContext, id: &str) -> Result<AcpSession> {
+    pub(crate) fn session(
+        &self,
+        context: &HostContext,
+        id: &str,
+    ) -> Result<Arc<dyn ExecutionSession>> {
         let scope = self.scope(context)?;
         self.state
             .lock()

@@ -129,3 +129,10 @@ retain their existing status.
 process-free installed-model facts, correlated progress and safe operation
 failures. Original M0–M5 status and publication gates remain unchanged; Desktop
 model inference and two-device pairing remain consumer acceptance.
+
+## Hosted execution port
+
+[Host execution](../../history/2026-10-22-host-execution.md) adds the native
+backend/session boundary with supervised host processes as the default. M0–M5
+retain their status; hosted H04 admission and transport remain consumer work.
+Docker execution, model inference and platform/provider gates remain separate.

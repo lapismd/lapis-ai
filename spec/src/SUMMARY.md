@@ -59,3 +59,5 @@
 - [Read-only local session pages](history/2026-10-21-local-session-pages.md)
 - [Managed compute inventory and progress](history/2026-10-21-compute-library.md)
 - [Neutral ACP host service](history/2026-10-22-neutral-acp-service.md)
+
+- [Host execution backend](history/2026-10-22-host-execution.md)

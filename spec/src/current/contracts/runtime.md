@@ -120,3 +120,9 @@ exact identities and unknown outcomes: the actor owns and drains preparation,
 then rechecks close/deadline. The host owns sanitation, storage and receipts;
 this callback adds no wire field, launch authority or automatic replay. Native
 Tauri command admission remains current even when inbound capture is retained.
+
+LAI-HOST-002 introduces an injectable native execution/session port around
+the existing runtime. The default host backend delegates to the same owned
+ACP session, preserving LAI-RUNTIME-001–004 wire framing, readiness, modes,
+exact requests, event bounds, cancellation and confirmed process retirement.
+Backend choice adds no automatic fallback, network discovery or replay.

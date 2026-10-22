@@ -3,7 +3,7 @@ use crate::{
     policy::label,
     registry::{Reservation, Slot},
 };
-use lapis_ai_runtime::{AcpSession, SessionOptions};
+use lapis_ai_runtime::SessionOptions;
 use std::sync::Arc;
 use tokio::sync::{oneshot, watch};
 use uuid::Uuid;
@@ -81,28 +81,19 @@ impl AcpHost {
         self.runtime.spawn(async move {
             let result = match crate::processing::create(&host, &context, &scope, &binding) {
                 Ok(processor) => {
-                    let started = match processor {
-                        Some(processor) => {
-                            AcpSession::start_cancellable_with_processor(
-                                launch.prepared,
-                                options,
-                                cancelled,
-                                processor,
-                            )
-                            .await
-                        }
-                        None => {
-                            AcpSession::start_cancellable(launch.prepared, options, cancelled).await
-                        }
-                    };
+                    let started = host
+                        .backend
+                        .start(launch.prepared, options, cancelled, processor)
+                        .await;
                     match started {
                         Ok(session) => {
-                            let result =
-                                if host.scope(&context).is_ok_and(|current| current == scope) {
-                                    reservation.commit(session.clone())
-                                } else {
-                                    Err(Error("admission_revoked"))
-                                };
+                            let result = if session.id() != binding.session_id {
+                                Err(Error("invalid_execution_identity"))
+                            } else if host.scope(&context).is_ok_and(|current| current == scope) {
+                                reservation.commit(session.clone())
+                            } else {
+                                Err(Error("admission_revoked"))
+                            };
                             if result.is_err() && session.close().await.is_err() {
                                 return finish(reservation, reply, Err(Error("cleanup_unknown")));
                             }

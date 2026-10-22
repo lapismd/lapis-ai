@@ -1,5 +1,4 @@
-use crate::{Error, Result};
-use lapis_ai_runtime::AcpSession;
+use crate::{Error, ExecutionSession, Result};
 use serde::Serialize;
 use serde_json::Value;
 use std::{
@@ -35,7 +34,7 @@ pub(crate) struct Slot {
     pub scope: Scope,
     pub request: String,
     pub target: String,
-    pub session: Option<AcpSession>,
+    pub session: Option<Arc<dyn ExecutionSession>>,
     pub cancel: watch::Sender<bool>,
     pub subscription: Option<Subscription>,
     pub startup_done: Option<watch::Receiver<Option<Result<()>>>>,
@@ -123,7 +122,7 @@ impl Reservation {
     pub fn finished(&mut self, result: Result<()>) {
         self.cleanup_result = result;
     }
-    pub fn commit(&mut self, session: AcpSession) -> Result<SessionInfo> {
+    pub fn commit(&mut self, session: Arc<dyn ExecutionSession>) -> Result<SessionInfo> {
         let mut state = self.state.lock().map_err(|_| Error("host_unavailable"))?;
         state.available()?;
         let slot = state
