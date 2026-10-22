@@ -13,6 +13,7 @@ members = [
   "crates/lapis-compute",
   "crates/lapis-ai-config",
   "crates/lapis-ai-runtime",
+  "crates/lapis-ai-service",
   "crates/tauri-plugin-lapis-ai"
 ]
 resolver = "2"
@@ -31,6 +32,7 @@ resolver = "2"
   serde_json = "1"
   thiserror = "2"
   lapis-ai-runtime = { path = "crates/lapis-ai-runtime", version = "0.1.1" }
+  lapis-ai-service = { path = "crates/lapis-ai-service", version = "0.1.1" }
 
     [workspace.dependencies.lapis-acp-protocol]
     path = "crates/lapis-acp-protocol"

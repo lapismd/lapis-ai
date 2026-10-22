@@ -1,4 +1,8 @@
 use super::support;
+use lapis_ai_service::{
+    AcpHost, Config, HostContext, HostPolicy, Launch, Result, SessionBinding, Target,
+    runtime::{BatchProcessorFuture, FrameBatch, FrameInput, SessionProcessor},
+};
 use serde_json::{Value, json};
 use std::{
     path::Path,
@@ -6,10 +10,6 @@ use std::{
         Arc,
         atomic::{AtomicBool, Ordering},
     },
-};
-use tauri_plugin_lapis_ai::{
-    AcpHost, Config, HostContext, HostPolicy, Launch, Result, SessionBinding, Target,
-    runtime::{BatchProcessorFuture, FrameBatch, FrameInput, SessionProcessor},
 };
 use tokio::sync::Notify;
 #[derive(Default)]

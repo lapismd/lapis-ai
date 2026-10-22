@@ -19,6 +19,11 @@ advances bounded local-file streaming in Notes; no milestone or release gate cha
 
 ## Consumer-driven native adapter
 
+[Neutral host extraction](../../history/2026-10-22-neutral-acp-service.md) moves
+the existing session service behind an owned Tokio runtime, preserving the
+Tauri adapter. Focused source/adapter and full workspace qualification pass.
+Hosted execution and Notes persistence remain separate H04/H05 gates.
+
 This work does not depend on or change M5 release authorization. Desktop M10.1
 uses local verified public outputs and remains incomplete until Tauri/native
 acceptance passes.

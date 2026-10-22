@@ -3,13 +3,13 @@
 mod fixture;
 mod support;
 use fixture::*;
+use lapis_ai_service::{Error, StreamMessage};
 use serde_json::Value;
 use std::{
     sync::{Arc, Mutex, atomic::Ordering},
     time::Duration,
 };
 use support::{all_stopped, configure, context, log, prompt, wait};
-use tauri_plugin_lapis_ai::{Error, StreamMessage};
 
 fn turn_activity(frame: &Value) -> bool {
     frame["type"] == "activity" && frame["requestId"] == "turn"

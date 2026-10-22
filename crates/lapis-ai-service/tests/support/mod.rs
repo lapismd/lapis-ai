@@ -1,4 +1,8 @@
 #![allow(dead_code)]
+use lapis_ai_service::{
+    AcpHost, Config, Error, HostContext, HostPolicy, Launch, Result, Target,
+    runtime::{Environment, PreparedLaunch, SessionRequest, SessionSnapshot},
+};
 use serde_json::Value;
 use std::{
     os::unix::fs::PermissionsExt,
@@ -8,10 +12,6 @@ use std::{
         atomic::{AtomicBool, AtomicU64, Ordering},
     },
     time::Duration,
-};
-use tauri_plugin_lapis_ai::{
-    AcpHost, Config, Error, HostContext, HostPolicy, Launch, Result, Target,
-    runtime::{Environment, PreparedLaunch, SessionRequest, SessionSnapshot},
 };
 pub struct Policy {
     pub root: PathBuf,

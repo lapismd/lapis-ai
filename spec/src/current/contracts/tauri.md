@@ -1,9 +1,10 @@
-# Native ACP adapter and Tauri contract
+# Native ACP service and Tauri contract
 
 ## Requirements
 
 | ID            | Requirement                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LAI-HOST-001  | A transport-independent ACP host service MUST retain scoped admission, bounded sessions and subscriptions, exact request identities, retained processing and supervised retirement without Tauri, network, credentials or persistence ownership. The host MUST supply a live Tokio runtime whose lifetime covers service shutdown.                                                                                                                          |
 | LAI-TAURI-001 | Future adapters MUST wrap the Rust runtime clients with host-selected executables and admitted workspace roots, scoped opaque session handles, ordered events and explicit cancellation/teardown. Secrets and arbitrary process launch MUST remain on the Rust side.                                                                                                                                                                                        |
 | LAI-TAURI-002 | The reusable ACP session layer MUST own one worker per concurrent conversation, correlate every response, fence session and permission identities, preserve exact option IDs and reject overlapping turns. Lost output, deadlines and uncertain writes MUST retire the worker without replay.                                                                                                                                                               |
 | LAI-TAURI-003 | Detach/reconnect MUST preserve a bounded acknowledged event journal with monotonic cursors. Coverage loss MUST remain observable independently of queued events. Explicit close and owner teardown MUST perform supervised process cleanup; cancelled consumer waits MUST NOT orphan workers.                                                                                                                                                               |
@@ -63,6 +64,14 @@ publication cannot finish. Startup has no live consumer and retains immediate
 overflow failure (LAI-TAURI-002/003/007/009).
 
 ## Tauri host boundary
+
+`lapis-ai-service` owns the existing admission, registry, session processing,
+stream and retirement implementation. `HostContext.window` remains an opaque
+host scope for compatibility; it need not identify a native window. The service
+uses an explicitly retained Tokio handle, including synchronous attach/drop
+outside an entered runtime. The runtime owner must drain shutdown before exit.
+Tauri's thin `AcpHost` adapter preserves its constructor and public commands,
+supplies Tauri's runtime handle and continues deriving caller context natively.
 
 `tauri-plugin-lapis-ai` wraps the owned session layer. Its Rust `HostPolicy`
 authorizes the invoking window/origin and returns a current opaque admission

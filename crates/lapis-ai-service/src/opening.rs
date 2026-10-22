@@ -78,7 +78,7 @@ impl AcpHost {
         let context = context.clone();
         // The registry owns startup even if the invoking WebView loses its reply.
         // Revocation cancels this task cooperatively and waits for its guard.
-        tokio::spawn(async move {
+        self.runtime.spawn(async move {
             let result = match crate::processing::create(&host, &context, &scope, &binding) {
                 Ok(processor) => {
                     let started = match processor {

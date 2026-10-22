@@ -46,8 +46,8 @@ impl AcpHost {
         let context = context.clone();
         let id = id.to_owned();
         let token = subscription.clone();
-        // Synchronous Tauri commands may run outside an entered Tokio context.
-        tauri::async_runtime::spawn(async move {
+        // Synchronous transport calls may run outside an entered Tokio context.
+        self.runtime.spawn(async move {
             let mut changed = changed;
             let mut cursor = after;
             loop {

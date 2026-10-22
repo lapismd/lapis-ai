@@ -3896,6 +3896,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "lapis-ai-service"
+version = "0.1.1"
+dependencies = [
+ "lapis-ai-runtime",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
 name = "lapis-compute"
 version = "0.1.1"
 dependencies = [
@@ -8488,6 +8500,7 @@ name = "tauri-plugin-lapis-ai"
 version = "0.1.1"
 dependencies = [
  "lapis-ai-runtime",
+ "lapis-ai-service",
  "serde",
  "serde_json",
  "tauri",

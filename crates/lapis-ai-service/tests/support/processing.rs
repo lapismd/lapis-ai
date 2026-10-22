@@ -1,4 +1,8 @@
 use super::support;
+use lapis_ai_service::{
+    AcpHost, Config, Error, HostContext, HostPolicy, Launch, Result, SessionBinding, Target,
+    runtime::{FrameInput, FramePublication, ProcessorFuture, SessionProcessor},
+};
 use serde_json::{Value, json};
 use std::{
     fs::OpenOptions,
@@ -9,10 +13,6 @@ use std::{
         atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering},
     },
     time::Duration,
-};
-use tauri_plugin_lapis_ai::{
-    AcpHost, Config, Error, HostContext, HostPolicy, Launch, Result, SessionBinding, Target,
-    runtime::{FrameInput, FramePublication, ProcessorFuture, SessionProcessor},
 };
 use tokio::sync::Notify;
 

@@ -11,6 +11,7 @@ pub(crate) type Completion = watch::Receiver<Option<Result<()>>>;
 /// Register while holding the same lock used to remove active slots. The job,
 /// rather than any calling future, owns the workers until supervised cleanup.
 pub(crate) fn retire(
+    runtime: &tokio::runtime::Handle,
     state: &mut Registry,
     owner: &Arc<Mutex<Registry>>,
     mut slots: Vec<Slot>,
@@ -32,7 +33,7 @@ pub(crate) fn retire(
         },
     );
     let owner = owner.clone();
-    tauri::async_runtime::spawn(async move {
+    runtime.spawn(async move {
         let result = AcpHost::stop_slots(slots).await;
         if result.is_ok()
             && let Ok(mut state) = owner.lock()

@@ -20,7 +20,7 @@ impl AcpHost {
             state.enabled = false;
             state.stopped |= permanent;
             let slots = state.slots.drain().map(|(_, slot)| slot).collect();
-            cleanup::retire(&mut state, &self.state, slots);
+            cleanup::retire(&self.runtime, &mut state, &self.state, slots);
             cleanup::pending(&state, |_| true)
         };
         cleanup::wait(completions).await
@@ -42,7 +42,7 @@ impl AcpHost {
                 .into_iter()
                 .filter_map(|id| state.slots.remove(&id))
                 .collect();
-            cleanup::retire(&mut state, &self.state, slots);
+            cleanup::retire(&self.runtime, &mut state, &self.state, slots);
             cleanup::pending(&state, |scope| {
                 scope.window == window && admission.is_none_or(|id| scope.admission == id)
             })
@@ -92,7 +92,7 @@ impl Drop for AcpHost {
             state.enabled = false;
             state.stopped = true;
             let slots = state.slots.drain().map(|(_, slot)| slot).collect();
-            cleanup::retire(&mut state, &self.state, slots);
+            cleanup::retire(&self.runtime, &mut state, &self.state, slots);
         }
     }
 }

@@ -14,6 +14,7 @@ description = "Host-admitted Tauri transport for owned native Lapis ACP workers"
 
 [dependencies]
 lapis-ai-runtime.workspace = true
+lapis-ai-service.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 tokio.workspace = true

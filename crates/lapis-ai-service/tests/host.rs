@@ -1,8 +1,8 @@
 #![cfg(unix)]
 mod support;
+use lapis_ai_service::{Config, Error};
 use std::sync::atomic::Ordering;
 use support::*;
-use tauri_plugin_lapis_ai::{Config, Error};
 
 #[tokio::test]
 async fn lazy_host_refuses_untrusted_origins_and_targets_before_any_launch() {
@@ -136,15 +136,15 @@ async fn cancelled_open_wait_remains_registry_owned_and_shutdown_drains_startup(
     assert!(host.enable().is_err());
 }
 
-#[test]
-fn invalid_resource_limits_are_rejected_without_startup() {
+#[tokio::test]
+async fn invalid_resource_limits_are_rejected_without_startup() {
     let dir = tempfile::tempdir().unwrap();
     let (_, policy) = setup(dir.path());
     let config = Config {
         maximum_sessions: 0,
         ..Config::default()
     };
-    assert!(tauri_plugin_lapis_ai::AcpHost::new(policy, config).is_err());
+    assert!(lapis_ai_service::AcpHost::new(policy, config).is_err());
 }
 
 #[tokio::test]
@@ -191,7 +191,7 @@ async fn startup_slots_count_towards_the_limit_and_revocation_releases_capacity(
     let (_, policy) = setup(dir.path());
     policy.blocked.store(true, Ordering::Release);
     let host = std::sync::Arc::new(
-        tauri_plugin_lapis_ai::AcpHost::new(
+        lapis_ai_service::AcpHost::new(
             policy.clone(),
             Config {
                 maximum_sessions: 1,

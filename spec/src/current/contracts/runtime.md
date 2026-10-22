@@ -43,6 +43,9 @@ above the raw client (LAI-RUNTIME-001–002); it does not change control-v3 or a
 conversation policy. Rust hosts may start an ACP client with a `PreparedLaunch`
 after native credential resolution; the client fixes its control-version argv.
 The [adapter contract](tauri.md) governs this additional lifecycle boundary.
+The transport-independent `lapis-ai-service` composes this same runtime for
+Tauri and hosted consumers. It adds no process selection, credential resolution,
+network or durable conversation authority (LAI-HOST-001).
 
 LAI-RUNTIME-001/002 retain isolated clients, exact identities and unknown outcomes
 with the optional native frame processor in LAI-TAURI-007. A runtime-owned startup

@@ -1,21 +1,14 @@
 //! Optional Tauri transport; applications own admission and conversation policy.
 #![forbid(unsafe_code)]
-mod cleanup;
 mod commands;
-mod error;
 mod host;
-mod lifecycle;
-mod opening;
-mod policy;
-mod processing;
-mod registry;
-mod stream;
-pub use error::{Error, Result};
-pub use host::{AcpHost, SessionInfo};
+pub use host::AcpHost;
 pub use lapis_ai_runtime as runtime;
-pub use policy::{Config, HostContext, HostPolicy, Launch, SessionBinding, Target};
+pub use lapis_ai_service::{
+    Config, Error, HostContext, HostPolicy, Launch, Result, SessionBinding, SessionInfo, Sink,
+    StreamMessage, Target,
+};
 use std::sync::Arc;
-pub use stream::{Sink, StreamMessage};
 use tauri::{Manager, RunEvent, Runtime, WindowEvent, plugin::TauriPlugin};
 
 pub struct Builder {

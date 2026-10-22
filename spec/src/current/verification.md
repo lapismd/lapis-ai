@@ -2,6 +2,7 @@
 
 | ID              | Status      | Evidence                                                                                                         |
 | --------------- | ----------- | ---------------------------------------------------------------------------------------------------------------- |
+| LAI-HOST-001    | Implemented | [Neutral ACP host](../history/2026-10-22-neutral-acp-service.md)                                                 |
 | LAI-AGENT-001   | Implemented | [Foundation](../history/2026-10-16-foundation.md)                                                                |
 | LAI-CAPTURE-001 | Implemented | [Capture acquisition](../history/2026-10-17-capture-discovery.md)                                                |
 | LAI-CAPTURE-002 | Implemented | [Capture acquisition](../history/2026-10-17-capture-discovery.md)                                                |

@@ -7,7 +7,8 @@ const forbidden =
 export const allowed = {
   "lapis-ai-app-tools": [],
   "lapis-ai-capture": [],
-  "tauri-plugin-lapis-ai": ["lapis-ai-runtime"],
+  "tauri-plugin-lapis-ai": ["lapis-ai-runtime", "lapis-ai-service"],
+  "lapis-ai-service": ["lapis-ai-runtime"],
   "lapis-acp-protocol": [],
   "lapis-acp-agent": ["lapis-acp-protocol"],
   "lapis-acp-runner": ["lapis-acp-protocol", "lapis-acp-agent"],
@@ -51,6 +52,7 @@ export function boundaryErrors(packages, root = process.cwd()) {
       if (
         (acp.test(pkg.name) ||
           pkg.name === "lapis-ai-config" ||
+          pkg.name === "lapis-ai-service" ||
           pkg.name === "lapis-ai-capture" ||
           pkg.name === "lapis-ai-app-tools") &&
         forbidden.test(dep.name) &&

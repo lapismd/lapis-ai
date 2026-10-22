@@ -1,11 +1,11 @@
 #![cfg(unix)]
 mod support;
+use lapis_ai_service::{Error, StreamMessage};
 use std::{
     sync::{Arc, Mutex},
     time::Duration,
 };
 use support::*;
-use tauri_plugin_lapis_ai::{Error, StreamMessage};
 
 async fn received(
     queue: &Arc<Mutex<Vec<StreamMessage>>>,

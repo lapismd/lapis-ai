@@ -1,7 +1,7 @@
 #![cfg(unix)]
 mod support;
+use lapis_ai_service::{AcpHost, Config, HostContext, HostPolicy, Launch, Result, Target};
 use std::{sync::Arc, time::Duration};
-use tauri_plugin_lapis_ai::{AcpHost, Config, HostContext, HostPolicy, Launch, Result, Target};
 
 struct PacedPolicy(Arc<support::Policy>);
 impl HostPolicy for PacedPolicy {

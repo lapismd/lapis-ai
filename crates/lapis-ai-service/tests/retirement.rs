@@ -1,8 +1,8 @@
 #![cfg(unix)]
 mod support;
+use lapis_ai_service::{AcpHost, Config, Error};
 use std::{sync::atomic::Ordering, time::Duration};
 use support::*;
-use tauri_plugin_lapis_ai::{AcpHost, Config, Error};
 
 async fn stopped(root: &std::path::Path) {
     tokio::time::timeout(Duration::from_secs(5), async {

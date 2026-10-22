@@ -7,12 +7,12 @@ mod support;
 use fixture::{
     BLOCK_ACTIVITY, BLOCK_FACTS, CAPTURE, CHANGE_IN_FACTORY, captured, entered, stopped,
 };
+use lapis_ai_service::Error;
 use std::{
     sync::{Arc, atomic::Ordering},
     time::Duration,
 };
 use support::{all_stopped, configure, context, prompt, wait};
-use tauri_plugin_lapis_ai::Error;
 
 #[tokio::test]
 async fn retained_capture_survives_renderer_suspension_without_granting_renderer_operations() {

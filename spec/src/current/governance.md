@@ -1,5 +1,9 @@
 # Governance
 
+The neutral ACP service is an owned workspace library with only the runtime
+workspace edge. Boundary checks reject Tauri, network and database dependencies;
+its extraction changes no imported-source budget or release authorization.
+
 The compute-library API uses inert configuration-owned facts re-exported by the
 runtime client. The helper's existing dependency edge to configuration remains
 unchanged; no dependency allowlist or source budget is relaxed. LAI-GOV-100/101

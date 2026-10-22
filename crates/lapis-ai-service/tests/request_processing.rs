@@ -1,5 +1,12 @@
 #![cfg(unix)]
 mod support;
+use lapis_ai_service::{
+    AcpHost, Config, Error, HostContext, HostPolicy, Launch, Result, SessionBinding, Target,
+    runtime::{
+        FrameInput, ProcessorFuture, RequestInput, RequestProcessorFuture, SessionProcessor,
+        SessionRequest,
+    },
+};
 use std::{
     path::Path,
     sync::{
@@ -7,13 +14,6 @@ use std::{
         atomic::{AtomicBool, AtomicU64, Ordering},
     },
     time::Duration,
-};
-use tauri_plugin_lapis_ai::{
-    AcpHost, Config, Error, HostContext, HostPolicy, Launch, Result, SessionBinding, Target,
-    runtime::{
-        FrameInput, ProcessorFuture, RequestInput, RequestProcessorFuture, SessionProcessor,
-        SessionRequest,
-    },
 };
 use tokio::sync::Notify;
 

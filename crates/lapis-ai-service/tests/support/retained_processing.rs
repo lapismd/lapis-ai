@@ -1,14 +1,14 @@
 use super::{fixture, support};
+use lapis_ai_service::{
+    AcpHost, Config, Error, HostContext, HostPolicy, Launch, Result, SessionBinding, Target,
+    runtime::SessionProcessor,
+};
 use std::{
     path::Path,
     sync::{
         Arc, Mutex,
         atomic::{AtomicBool, Ordering},
     },
-};
-use tauri_plugin_lapis_ai::{
-    AcpHost, Config, Error, HostContext, HostPolicy, Launch, Result, SessionBinding, Target,
-    runtime::SessionProcessor,
 };
 
 pub struct Policy {
