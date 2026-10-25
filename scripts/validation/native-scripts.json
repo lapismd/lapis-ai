@@ -1,0 +1,13 @@
+{
+  "dev:cargo": "node scripts/managed-cargo.mjs",
+  "format": "pnpm dev:cargo -- fmt --all && prettier --write .",
+  "spec:search": "spec-validator search",
+  "package:stage": "node scripts/stage.mjs",
+  "changeset": "changeset",
+  "release:status": "node scripts/release-state.mjs --plan",
+  "release:version": "node scripts/changeset-version.mjs",
+  "validation": "node scripts/validation.mjs",
+  "validation:doctor": "node scripts/validation.mjs doctor",
+  "validation:images": "node scripts/validation.mjs images",
+  "validation:clean": "node scripts/validation.mjs clean"
+}

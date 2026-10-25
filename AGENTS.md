@@ -28,3 +28,10 @@ exports. Keep its generic entry independent of the optional Tauri transport.
 Release automation follows `spec/src/current/contracts/release.md`. Never merge
 version PRs or publish packages/tags without the governing release authorization.
 Do not install services, mutate user caches, or update source repositories.
+
+Portable validation runs in bounded Docker workers by default; see
+`docs/validation.md`. Register new validation scripts in the fail-closed routing
+inventory. Native/model/platform qualification remains explicit and separate.
+Use the default 4 CPU/12 GiB worker with one Cargo job, coordinate concurrent
+runs, and collect failures before removing only this checkout's completed runs.
+Never infer native or release qualification from portable Docker results.

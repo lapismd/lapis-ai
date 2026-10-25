@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Cold acceptance on the two admitted ARM64 native platforms.
 set -euo pipefail
+export LAPIS_AI_VALIDATION_RUNTIME=native
 profile=${1:-debug}
 test "$profile" = debug || test "$profile" = release
 if [ "$profile" = debug ]; then

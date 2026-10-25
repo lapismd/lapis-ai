@@ -113,6 +113,11 @@ const config = defineConfig(tableRequirements(), {
     first: true,
     build: true,
     lanes: [
+      {
+        name: "validation-routing",
+        command: "pnpm",
+        args: ["check:validation-routing"],
+      },
       { name: "release", command: "pnpm", args: ["release:check"] },
       { name: "format", command: "pnpm", args: ["format:check"] },
       { name: "architecture", command: "pnpm", args: ["check:architecture"] },

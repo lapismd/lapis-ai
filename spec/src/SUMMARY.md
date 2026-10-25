@@ -61,3 +61,5 @@
 - [Neutral ACP host service](history/2026-10-22-neutral-acp-service.md)
 
 - [Host execution backend](history/2026-10-22-host-execution.md)
+
+- [Docker portable validation](history/2026-10-25-docker-validation.md)

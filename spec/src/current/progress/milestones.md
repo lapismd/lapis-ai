@@ -136,3 +136,11 @@ model inference and two-device pairing remain consumer acceptance.
 backend/session boundary with supervised host processes as the default. M0–M5
 retain their status; hosted H04 admission and transport remain consumer work.
 Docker execution, model inference and platform/provider gates remain separate.
+
+## Portable local tooling
+
+[Docker validation](../../history/2026-10-25-docker-validation.md) makes portable
+checks use bounded isolated workers over the exact source revision. Full
+portable check/test/build/package/spec qualification passes, with 1,076 Rust,
+43 renderer and 57 governance cases. Native/model qualification stays separate. Original
+M0–M5 status, model/platform qualification and publication remain unchanged.

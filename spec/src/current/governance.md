@@ -33,13 +33,14 @@ deferred wider qualification. Original M0–M5 gates and release authority stay.
 
 ## Requirements
 
-| ID          | Requirement                                                                                                                                                                                                             |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LAI-GOV-100 | Protected implementation, interfaces, tooling and guidance MUST update mapped owning contracts or record a fresh justified unchanged-contract confirmation, validation and milestone review in the same Jujutsu change. |
-| LAI-GOV-101 | Authored specification Markdown MUST remain within 400 physical lines and 32768 UTF-8 bytes. Each requirement MUST have exactly one verification row.                                                                   |
-| LAI-GOV-102 | New production Rust and scripts MUST stay within 300 counted lines and tests within 500. Exact imported exceptions MUST have pinned provenance and MUST NOT grow.                                                       |
-| LAI-GOV-103 | Evidence MUST record commands, results, failures, affected formats, gaps and next action. Fixture, native inference, interoperability and platform evidence MUST remain distinct.                                       |
-| LAI-GOV-104 | Verification MUST start at the exact affected boundary and widen only for shared infrastructure or multiple affected packages. Native and platform gates MUST NOT pass from compilation alone.                          |
+| ID          | Requirement                                                                                                                                                                                                                 |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LAI-GOV-100 | Protected implementation, interfaces, tooling and guidance MUST update mapped owning contracts or record a fresh justified unchanged-contract confirmation, validation and milestone review in the same Jujutsu change.     |
+| LAI-GOV-101 | Authored specification Markdown MUST remain within 400 physical lines and 32768 UTF-8 bytes. Each requirement MUST have exactly one verification row.                                                                       |
+| LAI-GOV-102 | New production Rust and scripts MUST stay within 300 counted lines and tests within 500. Exact imported exceptions MUST have pinned provenance and MUST NOT grow.                                                           |
+| LAI-GOV-103 | Evidence MUST record commands, results, failures, affected formats, gaps and next action. Fixture, native inference, interoperability and platform evidence MUST remain distinct.                                           |
+| LAI-GOV-104 | Verification MUST start at the exact affected boundary and widen only for shared infrastructure or multiple affected packages. Native and platform gates MUST NOT pass from compilation alone.                              |
+| LAI-GOV-105 | Portable local validation MUST use bounded Docker workers, exact source and ancestry, frozen dependencies, fail-closed routing, owned reports/cleanup and private/model guards; native/model/release gates remain explicit. |
 
 The logical ledger lives under current/progress. Evidence lives under history.
 Committed records are append-only. Sources and existing user data remain untouched.
@@ -113,3 +114,17 @@ M0–M5, release or packaged-native acceptance gates.
 The app-tool transport crate is independently checked under LAI-TOOLS-001–004.
 LAI-GOV-100/101 retain source boundaries, line budgets and separate consumer
 acceptance; adding this crate does not authorize publication.
+
+## Portable development validation
+
+The repository’s `docs/validation.md` documents the Docker default,
+reviewed native exceptions, finite resources, fingerprinted dependencies and
+checkout-owned cleanup. The runner transfers only tracked source and immutable
+ancestry, rejects recursive private/model paths, and preserves exact revision
+receipts. Workers have an init reaper and no Linux capabilities; denied-directory
+reads/writes must fail. Locked Cargo fetching prepares offline governance checks.
+Docker errors never select host execution. The repository has no
+Storybook; no catalog or browser-specific guard is invented here. Existing
+native/model/platform CI remains explicit and uses its provisioned host.
+Tooling qualification changes no service API, original M0–M5 gate or release
+permission. Portable results and actual inference remain separate evidence.

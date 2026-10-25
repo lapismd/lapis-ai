@@ -16,6 +16,7 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 env:
+  LAPIS_AI_VALIDATION_RUNTIME: native
   CARGO_BUILD_JOBS: 1
   CARGO_INCREMENTAL: 0
 jobs:

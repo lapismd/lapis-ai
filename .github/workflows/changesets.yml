@@ -9,6 +9,8 @@ permissions:
 concurrency:
   group: changesets-release
   cancel-in-progress: false
+env:
+  LAPIS_AI_VALIDATION_RUNTIME: native
 jobs:
   version:
     if: github.repository == 'lapismd/lapis-ai' && github.ref == 'refs/heads/main'
