@@ -24,10 +24,10 @@ sensitive under loaded hosted runners.
   run on the builder. Dependency caches use `cache-on-failure` and same-repo
   `save-if`. Declaring every runtime example restores builds after an explicit
   `[[example]]` disabled Cargo auto-discovery.
-- Native jobs run workspace tests first, then `cargo clean` of the production
-  helper crates and a feature-aligned `pnpm build`. Bin-only crates such as
-  `lapis-agent-tools` lose `target/debug/<bin>` under the test profile while
-  fingerprints stay Fresh, so a plain rebuild is not enough.
+- The build lane uses `--workspace --bins --examples` so production CLIs are
+  emitted; `--examples` alone builds example targets and skips package bins.
+  Native jobs still test first, then rebuild with that lane before
+  qualification.
 
 ## Unchanged-contract confirmation
 

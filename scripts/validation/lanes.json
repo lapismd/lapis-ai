@@ -1,5 +1,5 @@
 {
-  "build": "pnpm build:client && pnpm dev:cargo -- build --workspace --examples --features lapis-agent/test-support --locked",
+  "build": "pnpm build:client && pnpm dev:cargo -- build --workspace --bins --examples --features lapis-agent/test-support --locked",
   "check": "pnpm check:governance && pnpm format:check && pnpm check:boundaries && pnpm check:client && pnpm check:clippy",
   "check:governance": "pnpm check:validation-routing && pnpm spec:validate && pnpm release:check && pnpm check:architecture && pnpm check:progress && pnpm check:upstream",
   "check:clippy": "pnpm dev:cargo -- clippy --workspace --all-targets --features lapis-agent/test-support --locked -- -D warnings",
