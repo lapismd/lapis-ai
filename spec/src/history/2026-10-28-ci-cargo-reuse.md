@@ -24,8 +24,9 @@ sensitive under loaded hosted runners.
   run on the builder. Dependency caches use `cache-on-failure` and same-repo
   `save-if`. Declaring every runtime example restores builds after an explicit
   `[[example]]` disabled Cargo auto-discovery.
-- Native jobs build once with matching features, then
-  `LAPIS_AI_SKIP_NATIVE_BUILD=1` for qualification.
+- Native jobs run workspace tests first, then a feature-aligned `pnpm build` so
+  bin-only crates such as `lapis-agent-tools` keep `target/debug/<bin>` after the
+  test profile, then `LAPIS_AI_SKIP_NATIVE_BUILD=1` for qualification.
 
 ## Unchanged-contract confirmation
 

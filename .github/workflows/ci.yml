@@ -195,8 +195,11 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
       - name: Require qualified ARM64 architecture
         run: test "$(uname -m)" = arm64 || test "$(uname -m)" = aarch64
-      - run: pnpm build
+      # Workspace cargo test rebuilds bin-only crates as test units and can drop
+      # target/debug/<bin> (seen with lapis-agent-tools). Build production bins
+      # and examples after tests so qualification has the CLIs.
       - run: pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked
+      - run: pnpm build
       - name: Cold inference, permissions, Rust clients and native bundle
         env:
           LAPIS_AI_SKIP_NATIVE_BUILD: "1"
