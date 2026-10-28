@@ -27,6 +27,9 @@ pub struct CapturingLlm {
     pub captured: Arc<Mutex<Vec<Value>>>,
 }
 
+/// Shared one-shot so only the held provider POST waits, and only once.
+type PostHold = Arc<Mutex<Option<oneshot::Receiver<()>>>>;
+
 pub async fn spawn_capturing_llm(responses: Vec<Value>) -> CapturingLlm {
     spawn_capturing_llm_with_status(responses.into_iter().map(|v| (200u16, v)).collect()).await
 }
@@ -55,7 +58,7 @@ pub async fn spawn_capturing_llm_with_status(responses: Vec<(u16, Value)>) -> Ca
 
 async fn spawn_capturing_llm_inner(
     responses: Vec<(u16, Value)>,
-    hold: Option<(usize, Arc<Mutex<Option<oneshot::Receiver<()>>>>)>,
+    hold: Option<(usize, PostHold)>,
 ) -> CapturingLlm {
     let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
     let url = format!("http://{}", listener.local_addr().unwrap());
