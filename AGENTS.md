@@ -9,6 +9,10 @@ Protected changes update their owning requirement or record an explicit
 unchanged-contract confirmation, actual validation and milestone review in the
 same Jujutsu change. Commit each verified slice using an explicit message.
 
+Prefer `pnpm spec:search "<topic or ID>"` before any manual scan of spec/src;
+use --semantic for conceptual queries; rg is the fallback only when QMD is
+unavailable.
+
 New production Rust, TypeScript and scripts stay within 300 counted lines;
 tests stay within 500. Imported exceptions in `scripts/architecture-baseline.json`
 never grow. Do not introduce new exceptions. New tests live in separate files.
