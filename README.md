@@ -68,9 +68,9 @@ those fixtures. Run `pnpm dev:cargo -- <arguments>` for focused Cargo work.
 When a registry version is available, executable installation uses:
 
 ```sh
-cargo install lapis-acp --version 0.1.1 --locked
-cargo install lapis-agent --version 0.1.1 --locked
-cargo install lapis-agent-tools --version 0.1.1 --locked
+cargo install lapis-acp --version 0.2.0 --locked
+cargo install lapis-agent --version 0.2.0 --locked
+cargo install lapis-agent-tools --version 0.2.0 --locked
 ```
 
 Native distributions are published through [GitHub releases](https://github.com/lapismd/lapis-ai/releases).
