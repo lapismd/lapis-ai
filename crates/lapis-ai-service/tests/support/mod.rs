@@ -53,8 +53,7 @@ impl HostPolicy for Policy {
         let root = self.root.join(&context.window);
         std::fs::create_dir_all(&root).unwrap();
         let path = root.join("peer.py");
-        std::fs::write(&path, PEER).unwrap();
-        std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o700)).unwrap();
+        write_peer(&path, PEER);
         let mut environment = Environment::default();
         environment
             .0
@@ -82,6 +81,16 @@ impl HostPolicy for Policy {
             directory: root,
             resume,
         })
+    }
+}
+pub fn peer_script(launch: &Launch) -> &Path {
+    &launch.prepared.executable
+}
+pub fn write_peer(path: &Path, body: &str) {
+    std::fs::write(path, body).unwrap();
+    std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o700)).unwrap();
+    if let Ok(file) = std::fs::File::open(path) {
+        let _ = file.sync_all();
     }
 }
 pub fn setup(root: &Path) -> (Arc<AcpHost>, Arc<Policy>) {

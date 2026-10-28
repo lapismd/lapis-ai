@@ -13,7 +13,7 @@ impl HostPolicy for PacedPolicy {
     }
     fn resolve(&self, context: &HostContext, target: &str, resume: Option<&str>) -> Result<Launch> {
         let launch = self.0.resolve(context, target, resume)?;
-        std::fs::write(&launch.prepared.executable, PEER).unwrap();
+        support::write_peer(support::peer_script(&launch), PEER);
         Ok(launch)
     }
 }

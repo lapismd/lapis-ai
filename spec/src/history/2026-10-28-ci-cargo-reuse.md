@@ -26,8 +26,9 @@ sensitive under loaded hosted runners.
   `[[example]]` disabled Cargo auto-discovery.
 - The build lane uses `--workspace --bins --examples` so production CLIs are
   emitted; `--examples` alone builds example targets and skips package bins.
-  Native jobs still test first, then rebuild with that lane before
-  qualification.
+  Native jobs still test first with `--test-threads=1` (matches jj-store
+  native), then rebuild with that lane before qualification. Parallel helper
+  peer spawns on Linux ARM previously failed open with `helper_spawn_failed`.
 
 ## Unchanged-contract confirmation
 

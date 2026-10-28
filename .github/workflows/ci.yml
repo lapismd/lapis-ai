@@ -195,7 +195,8 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
       - name: Require qualified ARM64 architecture
         run: test "$(uname -m)" = arm64 || test "$(uname -m)" = aarch64
-      - run: pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked
+      # Serialize helper peers on constrained ARM runners (jj-store native pattern).
+      - run: pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked -- --test-threads=1
       # Rebuild with --bins --examples so production CLIs exist for qualification.
       - run: pnpm build
       - name: Cold inference, permissions, Rust clients and native bundle

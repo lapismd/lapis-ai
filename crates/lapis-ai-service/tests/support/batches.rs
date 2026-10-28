@@ -36,8 +36,12 @@ impl HostPolicy for Policy {
     }
     fn resolve(&self, context: &HostContext, target: &str, resume: Option<&str>) -> Result<Launch> {
         let launch = self.base.resolve(context, target, resume)?;
-        let peer=std::fs::read_to_string(&launch.prepared.executable).unwrap().replace("update={'content':{'text':'reply'}}", "update={'sessionUpdate':'agent_message_chunk','messageId':'answer','content':{'type':'text','text':'raw reply'}}");
-        std::fs::write(&launch.prepared.executable, peer).unwrap();
+        let script = support::peer_script(&launch);
+        let peer = std::fs::read_to_string(script).unwrap().replace(
+            "update={'content':{'text':'reply'}}",
+            "update={'sessionUpdate':'agent_message_chunk','messageId':'answer','content':{'type':'text','text':'raw reply'}}",
+        );
+        support::write_peer(script, &peer);
         Ok(launch)
     }
     fn processor(

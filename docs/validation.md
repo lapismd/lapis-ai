@@ -68,9 +68,9 @@ governance, prettier, client, actionlint) with no Rust toolchain or fetch.
 After `cargo fetch`, Rust build runs the Cargo-backed `spec:check` lanes
 (`format:check`, `boundaries`, `test:governance`), compiles once, archives and
 runs nextest in-tree (integration tests bake `CARGO_BIN_EXE_*` paths), then
-packages. Hosted native jobs build once with matching features, then set
-`LAPIS_AI_SKIP_NATIVE_BUILD=1`. Before pushing CI or spec changes, run the Spec
-gate locally:
+packages. Hosted native jobs run workspace tests with `--test-threads=1`, build once with
+matching features, then set `LAPIS_AI_SKIP_NATIVE_BUILD=1`. Before pushing CI or
+spec changes, run the Spec gate locally:
 
 ```sh
 export LAPIS_AI_CHECK_BASE=$(git merge-base HEAD origin/main)

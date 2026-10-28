@@ -67,7 +67,14 @@ impl NativeProcess {
             .kill_on_drop(true);
         #[cfg(unix)]
         command.process_group(0);
-        let mut child = command.spawn().map_err(|_| Error("helper_spawn_failed"))?;
+        let mut child = command.spawn().map_err(|error| {
+            eprintln!(
+                "helper_spawn_failed: {error} executable={} cwd={}",
+                plan.executable.display(),
+                plan.directory.display()
+            );
+            Error("helper_spawn_failed")
+        })?;
         let input = child
             .stdin
             .take()

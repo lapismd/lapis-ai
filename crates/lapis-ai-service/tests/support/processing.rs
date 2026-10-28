@@ -48,17 +48,18 @@ impl HostPolicy for Policy {
     }
     fn resolve(&self, context: &HostContext, target: &str, resume: Option<&str>) -> Result<Launch> {
         let launch = self.base.resolve(context, target, resume)?;
-        let peer = std::fs::read_to_string(&launch.prepared.executable).unwrap();
-        std::fs::write(
-            &launch.prepared.executable,
-            peer.replace(
-                "emit('warmed',rid)",
-                "emit('activity',rid,update={'text':'bootstrap-secret'});emit('warmed',rid)",
-            )
-            .replace("session={}", "session={'label':'facts-secret'}")
-            .replace("'text':'reply'", "'text':'reply-secret'"),
-        )
-        .unwrap();
+        let script = support::peer_script(&launch);
+        let peer = std::fs::read_to_string(script).unwrap();
+        support::write_peer(
+            script,
+            &peer
+                .replace(
+                    "emit('warmed',rid)",
+                    "emit('activity',rid,update={'text':'bootstrap-secret'});emit('warmed',rid)",
+                )
+                .replace("session={}", "session={'label':'facts-secret'}")
+                .replace("'text':'reply'", "'text':'reply-secret'"),
+        );
         if self.control.mode.load(Ordering::Acquire) == CHANGE_IN_RESOLVE {
             self.base.generation.fetch_add(1, Ordering::AcqRel);
         }
