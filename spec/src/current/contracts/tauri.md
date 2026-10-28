@@ -280,3 +280,8 @@ callback nor a lost caller reply permits replay.
 Storage, privacy, receipts, application message identities and prompt/context
 policy remain host-owned. Source qualification and downstream mounted native
 conversation acceptance remain separate gates.
+
+The private `@lapismd/ai` package keeps `packages/ai/CHANGELOG.md` as release
+metadata for coordinated Version Packages. That is an unchanged LAI-TAURI-006
+wire/client confirmation; no public renderer signatures change. Evidence:
+[CI Cargo reuse](../../history/2026-10-28-ci-cargo-reuse.md).
