@@ -134,7 +134,9 @@ the permissions CI declares, including `actions: read`. The private renderer
 client keeps a `packages/ai/CHANGELOG.md` so coordinated Version Packages PRs can
 open. Changesets tag qualification reuses successful exact-source CI for the
 candidate SHA and does not duplicate native acceptance when those checks are
-already green. That is an unchanged LAI-REL-002–005 confirmation: publication
-still requires a human-merged Version Packages PR, immutable tags and scoped
-trusted publishing. Evidence: [CI Cargo reuse](../history/2026-10-28-ci-cargo-reuse.md),
-[Changesets CI reuse](../history/2026-10-28-changesets-ci-reuse.md).
+already green. Main admits commits through a merge queue that rechecks the
+exact post-merge SHA. That is an unchanged LAI-REL-002–005 confirmation:
+publication still requires a human-merged Version Packages PR, immutable tags
+and scoped trusted publishing. Evidence: [CI Cargo reuse](../history/2026-10-28-ci-cargo-reuse.md),
+[Changesets CI reuse](../history/2026-10-28-changesets-ci-reuse.md),
+[Merge queue and compute busy](../history/2026-10-28-merge-queue-compute-busy.md).

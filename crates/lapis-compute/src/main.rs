@@ -7,7 +7,14 @@ mod peers;
 mod progress;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use std::{collections::BTreeMap, sync::Arc, time::Duration};
+use std::{
+    collections::BTreeMap,
+    sync::{
+        Arc,
+        atomic::{AtomicBool, Ordering},
+    },
+    time::Duration,
+};
 use tokio::{
     io::{AsyncBufReadExt, BufReader},
     sync::{Mutex, RwLock, Semaphore},
@@ -98,6 +105,9 @@ async fn run() -> anyhow::Result<()> {
     );
     let mut input = BufReader::new(tokio::io::stdin());
     let mut operation: Option<tokio::task::JoinHandle<()>> = None;
+    // Released before the terminal frame so clients that react to completed /
+    // error are not rejected while the JoinHandle is still winding down.
+    let busy = Arc::new(AtomicBool::new(false));
     loop {
         let mut line = Vec::new();
         let mut bounded = tokio::io::AsyncReadExt::take(&mut input, 65537);
@@ -110,7 +120,7 @@ async fn run() -> anyhow::Result<()> {
         match request["action"].as_str().unwrap_or("") {
             "configure" => {
                 let config: Config = serde_json::from_value(request["config"].clone())?;
-                if operation.as_ref().is_some_and(|task| !task.is_finished()) {
+                if busy.load(Ordering::Acquire) {
                     emit(json!({"type":"error","requestId":id,"code":"compute_busy"}));
                     continue;
                 }
@@ -120,7 +130,7 @@ async fn run() -> anyhow::Result<()> {
                 emit(json!({"type":"configured","requestId":id}));
             }
             "prepare" | "download" | "start" | "import" | "remove" => {
-                if operation.as_ref().is_some_and(|task| !task.is_finished()) {
+                if busy.load(Ordering::Acquire) {
                     emit(json!({"type":"error","requestId":id,"code":"compute_busy"}));
                     continue;
                 }
@@ -128,6 +138,8 @@ async fn run() -> anyhow::Result<()> {
                 let model = request["model"].as_str().unwrap_or("").to_owned();
                 let shared = shared.clone();
                 let action = request["action"].as_str().unwrap().to_owned();
+                let flag = busy.clone();
+                flag.store(true, Ordering::Release);
                 operation = Some(tokio::spawn(async move {
                     progress::begin(&id, &action);
                     let result = match action.as_str() {
@@ -146,7 +158,7 @@ async fn run() -> anyhow::Result<()> {
                         _ => engine::start(&shared).await,
                     };
                     progress::end();
-                    emit(match result {
+                    let frame = match result {
                         Ok(()) => {
                             json!({"type":"completed","requestId":id,"action":action,"model":model})
                         }
@@ -154,7 +166,9 @@ async fn run() -> anyhow::Result<()> {
                             let failure = failure::classify(&action, &error);
                             json!({"type":"error","requestId":id,"code":failure.code,"message":failure.message})
                         }
-                    });
+                    };
+                    flag.store(false, Ordering::Release);
+                    emit(frame);
                 }));
             }
             "stop" => break,

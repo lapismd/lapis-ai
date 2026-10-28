@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Merge queue validates the exact post-merge commit before it reaches main.
+  merge_group:
   workflow_dispatch:
   workflow_call:
     inputs:
