@@ -15,7 +15,9 @@ wall-clock stream-delivery cap with a 2× coalescing bound, and restores
 Changesets/Release reusable-CI caller permissions so Version Packages can open.
 [Changesets CI reuse](../../history/2026-10-28-changesets-ci-reuse.md) makes tag
 qualification await successful exact-source CI for the candidate SHA instead of
-duplicating native acceptance. M5 stays open.
+duplicating native acceptance. [Merge queue and compute busy](../../history/2026-10-28-merge-queue-compute-busy.md)
+admits main only after required checks on the post-merge commit and releases the
+compute busy slot before terminal frames. M5 stays open.
 
 [Codex compact effort](../../history/2026-10-19-codex-effort.md) adds a
 private Control V3 compatibility profile for Notes local-file chat. Generic IDs,

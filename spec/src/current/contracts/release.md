@@ -28,9 +28,11 @@ The npm coordinator and the `@lapismd/ai` renderer client stay private and have
 no npm publication or tag lane. The client shares the coordinated version;
 version preparation checks and updates its manifest alongside Cargo versions.
 
-Changesets generates a Version Packages PR. A passing PR is merged by a human.
-The reviewed version on main then becomes a candidate for exact-source CI and
-one immutable `v<version>` tag. Changesets tag qualification MUST reuse a
+Changesets generates a Version Packages PR. A passing PR is merged by a human
+through the main merge queue, which MUST run the same required checks on the
+exact post-merge commit before that commit reaches main. The reviewed version on
+main then becomes a candidate for exact-source CI and one immutable
+`v<version>` tag. Changesets tag qualification MUST reuse a
 successful exact-source CI run for that candidate SHA (Plan, Spec, Rust build,
 both admitted native targets and Canonical checks) and MUST NOT duplicate native
 acceptance by re-invoking the reusable CI workflow when those checks are already

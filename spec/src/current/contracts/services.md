@@ -39,7 +39,9 @@ only the verified regular files (LAI-PACKAGE-001).
 
 LAI-COMPUTE-001 reports explicit operation progress with its request identity,
 stage and known byte counts for weights, runtime artifacts and GGUF imports.
-Completion follows managed receipt persistence. Imported filenames are optional
+Long operations serialize through one busy slot; the slot MUST clear before the
+terminal completed or error frame so the next control command is not rejected
+while the worker task winds down. Completion follows managed receipt persistence. Imported filenames are optional
 display metadata in the existing index. Explicit removal retains managed-path
 and shared-file protection. Failures use bounded allowlisted categories without
 dependency diagnostics. Model indexes and preparation facts are readable while

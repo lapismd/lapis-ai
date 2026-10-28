@@ -65,3 +65,4 @@
 - [Docker portable validation](history/2026-10-25-docker-validation.md)
 - [CI Cargo reuse](history/2026-10-28-ci-cargo-reuse.md)
 - [Changesets CI reuse](history/2026-10-28-changesets-ci-reuse.md)
+- [Merge queue and compute busy](history/2026-10-28-merge-queue-compute-busy.md)
