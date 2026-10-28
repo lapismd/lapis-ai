@@ -1,22 +1,27 @@
-use crate::{Component, Config, Error, NativeProcess, PreparedLaunch, Resolver, Result};
+use crate::{
+    Component, ComputeCommands, ComputeConnection, Config, Error, NativeProcess, PreparedLaunch,
+    ProcessLimits, Resolver, Result,
+};
 use serde_json::{Value, json};
 use std::{collections::VecDeque, time::Duration};
 pub struct ComputeClient {
     process: NativeProcess,
-    endpoint: reqwest::Url,
-    token: String,
+    connection: ComputeConnection,
     events: VecDeque<Value>,
 }
 impl std::fmt::Debug for ComputeClient {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("ComputeClient")
-            .field("endpoint", &self.endpoint)
+            .field("endpoint", &self.connection.endpoint)
             .finish_non_exhaustive()
     }
 }
 impl ComputeClient {
     pub async fn start(config: &Config, resolver: &dyn Resolver) -> Result<Self> {
         let plan = PreparedLaunch::new(config, Component::Compute, resolver)?;
+        Self::start_prepared(plan, ProcessLimits::default()).await
+    }
+    pub async fn start_prepared(plan: PreparedLaunch, limits: ProcessLimits) -> Result<Self> {
         lapis_ai_config::launch::private_directory(&plan.directory)?;
         let token = plan
             .environment
@@ -25,7 +30,7 @@ impl ComputeClient {
             .filter(|s| s.len() >= 8)
             .cloned()
             .ok_or(Error("compute_token_required"))?;
-        let mut process = NativeProcess::spawn(plan).await?;
+        let mut process = NativeProcess::spawn_with_limits(plan, limits).await?;
         let ready = process.next(Duration::from_secs(15)).await?;
         let endpoint = reqwest::Url::parse(
             ready["endpoint"]
@@ -48,10 +53,18 @@ impl ComputeClient {
         events.push_back(ready);
         Ok(Self {
             process,
-            endpoint,
-            token,
+            connection: ComputeConnection {
+                endpoint,
+                token: zeroize::Zeroizing::new(token),
+            },
             events,
         })
+    }
+    pub fn commands(&self) -> ComputeCommands {
+        ComputeCommands(self.process.sender())
+    }
+    pub fn connection(&self) -> &ComputeConnection {
+        &self.connection
     }
     pub async fn configure(&mut self, id: &str, config: Value) -> Result<Value> {
         self.command(
@@ -149,7 +162,7 @@ impl ComputeClient {
         if input["stream"] == true {
             return Err(Error("streaming_unavailable"));
         }
-        let mut endpoint = self.endpoint.clone();
+        let mut endpoint = self.connection.endpoint.clone();
         endpoint.set_path(if responses {
             "/v1/responses"
         } else {
@@ -160,7 +173,7 @@ impl ComputeClient {
             .build()
             .map_err(|_| Error("http_unavailable"))?
             .post(endpoint)
-            .bearer_auth(&self.token)
+            .bearer_auth(self.connection.bearer_token())
             .json(&input)
             .send()
             .await
@@ -172,10 +185,10 @@ impl ComputeClient {
             .map_err(|_| Error("invalid_inference_response"))
     }
     pub async fn shutdown(&mut self) -> Result<()> {
-        self.process
-            .sender()
-            .send(&json!({"action":"stop"}))
-            .await?;
+        // Another owned command sender may already have stopped the helper.
+        // Successful reap is the shutdown proof; a closed input pipe is not a
+        // failed cleanup when its process has exited successfully.
+        let _sent = self.commands().stop().await;
         self.process.shutdown(Duration::from_secs(20)).await
     }
 }

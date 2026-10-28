@@ -46,17 +46,20 @@ impl Worker {
                 if self.warm.is_none() {
                     self.warm = Some(WarmWorker::start(config, handler, cancel).await?);
                 }
-                handler.events.emit(
+                handler.events.emit_wait(
                     "warmed",
                     &id,
                     json!({"capabilities":self.warm.as_ref().map(|w| &w.initialized.capabilities)}),
-                );
+                ).await;
             }
             Request::Release { scope, .. } => {
                 if self.scopes.remove(&scope).is_none() {
                     return Err("session_not_open");
                 }
-                handler.events.emit("session_closed", &id, json!({}));
+                handler
+                    .events
+                    .emit_wait("session_closed", &id, json!({}))
+                    .await;
             }
             Request::Session {
                 command: Command::Open {
@@ -81,7 +84,7 @@ impl Worker {
                         cancel,
                     )
                     .await?;
-                handler.events.emit("opened", &id, json!({"adapterSessionId":session.id,"session":session.raw,"capabilities":warm.initialized.capabilities}));
+                handler.events.emit_wait("opened", &id, json!({"adapterSessionId":session.id,"session":session.raw,"capabilities":warm.initialized.capabilities})).await;
                 self.known_sessions.insert(session.id.clone());
                 self.scopes.insert(
                     scope,
@@ -111,16 +114,26 @@ impl Worker {
                     effort,
                     mode: mode.clone(),
                 };
-                let report = tokio::select! {
-                    result = lapis_acp_runner::apply(&mut warm.agent.connection, handler, &session.session.id, &session.session.raw, &preferences) => result.map_err(|e| classify(&e))?,
+                let codex = crate::codex_profile::preferences(
+                    warm.initialized.agent_name.as_deref(),
+                    &session.session.raw,
+                    &preferences,
+                );
+                let selected = codex.as_ref().unwrap_or(&preferences);
+                let mut report = tokio::select! {
+                    result = lapis_acp_runner::apply(&mut warm.agent.connection, handler, &session.session.id, &session.session.raw, selected) => result.map_err(|e| classify(&e))?,
                     () = lapis_acp_runner::persistent::cancellation(cancel) => return Err("cancelled"),
                 };
+                if codex.is_some() {
+                    // Both requested settings land only if the exact variant did.
+                    report.effort = report.model.clone();
+                }
                 session.mode_ready = mode.is_some() && report.mode.applied();
-                handler.events.emit(
+                handler.events.emit_wait(
                     "configured",
                     &id,
                     json!({"configuration":report_value(&report),"modeReady":session.mode_ready}),
-                );
+                ).await;
             }
             Request::Session {
                 command:
@@ -139,11 +152,14 @@ impl Worker {
                 }
                 let warm = self.warm.as_mut().ok_or("worker_not_warm")?;
                 handler.adapter_session = Some(session.session.id.clone());
-                handler.events.emit(
-                    "started",
-                    &id,
-                    json!({"adapterSessionId":session.session.id}),
-                );
+                handler
+                    .events
+                    .emit_wait(
+                        "started",
+                        &id,
+                        json!({"adapterSessionId":session.session.id}),
+                    )
+                    .await;
                 let outcome = lapis_acp_runner::persistent::prompt_input(
                     &mut warm.agent,
                     handler,
@@ -180,7 +196,7 @@ impl Worker {
                 } else {
                     self.stop(config).await
                 };
-                handler.events.emit("record", &id, json!({"record":{"version":1,"taskId":id,"status":status,"stopReason":outcome.stop_reason,"failureKind":outcome.failure.as_ref().map(|f|format!("{:?}",f.kind)),"agentCode":outcome.failure.as_ref().and_then(|f|f.agent_code),"timeoutKind":outcome.timeout.map(|t|format!("{t:?}"))},"quiescent":quiescent,"sessionUsable":usable}));
+                handler.events.emit_wait("record", &id, json!({"record":{"version":1,"taskId":id,"status":status,"stopReason":outcome.stop_reason,"failureKind":outcome.failure.as_ref().map(|f|format!("{:?}",f.kind)),"agentCode":outcome.failure.as_ref().and_then(|f|f.agent_code),"timeoutKind":outcome.timeout.map(|t|format!("{t:?}"))},"quiescent":quiescent,"sessionUsable":usable})).await;
             }
             _ => return Err("invalid_request"),
         }
@@ -227,7 +243,7 @@ pub async fn run(
             known_sessions: worker.known_sessions.clone(),
         };
         if *job.cancel.borrow() || *events.cancel.borrow() {
-            handler.events.emit("record", &id, json!({"record":{"version":1,"taskId":id,"status":"cancelled"},"quiescent":true,"sessionUsable":worker.warm.is_some() && !*events.cancel.borrow()}));
+            handler.events.emit_wait("record", &id, json!({"record":{"version":1,"taskId":id,"status":"cancelled"},"quiescent":true,"sessionUsable":worker.warm.is_some() && !*events.cancel.borrow()})).await;
         } else if let Err(code) = worker
             .execute(job.request, &config, &mut handler, &mut job.cancel)
             .await
@@ -243,7 +259,10 @@ pub async fn run(
             ) {
                 worker.stop(&config).await;
             }
-            handler.events.emit("error", &id, json!({"code":code}));
+            handler
+                .events
+                .emit_wait("error", &id, json!({"code":code}))
+                .await;
         }
         if let Ok(mut map) = requests.lock() {
             map.remove(&id);
@@ -253,5 +272,7 @@ pub async fn run(
         }
     }
     let stopped = worker.stop(&config).await;
-    events.emit("closed", "close", json!({"confirmedStopped":stopped}));
+    events
+        .emit_wait("closed", "close", json!({"confirmedStopped":stopped}))
+        .await;
 }

@@ -1,6 +1,11 @@
 //! Versioned, inert TOML configuration and explicit native launch preparation.
 #![forbid(unsafe_code)]
+mod compute_failure;
+mod compute_inventory;
+mod compute_model_name;
 mod environment;
+pub use compute_failure::ComputeFailure;
+pub use compute_inventory::{ComputeInventory, ComputeModel};
 pub mod launch;
 mod validation;
 pub use environment::{Environment, Resolver, SystemResolver};

@@ -47,6 +47,7 @@ use serde_json::{json, Value};
 use tokio::io::BufReader;
 use tokio::sync::{mpsc, watch, Mutex};
 
+mod session_configuration;
 use crate::agent::RunCtx;
 use crate::config::{Config, MAX_SYSTEM_PROMPT_BYTES, PROTOCOL_VERSION};
 use crate::hints::SkillEntry;
@@ -116,6 +117,7 @@ struct Session {
     /// overrides `App::cfg.model` for all LLM calls on this session. Persists
     /// across `session/prompt` calls until changed.
     effective_model: Option<String>,
+    effective_effort: Option<crate::config::ThinkingEffort>,
     /// Session-cumulative input tokens across all turns. Sent in the
     /// `_goose/unstable/session/update` usage notification so buzz-acp's
     /// `UsageTracker` can compute per-turn deltas symmetrically with goose.
@@ -343,27 +345,7 @@ async fn handle_request(
         }
         "session/prompt" => spawn_prompt(app.clone(), id, params, wire_tx.clone()),
         "session/set_mode" | "session/set_config_option" => {
-            let session = params["sessionId"].as_str().unwrap_or("");
-            let selected = if method == "session/set_mode" {
-                params["modeId"] == "ask"
-            } else {
-                params["configId"] == "mode" && params["value"] == "ask"
-            };
-            if selected && app.sessions.lock().await.contains_key(session) {
-                wire::send(
-                    wire_tx,
-                    wire::ok(id, json!({"configOptions":mode_options()})),
-                )
-                .await;
-            } else {
-                reject(
-                    wire_tx,
-                    id,
-                    INVALID_PARAMS,
-                    "unsupported execution mode or session",
-                )
-                .await;
-            }
+            session_configuration::configure(app, &method, id, params, wire_tx).await;
         }
         "session/set_model" => {
             set_model_session(app, id, params, wire_tx).await;
@@ -638,6 +620,7 @@ async fn session_new(app: &Arc<App>, id: Value, params: Value, wire_tx: &WireSen
             last_request_history_bytes: None,
             effective_system_prompt,
             effective_model: None,
+            effective_effort: app.cfg.thinking_effort,
             accumulated_input_tokens: crate::types::TurnIOState::Unseen,
             accumulated_output_tokens: crate::types::TurnIOState::Unseen,
             accumulated_cached_input_tokens: crate::types::CacheTotalState::Unseen,
@@ -653,7 +636,7 @@ async fn session_new(app: &Arc<App>, id: Value, params: Value, wire_tx: &WireSen
             id,
             json!({
                 "sessionId": session_id,
-                "configOptions": mode_options(),
+                "configOptions": session_configuration::options(app.cfg.provider, app.cfg.thinking_effort),
                 "modes": { "currentModeId":"ask", "availableModes":[{"id":"ask","name":"Ask before tools","description":"Every tool call requires ACP permission"}] },
                 "models": {
                     "currentModelId": app.cfg.model,
@@ -830,6 +813,7 @@ async fn run_prompt(app: Arc<App>, id: Value, params: Value, wire_tx: WireSender
         mut cancel_rx,
         effective_system_prompt,
         effective_model_override,
+        effective_effort,
         run_id,
         mut steer_rx,
         usage_baseline,
@@ -874,8 +858,10 @@ async fn run_prompt(app: Arc<App>, id: Value, params: Value, wire_tx: WireSender
     // Not stored in Session (not session-cumulative); used only for the final
     // end-of-turn wire emission.
     let mut turn_pricing_identity: Option<Option<crate::types::PricingIdentity>> = None;
+    let mut session_config = app.cfg.clone();
+    session_config.thinking_effort = effective_effort;
     let mut ctx = RunCtx {
-        cfg: &app.cfg,
+        cfg: &session_config,
         effective_model: effective_model_str,
         session_id: &sid,
         system_prompt: &effective_system_prompt,
@@ -1019,6 +1005,7 @@ async fn acquire_session(
         watch::Receiver<bool>,
         Arc<str>,
         Option<String>,
+        Option<crate::config::ThinkingEffort>,
         String,
         mpsc::UnboundedReceiver<Vec<ContentBlock>>,
         crate::types::SessionUsageBaseline,
@@ -1062,6 +1049,7 @@ async fn acquire_session(
         rx,
         Arc::clone(&s.effective_system_prompt),
         effective_model,
+        s.effective_effort,
         run_id,
         steer_rx,
         // Snapshot rather than a handle: the run loop reports cumulative usage
@@ -1083,12 +1071,6 @@ fn session_token() -> Result<String, String> {
     let mut b = [0u8; 8];
     getrandom::fill(&mut b).map_err(|e| format!("rng: getrandom failed: {e}"))?;
     Ok(b.iter().map(|x| format!("{x:02x}")).collect())
-}
-
-// The owned host selects advertised modes through ACP config options.
-fn mode_options() -> Value {
-    json!([{"id":"mode","name":"Execution mode","category":"mode","type":"select","currentValue":"ask",
-        "options":[{"value":"ask","name":"Ask before tools"}]}])
 }
 
 /// LapisMD: a standalone tool-free completion for application discovery metadata.

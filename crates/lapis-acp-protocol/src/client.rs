@@ -325,7 +325,7 @@ impl<R: AsyncRead + Unpin, W: AsyncWrite + Unpin> Connection<R, W> {
             Inbound::Notification { method, params } => {
                 if method == m::SESSION_UPDATE {
                     if handler.accept_session(params.get("sessionId").and_then(Value::as_str))? {
-                        handler.session_update(update::parse(&params));
+                        handler.session_update_async(update::parse(&params)).await;
                     }
                 } else {
                     handler.notification(&method, &params);

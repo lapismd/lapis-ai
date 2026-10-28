@@ -33,6 +33,8 @@ function fixture(t) {
   for (const path of [
     "package.json",
     "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "packages",
     "Cargo.toml",
     "Cargo.lock",
     "rust-toolchain.toml",
@@ -43,7 +45,11 @@ function fixture(t) {
     "crates",
     "spec/src",
   ])
-    cpSync(join(source, path), join(root, path), { recursive: true });
+    cpSync(join(source, path), join(root, path), {
+      recursive: true,
+      filter: (path) =>
+        !["node_modules", "dist"].includes(path.split("/").at(-1)),
+    });
   mkdirSync(join(root, ".changeset"));
   for (const path of ["config.json", "README.md"])
     cpSync(join(source, ".changeset", path), join(root, ".changeset", path));
@@ -84,7 +90,7 @@ test("missing offline Cargo bootstrap preserves notes and all version metadata",
   assert.deepEqual(snapshot(root, metadata), before);
   assert.equal((await pendingChangesets(root)).length, 1);
 });
-test("real Changesets prepare all eleven Cargo versions without editing canonical evidence", async (t) => {
+test("real Changesets prepare every governed Cargo version without editing canonical evidence", async (t) => {
   const root = fixture(t),
     canonical = snapshot(root, [
       "spec/src/current/contracts/release.md",
@@ -106,6 +112,7 @@ test("real Changesets prepare all eleven Cargo versions without editing canonica
   assert.equal(result.version, next);
   assert.equal(checkRelease(root), next);
   assert.equal(json(root, "package.json").version, next);
+  assert.equal(json(root, "packages/ai/package.json").version, next);
   const lock = manifest(root, "Cargo.lock").package;
   for (const name of allCrates)
     assert.equal(

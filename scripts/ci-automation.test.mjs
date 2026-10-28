@@ -169,15 +169,17 @@ test("ci_resolves_automation_before_checks_and_keeps_product_gates", () => {
     new URL("../.github/workflows/ci.yml", import.meta.url),
     "utf8",
   );
+  const spec = readFileSync(new URL("./ci-spec.mjs", import.meta.url), "utf8");
   assert.ok(
-    ci.indexOf("node scripts/ci-range.mjs") < ci.indexOf("pnpm spec:check"),
+    ci.indexOf("node scripts/ci-range.mjs") <
+      ci.indexOf("node scripts/ci-spec.mjs"),
   );
   assert.match(ci, /GITHUB_TOKEN: \$\{\{ github.token \}\}/);
+  for (const lane of ["check:governance", "test:client", "check:workflow"])
+    assert.ok(spec.includes(`"${lane}"`), lane);
   for (const command of [
-    "pnpm check",
-    "pnpm test",
+    "pnpm test:governance",
     "pnpm build",
-    "pnpm check:workflow",
     "pnpm package:check",
     "pnpm dev:cargo -- publish --workspace --exclude lapis-compute --locked --dry-run",
   ])

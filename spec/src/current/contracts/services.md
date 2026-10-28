@@ -1,5 +1,12 @@
 # Native services and packaging
 
+LAI-LOCAL-001 exposes the bundled agent's existing reasoning-effort control as
+an ACP thought-level configuration option. Each session owns its selected
+effort, inherited initially from launch configuration; only idle sessions can
+change it. Unknown values and unsupported provider values refuse without
+changing state. Prompts capture the session's effort into their own configuration
+while retaining the original provider/token source and permission policy.
+
 ## Requirements
 
 | ID              | Requirement                                                                                                                                                                                                               |
@@ -25,3 +32,18 @@ behavior and removes an accidental dependency on compute feature unification.
 The canonical GitHub owner is now `lapismd`. Service documentation and Cargo
 metadata follow this identity; providers, native pins and wire contracts remain
 unchanged (LAI-LOCAL-001, LAI-COMPUTE-001–002).
+
+Bundle verification rejects symbolic links in manifests, helper files and native
+file path components, including links within the bundle. Consumer startup uses
+only the verified regular files (LAI-PACKAGE-001).
+
+LAI-COMPUTE-001 reports explicit operation progress with its request identity,
+stage and known byte counts for weights, runtime artifacts and GGUF imports.
+Completion follows managed receipt persistence. Imported filenames are optional
+display metadata in the existing index. Explicit removal retains managed-path
+and shared-file protection. Failures use bounded allowlisted categories without
+dependency diagnostics. Model indexes and preparation facts are readable while
+off through the inert configuration layer, re-exported by the native runtime;
+neither helper acquires a client/runtime dependency. Engine startup still checks
+the current native pin and installed weights. LAI-COMPUTE-002 peer ALPN,
+authentication and routing semantics are unchanged.

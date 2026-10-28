@@ -32,7 +32,7 @@ pub struct InvocationConfig {
     /// Runners the caller may select from.
     pub catalog: Catalog,
     /// Tools fixed by trusted launch, never task/control input.
-    pub mcp_servers: Vec<lapis_acp_protocol::McpServer>,
+    pub mcp_servers: Vec<lapis_acp_protocol::McpServerConfig>,
     /// The runner this process was launched to act as, when the caller pinned one.
     pub configured_runner: Option<String>,
     /// Working directory. A task document cannot change it.

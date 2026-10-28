@@ -16,6 +16,10 @@ pub fn normalize(path: &str, bytes: &[u8]) -> Result<Vec<u8>, ()> {
     }
     let tools = document["tools"].as_array_mut().ok_or(())?;
     for tool in tools.iter_mut() {
+        if tool["type"] == "http" {
+            variables(tool["headers"].as_array_mut().ok_or(())?, true)?;
+            continue;
+        }
         let command = tool["command"].as_str().ok_or(())?;
         if Path::new(command).is_relative() {
             let directory = Path::new(path).canonicalize().map_err(|_| ())?;
@@ -28,28 +32,38 @@ pub fn normalize(path: &str, bytes: &[u8]) -> Result<Vec<u8>, ()> {
                     .into_owned(),
             );
         }
-        for variable in tool["env"].as_array_mut().ok_or(())? {
-            let map = variable.as_object_mut().ok_or(())?;
-            if let Some(reference) = map.remove("env") {
-                if map.contains_key("value") {
-                    return Err(());
-                }
-                let value = std::env::var(reference.as_str().ok_or(())?).map_err(|_| ())?;
-                map.insert("value".into(), Value::String(value));
-            } else {
-                let name = map
-                    .get("name")
-                    .and_then(Value::as_str)
-                    .ok_or(())?
-                    .to_ascii_uppercase();
-                if ["KEY", "TOKEN", "SECRET", "PASSWORD"]
-                    .iter()
-                    .any(|part| name.contains(part))
-                {
-                    return Err(());
-                }
+        variables(tool["env"].as_array_mut().ok_or(())?, false)?;
+    }
+    serde_json::to_vec(tools).map_err(|_| ())
+}
+
+fn variables(variables: &mut [Value], headers: bool) -> Result<(), ()> {
+    for variable in variables {
+        let map = variable.as_object_mut().ok_or(())?;
+        if let Some(reference) = map.remove("env") {
+            if map.contains_key("value") {
+                return Err(());
+            }
+            let value = std::env::var(reference.as_str().ok_or(())?).map_err(|_| ())?;
+            map.insert("value".into(), Value::String(value));
+        } else {
+            let name = map
+                .get("name")
+                .and_then(Value::as_str)
+                .ok_or(())?
+                .to_ascii_uppercase();
+            if ["KEY", "TOKEN", "SECRET", "PASSWORD"]
+                .iter()
+                .any(|part| name.contains(part))
+                || (headers
+                    && matches!(
+                        name.as_str(),
+                        "AUTHORIZATION" | "PROXY-AUTHORIZATION" | "COOKIE"
+                    ))
+            {
+                return Err(());
             }
         }
     }
-    serde_json::to_vec(tools).map_err(|_| ())
+    Ok(())
 }

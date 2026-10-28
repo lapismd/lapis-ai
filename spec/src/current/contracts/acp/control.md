@@ -1,5 +1,11 @@
 # Controlling application boundary
 
+Typed HTTP MCP declarations travel only in the existing trusted
+`InvocationConfig`, through new/load and warm sessions. LAI-CTRL-001 retains the
+application boundary: no task or control frame can select a tool URL, headers,
+executable or credentials. Control versions and unknown-outcome behavior are
+unchanged; declaration encoding starts no listener or network request.
+
 `lapis-acp` has no message bus, no relay, no subscription and no author gate. Work
 arrives from a controlling application that spawned the process, over stdin, and
 results leave over stdout. There is no listener, no port, no token and no
@@ -11,6 +17,15 @@ gate, membership discovery, owner resolution and workflow-provenance checking
 have no analogue here and are not partially reimplemented.
 
 ## Requirements
+
+Interactive v2/v3 workers await output-queue handoff for at most 100ms while
+retaining only the current frame. The asynchronous update hook propagates this
+backpressure to the adapter read loop; queue/frame caps do not grow. Timeout,
+closed output or cancellation of a pending handoff latches coverage loss and
+cancels the worker. A later terminal record stays unknown and unusable. Exact
+scopes, permission IDs and original absolute budgets remain enforced. Legacy
+synchronous emission still fails immediately on a full queue
+(LAI-CTRL-003/008/009).
 
 | ID           | Requirement                                                                                                                                                                                                                                                |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -323,3 +338,8 @@ permission contracts remain unchanged by release preparation.
 
 The GitHub ownership transfer updates package documentation links to
 `lapismd/lapis-ai`; the owning ACP requirements and runtime behavior are unchanged.
+
+Control V3 applies the identified Codex compact-effort profile described in
+[runner configuration](runner.md#effort-has-three-encodings-in-the-wild).
+LAI-CTRL-009 keeps exact session scopes, explicit configuration and no replay;
+profile resolution grants no additional tools, process or working-directory authority.

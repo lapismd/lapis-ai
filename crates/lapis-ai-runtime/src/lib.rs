@@ -1,16 +1,29 @@
 //! Application-owned native helper clients. No durable orchestration or UI policy.
 #![forbid(unsafe_code)]
 mod acp;
+mod acp_session;
 mod agent;
 mod compute;
 mod launch;
+mod limits;
 mod process;
 mod resources;
 pub use acp::{AcpClient, AcpCommands};
+pub use acp_session::{
+    AcpSession, BatchProcessorFuture, FrameBatch, FrameInput, FramePublication, ProcessorFuture,
+    RequestInput, RequestProcessorFuture, SessionEvent, SessionOptions, SessionProcessor,
+    SessionRequest, SessionSnapshot,
+};
 pub use agent::AgentClient;
 pub use compute::ComputeClient;
+pub use compute_commands::ComputeCommands;
+pub use compute_connection::ComputeConnection;
 pub use lapis_ai_config::{Component, Config, Environment, Resolver};
+pub use lapis_ai_config::{ComputeFailure, ComputeInventory, ComputeModel};
 pub use launch::PreparedLaunch;
+pub use limits::{AcpOptions, ProcessLimits};
+mod compute_commands;
+mod compute_connection;
 pub use process::{NativeProcess, Sender};
 pub use resources::ResourceBundle;
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

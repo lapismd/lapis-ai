@@ -1,0 +1,8 @@
+[default]
+description = "No AI access by default. Hosts explicitly grant admitted ACP sessions."
+permissions = []
+
+[[set]]
+identifier = "acp-session"
+description = "Owned ACP workers scoped to the invoking window and current Rust admission."
+permissions = ["allow-targets", "allow-list", "allow-open", "allow-submit", "allow-snapshot", "allow-attach", "allow-detach", "allow-ack", "allow-close"]

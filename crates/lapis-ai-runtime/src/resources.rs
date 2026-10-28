@@ -32,6 +32,7 @@ impl ResourceBundle {
             .canonicalize()
             .map_err(|_| Error("bundle_unavailable"))?;
         let file = directory.join("runtime-manifest.toml");
+        regular(&directory, Path::new("runtime-manifest.toml"))?;
         if std::fs::metadata(&file)
             .map_err(|_| Error("bundle_unavailable"))?
             .len()
@@ -78,6 +79,7 @@ impl ResourceBundle {
         }
         let mut paths = std::collections::BTreeSet::new();
         for item in manifest.binary.iter().chain(&manifest.native_file) {
+            regular(&directory, &item.path)?;
             if !paths.insert(&item.path) {
                 return Err(Error("duplicate_bundle_path"));
             }
@@ -133,4 +135,27 @@ impl ResourceBundle {
             config.compute.native_runtime = Some(self.directory.join("native-runtime"));
         }
     }
+}
+
+fn regular(directory: &Path, relative: &Path) -> Result<()> {
+    let mut path = directory.to_path_buf();
+    let components = relative.components().collect::<Vec<_>>();
+    if components.is_empty() {
+        return Err(Error("invalid_bundle_path"));
+    }
+    for (index, component) in components.iter().enumerate() {
+        let std::path::Component::Normal(name) = component else {
+            return Err(Error("invalid_bundle_path"));
+        };
+        path.push(name);
+        let metadata =
+            std::fs::symlink_metadata(&path).map_err(|_| Error("bundle_file_unavailable"))?;
+        if metadata.file_type().is_symlink()
+            || (index + 1 == components.len() && !metadata.is_file())
+            || (index + 1 < components.len() && !metadata.is_dir())
+        {
+            return Err(Error("invalid_bundle_path"));
+        }
+    }
+    Ok(())
 }

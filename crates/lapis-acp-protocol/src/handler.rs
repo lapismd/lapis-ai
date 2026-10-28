@@ -37,6 +37,13 @@ pub trait SessionHandler {
     /// A `session/update` notification arrived.
     fn session_update(&mut self, _update: SessionUpdate) {}
 
+    /// Await bounded delivery before reading another update. Legacy handlers
+    /// keep their synchronous callback; asynchronous consumers may override this.
+    fn session_update_async(&mut self, update: SessionUpdate) -> impl Future<Output = ()> + Send {
+        self.session_update(update);
+        async {}
+    }
+
     /// The agent asked for approval.
     ///
     /// The default refuses by cancelling. A caller that wants unattended

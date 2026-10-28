@@ -16,6 +16,30 @@ impl std::fmt::Debug for PreparedLaunch {
     }
 }
 impl PreparedLaunch {
+    /// Copy only explicit host values; never inherit the parent process environment.
+    pub fn from_command(command: &std::process::Command) -> Result<Self> {
+        let text = |value: &std::ffi::OsStr| {
+            value
+                .to_str()
+                .map(str::to_owned)
+                .ok_or(Error("invalid_launch_text"))
+        };
+        let mut environment = BTreeMap::new();
+        for (name, value) in command.get_envs() {
+            if let Some(value) = value {
+                environment.insert(text(name)?, text(value)?);
+            }
+        }
+        Ok(Self {
+            executable: command.get_program().into(),
+            arguments: command.get_args().map(text).collect::<Result<_>>()?,
+            directory: command
+                .get_current_dir()
+                .ok_or(Error("working_directory_required"))?
+                .into(),
+            environment: Environment(environment),
+        })
+    }
     pub fn new(config: &Config, component: Component, resolver: &dyn Resolver) -> Result<Self> {
         config.validate()?;
         let executable = config

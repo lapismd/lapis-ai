@@ -4,13 +4,22 @@ use serde::Serialize;
 use serde_json::{Value, json};
 
 /// One environment variable for an MCP server.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Clone, PartialEq, Eq, Serialize)]
 pub struct EnvVar {
     /// Variable name.
     pub name: String,
     /// Variable value. A secret here travels in the frame, so callers should
     /// prefer the agent's inherited environment when a value is sensitive.
     pub value: String,
+}
+impl std::fmt::Debug for EnvVar {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter
+            .debug_struct("EnvVar")
+            .field("name", &self.name)
+            .field("value", &"[REDACTED]")
+            .finish()
+    }
 }
 
 impl EnvVar {

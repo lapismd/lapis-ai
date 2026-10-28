@@ -1,7 +1,7 @@
 /target/
-/node_modules/
+**/node_modules/
 /.local/
-/dist/
+**/dist/
 /spec/book/
 .env
 .env.*

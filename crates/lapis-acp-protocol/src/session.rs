@@ -2,8 +2,8 @@
 
 use serde_json::{Map, Value, json};
 
-use crate::content::McpServer;
 use crate::error::Error;
+use crate::mcp::McpServerConfig;
 use crate::stop_reason::StopReason;
 
 /// Where an adapter expects standing instructions to travel.
@@ -38,7 +38,7 @@ pub struct SessionNewRequest<'a> {
     /// configuration and never from a task document.
     pub cwd: &'a str,
     /// MCP servers to hand to the agent.
-    pub mcp_servers: Vec<McpServer>,
+    pub mcp_servers: Vec<McpServerConfig>,
     /// Optional standing instructions.
     pub system_prompt: Option<SystemPrompt<'a>>,
     /// Optional human-readable session title.

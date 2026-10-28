@@ -16,11 +16,13 @@
 
 #![forbid(unsafe_code)]
 
+mod codex_profile;
 pub mod fleet;
 mod fleet_wire;
 mod fleet_worker;
 pub mod input;
 pub mod interactive;
+mod interactive_events;
 pub mod interactive_handler;
 pub mod interactive_session;
 pub mod interactive_wire;

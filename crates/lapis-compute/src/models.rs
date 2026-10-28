@@ -9,6 +9,8 @@ use std::{
 struct Installed {
     primary: PathBuf,
     files: Vec<PathBuf>,
+    #[serde(default)]
+    name: Option<String>,
 }
 fn read() -> Result<BTreeMap<String, Installed>> {
     let path = Path::new("installed-models.json");
@@ -73,7 +75,14 @@ pub fn record(id: &str, primary: PathBuf, files: Vec<PathBuf>) -> Result<()> {
     }
     let mut index = read()?;
     ensure!(index.len() < 64 || index.contains_key(id), "model limit");
-    index.insert(id.into(), Installed { primary, files });
+    index.insert(
+        id.into(),
+        Installed {
+            primary,
+            files,
+            name: None,
+        },
+    );
     save(&index)
 }
 pub fn installed(id: &str) -> Result<PathBuf> {
@@ -111,6 +120,17 @@ pub async fn import(path: &str) -> Result<String> {
     hash.update(magic);
     let mut bytes = vec![0u8; 1024 * 1024];
     let mut length = 4u64;
+    let name = source
+        .file_name()
+        .and_then(|n| n.to_str())
+        .unwrap_or("GGUF model");
+    crate::progress::report(
+        name,
+        Some(name),
+        Some(length),
+        Some(metadata.len()),
+        "importing",
+    );
     loop {
         let n = input.read(&mut bytes).await?;
         if n == 0 {
@@ -120,6 +140,15 @@ pub async fn import(path: &str) -> Result<String> {
         ensure!(length <= metadata.len(), "source changed");
         hash.update(&bytes[..n]);
         output.write_all(&bytes[..n]).await?;
+        if length % (8 * 1024 * 1024) < 1024 * 1024 || length == metadata.len() {
+            crate::progress::report(
+                name,
+                Some(name),
+                Some(length),
+                Some(metadata.len()),
+                "importing",
+            );
+        }
     }
     ensure!(length == metadata.len(), "source changed");
     output.sync_all().await?;
@@ -128,6 +157,14 @@ pub async fn import(path: &str) -> Result<String> {
     let target = PathBuf::from(format!("imports/{id}.gguf"));
     tokio::fs::rename(temporary, &target).await?;
     record(&id, target.clone(), vec![target])?;
+    let mut index = read()?;
+    if let Some(item) = index.get_mut(&id) {
+        item.name = source
+            .file_name()
+            .and_then(|n| n.to_str())
+            .map(str::to_owned);
+    }
+    save(&index)?;
     Ok(id)
 }
 pub async fn remove(id: &str) -> Result<()> {

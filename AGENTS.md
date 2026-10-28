@@ -9,6 +9,10 @@ Protected changes update their owning requirement or record an explicit
 unchanged-contract confirmation, actual validation and milestone review in the
 same Jujutsu change. Commit each verified slice using an explicit message.
 
+Prefer `pnpm spec:search "<topic or ID>"` before any manual scan of spec/src;
+use --semantic for conceptual queries; rg is the fallback only when QMD is
+unavailable.
+
 New production Rust, TypeScript and scripts stay within 300 counted lines;
 tests stay within 500. Imported exceptions in `scripts/architecture-baseline.json`
 never grow. Do not introduce new exceptions. New tests live in separate files.
@@ -21,7 +25,17 @@ Record native/model/platform gaps separately from deterministic fixture passes.
 
 ACP owns no network, identity, credentials or durability. Applications own trust,
 workspace admission, secrets, context and history. No uncertain prompt is replayed.
-Tauri is a documented future adapter; Node and Python are development tools only.
+Tauri integration wraps the native runtime in its own adapter crate; application
+admission and history remain host-owned. Node and Python are development tools only.
+The private renderer client lives in `packages/ai`; consume its built public
+exports. Keep its generic entry independent of the optional Tauri transport.
 Release automation follows `spec/src/current/contracts/release.md`. Never merge
 version PRs or publish packages/tags without the governing release authorization.
 Do not install services, mutate user caches, or update source repositories.
+
+Portable validation runs in bounded Docker workers by default; see
+`docs/validation.md`. Register new validation scripts in the fail-closed routing
+inventory. Native/model/platform qualification remains explicit and separate.
+Use the default 4 CPU/12 GiB worker with one Cargo job, coordinate concurrent
+runs, and collect failures before removing only this checkout's completed runs.
+Never infer native or release qualification from portable Docker results.

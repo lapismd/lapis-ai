@@ -50,9 +50,25 @@ const config = defineConfig(tableRequirements(), {
         "^spec/src/current/(?:verification|progress)/",
       ],
       protected: [
-        "^(?:\\.github/|crates/|scripts/|examples/|Cargo|rust|package|pnpm|AGENTS|README|docs/|spec-validator|release\\.toml|CHANGELOG|\\.changeset/)",
+        "^(?:\\.github/|crates/|packages/|scripts/|examples/|Cargo|rust|package|pnpm|AGENTS|README|docs/|spec-validator|release\\.toml|CHANGELOG|\\.changeset/)",
       ],
       rules: [
+        {
+          pattern: "^crates/lapis-ai-app-tools/",
+          chapters: ["spec/src/current/contracts/app-tools.md"],
+        },
+        {
+          pattern: "^crates/lapis-ai-capture/",
+          chapters: ["spec/src/current/contracts/capture.md"],
+        },
+        {
+          pattern: "^packages/ai/",
+          chapters: ["spec/src/current/contracts/tauri.md"],
+        },
+        {
+          pattern: "^crates/(?:tauri-plugin-lapis-ai|lapis-ai-service)/",
+          chapters: ["spec/src/current/contracts/tauri.md"],
+        },
         {
           pattern: "^crates/lapis-acp-protocol/",
           chapters: ["spec/src/current/contracts/acp/protocol.md"],
@@ -97,6 +113,11 @@ const config = defineConfig(tableRequirements(), {
     first: true,
     build: true,
     lanes: [
+      {
+        name: "validation-routing",
+        command: "pnpm",
+        args: ["check:validation-routing"],
+      },
       { name: "release", command: "pnpm", args: ["release:check"] },
       { name: "format", command: "pnpm", args: ["format:check"] },
       { name: "architecture", command: "pnpm", args: ["check:architecture"] },

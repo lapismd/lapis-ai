@@ -1,0 +1,38 @@
+{
+  "name": "@lapismd/ai",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "Typed native ACP session client and optional Tauri transport",
+  "files": [
+    "dist",
+    "LICENSE.md",
+    "NOTICE.md",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tauri": {
+      "types": "./dist/tauri/index.d.ts",
+      "default": "./dist/tauri/index.js"
+    }
+  },
+  "peerDependencies": {
+    "@tauri-apps/api": "^2.12.4"
+  },
+  "peerDependenciesMeta": {
+    "@tauri-apps/api": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test tests/*.test.mjs"
+  }
+}

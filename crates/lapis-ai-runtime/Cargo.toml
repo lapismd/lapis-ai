@@ -15,6 +15,7 @@ description = "Supervised native ACP, agent and compute clients for Rust applica
 toml = "0.9"
 serde.workspace = true
 sha2 = "0.10"
+zeroize = "1"
 lapis-ai-config.workspace = true
 serde_json.workspace = true
 tokio.workspace = true
@@ -26,3 +27,9 @@ tempfile = "3"
 [[example]]
 name = "native-session"
 path = "examples/native-session.rs"
+[[example]]
+name = "agent-catalog"
+path = "examples/agent-catalog.rs"
+[[example]]
+name = "native-compute"
+path = "examples/native-compute.rs"

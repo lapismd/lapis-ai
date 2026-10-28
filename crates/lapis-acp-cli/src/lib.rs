@@ -118,6 +118,7 @@ fn run_task_command(task: &TaskSource, launch: &LaunchOptions) -> i32 {
     })
 }
 
+mod http_tools;
 mod tools;
 
 mod argument_values;

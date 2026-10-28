@@ -12,24 +12,85 @@ on:
 permissions:
   contents: read
   pull-requests: read
+  actions: read
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 env:
+  LAPIS_AI_VALIDATION_RUNTIME: native
   CARGO_BUILD_JOBS: 1
   CARGO_INCREMENTAL: 0
+  LAPIS_AI_TEST_ARCHIVE: .release/tests-canonical.tar.zst
 jobs:
-  validate:
-    name: Canonical checks
+  plan:
+    name: Plan
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 5
+    outputs:
+      cache_write: ${{ steps.cache.outputs.cache_write }}
+      source: ${{ steps.source.outputs.source }}
+    steps:
+      - id: source
+        run: |
+          source="${{ inputs.ref || github.event.pull_request.head.sha || github.sha }}"
+          echo "source=$source" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ steps.source.outputs.source }}
+          sparse-checkout: |
+            scripts/ci-cache.mjs
+          sparse-checkout-cone-mode: false
+      - id: cache
+        run: node scripts/ci-cache.mjs
+        env:
+          CI_EVENT: ${{ github.event_name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          CI_HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+  # Node-only: validators, mdBook, prettier, client, actionlint. No Rust.
+  # Cargo-backed spec:check lanes (fmt, boundaries, test:governance) run after
+  # fetch in rust-build. Prefer the Spec gate script locally before pushing.
+  spec:
+    name: Spec
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-          ref:
-            ${{ inputs.ref || github.event.pull_request.head.sha || github.sha
-            }}
+          ref: ${{ needs.plan.outputs.source }}
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
+        with:
+          tool: mdbook@0.5.4
+      - name: Install actionlint 1.7.12
+        run: |
+          curl --fail --silent --show-error --location https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/actionlint.tar.gz
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum --check
+          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
+          sudo install -m 755 /tmp/actionlint /usr/local/bin/actionlint
+      - run: pnpm install --frozen-lockfile --ignore-pnpmfile
+      - name: Select committed revision range
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CI_EVENT: ${{ github.event_name }}
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: node scripts/ci-range.mjs
+      - run: node scripts/ci-spec.mjs
+  # One feature-aligned compile: clippy, bins/examples, nextest archive, package.
+  rust-build:
+    name: Rust build
+    needs: [plan, spec]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.plan.outputs.source }}
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -45,38 +106,48 @@ jobs:
       - name: Native build prerequisites and ephemeral runner disk
         run: |
           sudo apt-get update
-          sudo apt-get install -y pkg-config libssl-dev
+          sudo apt-get install -y pkg-config libssl-dev libgtk-3-dev libwebkit2gtk-4.1-dev librsvg2-dev
           sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
           df -h .
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        id: rust-cache
+        with:
+          workspaces: . -> target
+          key: canonical-1.99-debug
+          save-if: ${{ needs.plan.outputs.cache_write == 'true' }}
+          cache-workspace-crates: "false"
+          cache-on-failure: "true"
+      - name: Report Rust cache match
+        run: 'echo "Rust cache exact hit: $CACHE_HIT" >> "$GITHUB_STEP_SUMMARY"'
+        env:
+          CACHE_HIT: ${{ steps.rust-cache.outputs.cache-hit }}
       - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
         with:
-          tool: mdbook@0.5.4
-      - name: Install actionlint 1.7.12
-        run: |
-          curl --fail --silent --show-error --location https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/actionlint.tar.gz
-          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum --check
-          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
-          sudo install -m 755 /tmp/actionlint /usr/local/bin/actionlint
+          tool: nextest@0.9.108
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
-      - name: Fetch locked Rust dependencies before offline checks
-        run: pnpm dev:cargo -- fetch --locked
-      - name: Select committed revision range
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          CI_EVENT: ${{ github.event_name }}
-          CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: node scripts/ci-range.mjs
-      - run: pnpm spec:check --base "$LAPIS_AI_CHECK_BASE" --head
-          "$LAPIS_AI_CHECK_HEAD"
-      - run: pnpm check
-      - run: pnpm test
+      - run: pnpm dev:cargo -- fetch --locked
+      # Cargo-backed pieces of pnpm spec:check; Node validators already ran in Spec.
+      - run: pnpm format:check
+      - run: pnpm check:boundaries
+      - run: pnpm test:governance
+      - run: pnpm check:clippy
       - run: pnpm build
-      - run: pnpm check:workflow
+      # Archive for evidence, then run in-tree. Cross-job archive execution cannot
+      # remap env!("CARGO_BIN_EXE_*") paths baked into integration tests.
+      - run: node scripts/ci-rust-tests.mjs archive
+      - run: node scripts/ci-rust-tests.mjs run
       - run: pnpm package:check
       - run: pnpm dev:cargo -- publish --workspace --exclude lapis-compute --locked --dry-run
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tests-canonical-${{ github.run_attempt }}
+          path: .release/tests-canonical.tar.zst*
+          if-no-files-found: error
+          retention-days: 3
+          include-hidden-files: true
   native:
     name: Native ${{ matrix.target }}
+    needs: [plan, spec]
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 90
     strategy:
@@ -90,7 +161,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ inputs.ref || github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ needs.plan.outputs.source }}
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -106,13 +177,40 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y pkg-config libssl-dev
+          sudo apt-get install -y pkg-config libssl-dev libgtk-3-dev libwebkit2gtk-4.1-dev librsvg2-dev
           sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
           df -h .
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        id: rust-cache
+        with:
+          workspaces: . -> target
+          key: native-${{ matrix.target }}-1.99-debug
+          save-if: ${{ needs.plan.outputs.cache_write == 'true' }}
+          cache-workspace-crates: "false"
+          cache-on-failure: "true"
+      - name: Report Rust cache match
+        run: 'echo "Rust cache exact hit: $CACHE_HIT" >> "$GITHUB_STEP_SUMMARY"'
+        env:
+          CACHE_HIT: ${{ steps.rust-cache.outputs.cache-hit }}
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
       - name: Require qualified ARM64 architecture
         run: test "$(uname -m)" = arm64 || test "$(uname -m)" = aarch64
-      - run: pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked
+      # Serialize helper peers on constrained ARM runners (jj-store native pattern).
+      - run: pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked -- --test-threads=1
+      # Rebuild with --bins --examples so production CLIs exist for qualification.
+      - run: pnpm build
       - name: Cold inference, permissions, Rust clients and native bundle
+        env:
+          LAPIS_AI_SKIP_NATIVE_BUILD: "1"
         run: bash scripts/native-qualification.sh debug
+  validate:
+    name: Canonical checks
+    needs: [plan, spec, rust-build]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require green Spec and Rust build jobs
+        run: |
+          test "${{ needs.spec.result }}" = success
+          test "${{ needs.rust-build.result }}" = success

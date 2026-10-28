@@ -5,6 +5,10 @@ const acp = /^lapis-acp(?:-|$)/;
 const forbidden =
   /^(nostr.*|reqwest|axum|hyper|rustls|rusqlite|sqlx.*|turso|tauri.*)$/;
 export const allowed = {
+  "lapis-ai-app-tools": [],
+  "lapis-ai-capture": [],
+  "tauri-plugin-lapis-ai": ["lapis-ai-runtime", "lapis-ai-service"],
+  "lapis-ai-service": ["lapis-ai-runtime"],
   "lapis-acp-protocol": [],
   "lapis-acp-agent": ["lapis-acp-protocol"],
   "lapis-acp-runner": ["lapis-acp-protocol", "lapis-acp-agent"],
@@ -46,12 +50,29 @@ export function boundaryErrors(packages, root = process.cwd()) {
         errors.push(`${pkg.name}: sibling checkout dependency`);
       if (dep.kind === "dev") continue;
       if (
-        (acp.test(pkg.name) || pkg.name === "lapis-ai-config") &&
-        forbidden.test(dep.name)
+        (acp.test(pkg.name) ||
+          pkg.name === "lapis-ai-config" ||
+          pkg.name === "lapis-ai-service" ||
+          pkg.name === "lapis-ai-capture" ||
+          pkg.name === "lapis-ai-app-tools") &&
+        forbidden.test(dep.name) &&
+        !(
+          pkg.name === "lapis-ai-capture" &&
+          dep.name === "rusqlite" &&
+          dep.optional === true &&
+          pkg.features?.["opencode-sqlite"]?.includes("dep:rusqlite")
+        )
       )
         errors.push(`${pkg.name}: excluded ${dep.name}`);
       if (names.has(dep.name) && !allowed[pkg.name].includes(dep.name))
         errors.push(`${pkg.name}: invalid edge ${dep.name}`);
+      if (
+        pkg.name === "lapis-ai-capture" &&
+        /^(?:jj|lapis-(?:acp|agent|compute|ai-runtime)|tokio)/.test(dep.name)
+      )
+        errors.push(
+          `${pkg.name}: source acquisition cannot depend on ${dep.name}`,
+        );
       if (dep.name.includes("testkit"))
         errors.push(`${pkg.name}: production depends on testkit`);
     }

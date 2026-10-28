@@ -56,10 +56,22 @@ Runner `env` is a table of ordinary strings or `{ env = "REFERENCE" }` values.
 It resolves only when the selected catalog is loaded for launch/discovery.
 Compiled-in runner identifiers cannot be shadowed.
 
-TOML MCP declarations use `[[tools]]`: `name`, `command`, `args` and `env`.
+TOML stdio MCP declarations use `[[tools]]`: `name`, `command`, `args` and `env`.
 Commands are file-relative. `env` is an array of `{ name = "NAME", value = "text" }`
 or `{ name = "NAME", env = "REFERENCE" }`. Credential-like variables require a
 reference. JSON catalogs and JSON MCP declarations remain compatibility inputs.
+For host-owned HTTP application tools, use `type = "http"`, `name`, `url` and
+`headers` instead. URLs must use a literal loopback IP with an explicit port;
+credentials, queries and fragments in URLs are refused. Header entries use
+`name` and `env` references, for example
+`headers = [{ name = "Authorization", env = "LAPIS_TOOL_AUTHORIZATION" }]`.
+The referenced value includes any authentication scheme such as `Bearer`.
+Parsing creates no listener and does not probe the endpoint. The controlling
+application owns HTTP authentication, approvals and the endpoint lifetime.
+Rust callers retain the existing `McpServer` stdio builder and convert it with
+`.into()` where session/runner configuration now accepts `McpServerConfig`;
+`HttpMcpServer` supplies the additional typed transport. Stdio wire output is
+unchanged.
 Only the trusted Rust host selects catalogs and tool executables. ACP permissions
 are an additional gate; tools are not safe to expose as arbitrary WebView launch
 commands.
@@ -99,3 +111,27 @@ A packaged host calls `ResourceBundle::load(bundle_directory)`, then
 platform, helper inventory, version, hashes and pinned native ABI. The Rust
 example also accepts `--bundle PATH`. Hash verification is integrity checking for
 an already admitted bundle; signing and distribution trust remain host-owned.
+
+## Hosts with existing orchestration
+
+Use `PreparedLaunch::from_command(&command)` after selecting the executable,
+explicit environment and working directory in trusted native code. No implicit
+parent environment is copied. A deliberately unset variable remains absent.
+`AcpClient::start_prepared_with_options(plan, AcpOptions::default())` retains
+host launch flags and fixes Control V3. `readiness()` provides the consumed
+ready frame; use `commands().send_frame(&frame)` for an already admitted V3
+frame. Existing `AcpSession` startup keeps its fixed argument contract.
+
+`AgentClient::models_prepared` and `metadata_prepared` accept prepared launches,
+`ProcessLimits` and a deadline. Input and output bounds are independent, allowing
+a bounded transcript with a smaller metadata result. Cancellation drops the
+owned process; hosts keep credential leases alive until cleanup.
+
+For live compute controls, start with `ComputeClient::start_prepared`, retain
+`commands()` independently and drive `next_event()` from one event owner. A
+command submission acknowledges transport only; correlated events establish
+completion. Do not run a competing event reader alongside convenience calls.
+`connection()` exposes a native-only endpoint and bearer token; `peer_endpoint`
+constructs a peer URL after the host admits that identity. These credentials
+are neither serializable nor visible in Debug output. The connection does not
+perform pairing or grant repository/tool access. Await `shutdown()` on exit.

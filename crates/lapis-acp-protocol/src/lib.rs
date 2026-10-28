@@ -38,6 +38,7 @@ pub mod error;
 pub mod frame;
 pub mod handler;
 pub mod initialize;
+pub mod mcp;
 pub mod permission;
 pub mod session;
 pub mod stop_reason;
@@ -59,6 +60,7 @@ pub use handler::{RecordingHandler, SessionHandler};
 pub use initialize::{
     ClientCapabilities, ClientInfo, InitializeResult, PROTOCOL_VERSION, SUPPORTED_VERSIONS,
 };
+pub use mcp::{HttpMcpServer, McpServerConfig};
 pub use permission::{PermissionDecision, PermissionOption, PermissionRequest};
 pub use session::{Session, SessionNewRequest, SystemPrompt, SystemPromptTransport};
 pub use stop_reason::StopReason;

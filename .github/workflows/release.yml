@@ -25,6 +25,7 @@ concurrency:
   group: release-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
 env:
+  LAPIS_AI_VALIDATION_RUNTIME: native
   CARGO_BUILD_JOBS: 1
   CARGO_INCREMENTAL: 0
 jobs:

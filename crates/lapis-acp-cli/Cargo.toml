@@ -23,6 +23,7 @@ path = "src/main.rs"
 
 [dependencies]
 toml = "0.9"
+url = "2.5"
 lapis-ai-config.workspace = true
 lapis-acp-protocol.workspace = true
 lapis-acp-agent.workspace = true
@@ -44,4 +45,5 @@ tokio = { workspace = true, features = [
 
 [dev-dependencies]
 lapis-acp-testkit.workspace = true
+lapis-ai-runtime.workspace = true
 tokio = { workspace = true, features = ["macros"] }
