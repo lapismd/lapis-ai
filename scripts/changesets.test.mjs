@@ -113,6 +113,10 @@ test("real Changesets prepare every governed Cargo version without editing canon
   assert.equal(checkRelease(root), next);
   assert.equal(json(root, "package.json").version, next);
   assert.equal(json(root, "packages/ai/package.json").version, next);
+  assert.match(
+    readFileSync(join(root, "packages/ai/CHANGELOG.md"), "utf8"),
+    new RegExp(`## ${next}`),
+  );
   const lock = manifest(root, "Cargo.lock").package;
   for (const name of allCrates)
     assert.equal(
@@ -147,4 +151,12 @@ test("arbitrary packages and mismatched coordinator versions are refused", async
   pkg.version = "8.0.0";
   writeFileSync(join(root, "package.json"), JSON.stringify(pkg));
   assert.throws(() => checkRelease(root), /versions must match/);
+});
+test("release check refuses a missing renderer client changelog", async (t) => {
+  const root = fixture(t);
+  rmSync(join(root, "packages/ai/CHANGELOG.md"));
+  assert.throws(
+    () => checkRelease(root),
+    /packages\/ai\/CHANGELOG\.md is required/,
+  );
 });

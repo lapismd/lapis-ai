@@ -31,7 +31,8 @@ sensitive under loaded hosted runners.
   peer spawns on Linux ARM previously failed open with `helper_spawn_failed`.
   Callers of the reusable CI workflow (Changesets and Release) must grant
   `actions: read` after CI declared that permission; without it the orchestrator
-  failed at startup and never opened the Version Packages PR.
+  failed at startup and never opened the Version Packages PR.   `release:check` requires `packages/ai/CHANGELOG.md` for the coordinated client
+  version so changesets/action cannot fail after version prep with ENOENT.
 
 ## Unchanged-contract confirmation
 
