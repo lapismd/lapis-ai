@@ -70,9 +70,12 @@ jobs:
         run: node scripts/ci-range.mjs
       - run: pnpm spec:check --base "$LAPIS_AI_CHECK_BASE" --head
           "$LAPIS_AI_CHECK_HEAD"
+      # Clippy, then one feature-aligned build, then tests that reuse those
+      # artifacts. A build-after-test with mismatched features recompiled the
+      # workspace a third time.
       - run: pnpm check
-      - run: pnpm test
       - run: pnpm build
+      - run: pnpm test
       - run: pnpm check:workflow
       - run: pnpm package:check
       - run: pnpm dev:cargo -- publish --workspace --exclude lapis-compute --locked --dry-run
@@ -114,6 +117,11 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
       - name: Require qualified ARM64 architecture
         run: test "$(uname -m)" = arm64 || test "$(uname -m)" = aarch64
+      # Build bins/examples once with the same features as the test lane so the
+      # following cargo test and qualification do not recompile the workspace.
+      - run: pnpm build
       - run: pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked
       - name: Cold inference, permissions, Rust clients and native bundle
+        env:
+          LAPIS_AI_SKIP_NATIVE_BUILD: "1"
         run: bash scripts/native-qualification.sh debug

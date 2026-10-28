@@ -4,13 +4,25 @@ set -euo pipefail
 export LAPIS_AI_VALIDATION_RUNTIME=native
 profile=${1:-debug}
 test "$profile" = debug || test "$profile" = release
-if [ "$profile" = debug ]; then
-  pnpm build
-else
-  pnpm dev:cargo -- build --workspace --release --locked
-  pnpm dev:cargo -- build -p lapis-ai-runtime --examples --release --locked
+# CI may build once with matching features before this script; skip a second
+# full Cargo compile when LAPIS_AI_SKIP_NATIVE_BUILD=1.
+if [ "${LAPIS_AI_SKIP_NATIVE_BUILD:-}" != "1" ]; then
+  if [ "$profile" = debug ]; then
+    pnpm build
+  else
+    # Release keeps default features so test-only helper bins stay out of the
+    # archived profile.
+    pnpm dev:cargo -- build --workspace --release --locked
+    pnpm dev:cargo -- build -p lapis-ai-runtime --examples --release --locked
+  fi
 fi
 bin="target/$profile"
+for helper in lapis-acp lapis-agent lapis-agent-tools lapis-compute; do
+  test -x "$bin/$helper"
+done
+test -x "$bin/examples/native-session"
+test -x "$bin/examples/agent-catalog"
+test -x "$bin/examples/native-compute"
 root=".local/ci-native-$profile"
 bundle="dist/qualified-$profile"
 python3 scripts/client-acceptance.py --acp "$bin/lapis-acp" --agent "$bin/lapis-agent" --tools "$bin/lapis-agent-tools" --client "$bin/examples/native-session" --catalog-client "$bin/examples/agent-catalog" --allow

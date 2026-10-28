@@ -1,5 +1,5 @@
 {
-  "build": "pnpm build:client && pnpm dev:cargo -- build --workspace --locked && pnpm dev:cargo -- build -p lapis-ai-runtime --examples --locked",
+  "build": "pnpm build:client && pnpm dev:cargo -- build --workspace --features lapis-agent/test-support --locked && pnpm dev:cargo -- build -p lapis-ai-runtime --examples --features lapis-agent/test-support --locked",
   "check": "pnpm check:validation-routing && pnpm spec:validate && pnpm release:check && pnpm check:architecture && pnpm check:boundaries && pnpm check:progress && pnpm check:upstream && pnpm format:check && pnpm check:client && pnpm dev:cargo -- clippy --workspace --all-targets --features lapis-agent/test-support --locked -- -D warnings",
   "test": "pnpm test:client && pnpm test:governance && pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked",
   "test:governance": "node --test scripts/*.test.mjs",
