@@ -130,7 +130,9 @@ Tooling qualification changes no service API, original M0–M5 gate or release
 permission. Portable results and actual inference remain separate evidence.
 
 Reusable CI callers (Changesets orchestration and Release) MUST grant at least
-the permissions CI declares, including `actions: read`. The private renderer
+the permissions CI declares, including `actions: write`. A failed Rust build or
+native job cancels that CI run, and one native matrix leg cancels the other, so
+the remaining long jobs do not continue. The private renderer
 client keeps a `packages/ai/CHANGELOG.md` so coordinated Version Packages PRs can
 open. Changesets tag qualification reuses successful exact-source CI for the
 candidate SHA and does not duplicate native acceptance when those checks are

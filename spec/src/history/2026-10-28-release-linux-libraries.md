@@ -23,6 +23,9 @@ step.
   the steer reply is accepted. PR CI otherwise returned `steer: no active run
 to steer` when the turn finished first.
 - `node scripts/ci-spec.mjs`
+- A failed Rust build or native job cancels the rest of that CI run. The native
+  matrix also uses fail-fast, so one platform does not keep running after the
+  other has failed.
 
 ## Unchanged-contract confirmation
 
