@@ -18,6 +18,10 @@ step.
 
 - Compared `.github/workflows/release.yml` with the native job in
   `.github/workflows/ci.yml`.
+- `pnpm dev:cargo -- test -p lapis-agent --test handoff_cap_steer --locked`
+  repeated after withholding the steered turn's next provider response until
+  the steer reply is accepted. PR CI otherwise returned `steer: no active run
+to steer` when the turn finished first.
 - `node scripts/ci-spec.mjs`
 
 ## Unchanged-contract confirmation

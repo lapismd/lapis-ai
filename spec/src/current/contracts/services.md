@@ -29,8 +29,11 @@ The agent declares its Reqwest query feature explicitly so provider pagination
 compiles outside the workspace. This preserves the already qualified request
 behavior and removes an accidental dependency on compute feature unification.
 Handoff-cap regressions that inject mid-turn steers MUST drain both the prompt
-result and the steer RPC reply; ending the drain on the prompt alone can miss
-an accepted steer under load without changing the wire contract.
+result and the steer RPC reply, and MUST withhold the steered turn's next
+provider response until that steer is accepted. Ending the drain on the prompt
+alone can miss an accepted steer under load, and releasing the provider first
+lets a fast runner clear the active run before the steer is processed. Neither
+changes the wire contract.
 
 The canonical GitHub owner is now `lapismd`. Service documentation and Cargo
 metadata follow this identity; providers, native pins and wire contracts remain
