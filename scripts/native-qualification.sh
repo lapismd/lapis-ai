@@ -5,8 +5,10 @@ export LAPIS_AI_VALIDATION_RUNTIME=native
 profile=${1:-debug}
 test "$profile" = debug || test "$profile" = release
 # CI may build once with matching features before this script; skip a second
-# full Cargo compile when LAPIS_AI_SKIP_NATIVE_BUILD=1.
-if [ "${LAPIS_AI_SKIP_NATIVE_BUILD:-}" != "1" ]; then
+# full Cargo compile when LAPIS_AI_SKIP_NATIVE_BUILD=1. If a required CLI is
+# still missing (cargo test can drop bin-only artifacts while leaving Fresh
+# fingerprints), clear and rebuild those packages.
+build_native() {
   if [ "$profile" = debug ]; then
     pnpm build
   else
@@ -15,21 +17,35 @@ if [ "${LAPIS_AI_SKIP_NATIVE_BUILD:-}" != "1" ]; then
     pnpm dev:cargo -- build --workspace --release --locked
     pnpm dev:cargo -- build -p lapis-ai-runtime --examples --release --locked
   fi
+}
+if [ "${LAPIS_AI_SKIP_NATIVE_BUILD:-}" != "1" ]; then
+  build_native
 fi
 bin="target/$profile"
 require() {
   if [ ! -x "$1" ]; then
     echo "missing executable: $1" >&2
     ls -la "$(dirname "$1")" >&2 || true
-    exit 1
+    return 1
   fi
 }
+need_build=0
 for helper in lapis-acp lapis-agent lapis-agent-tools lapis-compute; do
-  require "$bin/$helper"
+  require "$bin/$helper" || need_build=1
 done
-require "$bin/examples/native-session"
-require "$bin/examples/agent-catalog"
-require "$bin/examples/native-compute"
+require "$bin/examples/native-session" || need_build=1
+require "$bin/examples/agent-catalog" || need_build=1
+require "$bin/examples/native-compute" || need_build=1
+if [ "$need_build" = 1 ]; then
+  pnpm dev:cargo -- clean -p lapis-acp -p lapis-agent -p lapis-agent-tools -p lapis-compute -p lapis-ai-runtime
+  build_native
+  for helper in lapis-acp lapis-agent lapis-agent-tools lapis-compute; do
+    require "$bin/$helper" || exit 1
+  done
+  require "$bin/examples/native-session" || exit 1
+  require "$bin/examples/agent-catalog" || exit 1
+  require "$bin/examples/native-compute" || exit 1
+fi
 root=".local/ci-native-$profile"
 bundle="dist/qualified-$profile"
 python3 scripts/client-acceptance.py --acp "$bin/lapis-acp" --agent "$bin/lapis-agent" --tools "$bin/lapis-agent-tools" --client "$bin/examples/native-session" --catalog-client "$bin/examples/agent-catalog" --allow
