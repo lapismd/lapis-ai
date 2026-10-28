@@ -10,8 +10,10 @@
 | M5   | In progress | M4           | Hosted CI, Changesets, Cargo release automation and spec Pages         | [Organization transfer](../../history/2026-10-16-organization-transfer.md) | Verify hosted product CI and retain version PR #1 unmerged |
 
 [CI Cargo reuse](../../history/2026-10-28-ci-cargo-reuse.md) keeps one
-feature-aligned native compile before ARM qualification and replaces the
-wall-clock stream-delivery cap with a 2× coalescing bound. M5 stays open.
+feature-aligned native compile before ARM qualification, replaces the
+wall-clock stream-delivery cap with a 2× coalescing bound, and restores
+Changesets/Release reusable-CI caller permissions so Version Packages can open.
+M5 stays open.
 
 [Codex compact effort](../../history/2026-10-19-codex-effort.md) adds a
 private Control V3 compatibility profile for Notes local-file chat. Generic IDs,
