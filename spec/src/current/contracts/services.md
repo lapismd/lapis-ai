@@ -28,6 +28,9 @@ behavior or wire contract (LAI-LOCAL-001); required package inputs travel togeth
 The agent declares its Reqwest query feature explicitly so provider pagination
 compiles outside the workspace. This preserves the already qualified request
 behavior and removes an accidental dependency on compute feature unification.
+Handoff-cap regressions that inject mid-turn steers MUST drain both the prompt
+result and the steer RPC reply; ending the drain on the prompt alone can miss
+an accepted steer under load without changing the wire contract.
 
 The canonical GitHub owner is now `lapismd`. Service documentation and Cargo
 metadata follow this identity; providers, native pins and wire contracts remain

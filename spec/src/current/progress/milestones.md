@@ -17,7 +17,10 @@ Changesets/Release reusable-CI caller permissions so Version Packages can open.
 qualification await successful exact-source CI for the candidate SHA instead of
 duplicating native acceptance. [Merge queue and compute busy](../../history/2026-10-28-merge-queue-compute-busy.md)
 admits main only after required checks on the post-merge commit and releases the
-compute busy slot before terminal frames. M5 stays open.
+compute busy slot before terminal frames.
+[Release CI reuse and steer drain](../../history/2026-10-28-release-ci-reuse-steer.md)
+awaits exact-source CI for tagged releases and hardens the handoff-cap steer
+drain. M5 stays open.
 
 [Codex compact effort](../../history/2026-10-19-codex-effort.md) adds a
 private Control V3 compatibility profile for Notes local-file chat. Generic IDs,
