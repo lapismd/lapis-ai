@@ -30,9 +30,14 @@ version preparation checks and updates its manifest alongside Cargo versions.
 
 Changesets generates a Version Packages PR. A passing PR is merged by a human.
 The reviewed version on main then becomes a candidate for exact-source CI and
-one immutable `v<version>` tag. Existing tags are never moved. Release resumes
-against the existing tag and accepts existing crates only after checksum
-verification; retries publish only missing packages.
+one immutable `v<version>` tag. Changesets tag qualification MUST reuse a
+successful exact-source CI run for that candidate SHA (Plan, Spec, Rust build,
+both admitted native targets and Canonical checks) and MUST NOT duplicate native
+acceptance by re-invoking the reusable CI workflow when those checks are already
+green. When no non-`workflow_call` CI run exists for the main tip SHA,
+orchestration MAY dispatch CI once and await it. Existing tags are never moved.
+Release resumes against the existing tag and accepts existing crates only after
+checksum verification; retries publish only missing packages.
 
 Initial crates.io namespace creation needs explicit bootstrap credentials before
 per-crate trusted publishers can be configured. The optional bootstrap mode is
