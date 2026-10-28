@@ -29,6 +29,9 @@ sensitive under loaded hosted runners.
   Native jobs still test first with `--test-threads=1` (matches jj-store
   native), then rebuild with that lane before qualification. Parallel helper
   peer spawns on Linux ARM previously failed open with `helper_spawn_failed`.
+  Callers of the reusable CI workflow (Changesets and Release) must grant
+  `actions: read` after CI declared that permission; without it the orchestrator
+  failed at startup and never opened the Version Packages PR.
 
 ## Unchanged-contract confirmation
 

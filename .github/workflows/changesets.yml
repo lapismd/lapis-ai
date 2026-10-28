@@ -63,6 +63,10 @@ jobs:
   qualify:
     needs: version
     if: needs.version.outputs.candidate == 'true'
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read
     uses: ./.github/workflows/ci.yml
     with:
       ref: ${{ github.sha }}
