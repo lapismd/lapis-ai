@@ -214,7 +214,20 @@ if (
   if (mode === "checks")
     await dispatchVersionChecks(process.env.VERSION_PR, request);
   else if (mode === "await-ci") {
-    const result = await awaitQualifiedCi(process.env.GITHUB_SHA, request);
+    let sha = process.env.GITHUB_SHA;
+    if (process.env.RELEASE_TAG) {
+      const tag = process.env.RELEASE_TAG.replace(/^refs\/tags\//, "");
+      const ref = await request(`git/ref/tags/${tag}`);
+      if (ref.status !== 200) throw Error(`release tag ${tag} is missing`);
+      sha = ref.data.object?.sha;
+      if (ref.data.object?.type === "tag") {
+        const annotated = await request(`git/tags/${sha}`);
+        if (annotated.status !== 200)
+          throw Error(`annotated release tag ${tag} is unreadable`);
+        sha = annotated.data.object?.sha;
+      }
+    }
+    const result = await awaitQualifiedCi(sha, request);
     console.log(result);
   } else {
     const state = await releaseState();

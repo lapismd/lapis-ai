@@ -37,7 +37,9 @@ successful exact-source CI run for that candidate SHA (Plan, Spec, Rust build,
 both admitted native targets and Canonical checks) and MUST NOT duplicate native
 acceptance by re-invoking the reusable CI workflow when those checks are already
 green. When no non-`workflow_call` CI run exists for the main tip SHA,
-orchestration MAY dispatch CI once and await it. Existing tags are never moved.
+orchestration MAY dispatch CI once and await it. The Release workflow MUST reuse
+the same exact-source CI await for the immutable tag SHA and MUST NOT re-invoke
+the reusable CI workflow. Existing tags are never moved.
 Release resumes against the existing tag and accepts existing crates only after
 checksum verification; retries publish only missing packages.
 
