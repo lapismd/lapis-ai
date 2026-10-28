@@ -6,8 +6,7 @@ profile=${1:-debug}
 test "$profile" = debug || test "$profile" = release
 # CI may build once with matching features before this script; skip a second
 # full Cargo compile when LAPIS_AI_SKIP_NATIVE_BUILD=1. If a required CLI is
-# still missing (cargo test can drop bin-only artifacts while leaving Fresh
-# fingerprints), clear and rebuild those packages.
+# still missing, clear those packages and rebuild (defensive).
 build_native() {
   if [ "$profile" = debug ]; then
     pnpm build
