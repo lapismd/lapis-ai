@@ -3734,7 +3734,7 @@ checksum = "bf36173d4167ed999940f804952e6b08197cae5ad5d572eb4db150ce8ad5d58f"
 
 [[package]]
 name = "lapis-acp"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "lapis-acp-agent",
  "lapis-acp-control",
@@ -3752,7 +3752,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-acp-agent"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "lapis-acp-protocol",
  "serde",
@@ -3763,7 +3763,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-acp-control"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "lapis-acp-agent",
  "lapis-acp-protocol",
@@ -3777,7 +3777,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-acp-protocol"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -3787,7 +3787,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-acp-runner"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "lapis-acp-agent",
  "lapis-acp-protocol",
@@ -3800,7 +3800,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-acp-testkit"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "lapis-acp-agent",
  "lapis-acp-protocol",
@@ -3810,7 +3810,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-agent"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "arc-swap",
  "async-trait",
@@ -3841,7 +3841,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-agent-tools"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "nix 0.31.3",
  "serde_json",
@@ -3850,7 +3850,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-ai-app-tools"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -3860,7 +3860,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-ai-capture"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "rusqlite",
  "serde",
@@ -3871,7 +3871,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-ai-config"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -3881,7 +3881,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-ai-runtime"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "lapis-ai-config",
  "nix 0.31.3",
@@ -3897,7 +3897,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-ai-service"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "lapis-ai-runtime",
  "serde",
@@ -3909,7 +3909,7 @@ dependencies = [
 
 [[package]]
 name = "lapis-compute"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "axum",
@@ -8497,7 +8497,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-lapis-ai"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "lapis-ai-runtime",
  "lapis-ai-service",

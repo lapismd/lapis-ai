@@ -19,7 +19,7 @@ members = [
 resolver = "2"
 
   [workspace.package]
-  version = "0.1.1"
+  version = "0.2.0"
   edition = "2024"
   rust-version = "1.99.0"
   license = "Apache-2.0"
@@ -31,32 +31,38 @@ resolver = "2"
   [workspace.dependencies]
   serde_json = "1"
   thiserror = "2"
-  lapis-ai-runtime = { path = "crates/lapis-ai-runtime", version = "0.1.1" }
-  lapis-ai-service = { path = "crates/lapis-ai-service", version = "0.1.1" }
+
+    [workspace.dependencies.lapis-ai-runtime]
+    path = "crates/lapis-ai-runtime"
+    version = "0.2.0"
+
+    [workspace.dependencies.lapis-ai-service]
+    path = "crates/lapis-ai-service"
+    version = "0.2.0"
 
     [workspace.dependencies.lapis-acp-protocol]
     path = "crates/lapis-acp-protocol"
-    version = "0.1.1"
+    version = "0.2.0"
 
     [workspace.dependencies.lapis-acp-agent]
     path = "crates/lapis-acp-agent"
-    version = "0.1.1"
+    version = "0.2.0"
 
     [workspace.dependencies.lapis-acp-runner]
     path = "crates/lapis-acp-runner"
-    version = "0.1.1"
+    version = "0.2.0"
 
     [workspace.dependencies.lapis-acp-control]
     path = "crates/lapis-acp-control"
-    version = "0.1.1"
+    version = "0.2.0"
 
     [workspace.dependencies.lapis-acp-testkit]
     path = "crates/lapis-acp-testkit"
-    version = "0.1.1"
+    version = "0.2.0"
 
     [workspace.dependencies.lapis-ai-config]
     path = "crates/lapis-ai-config"
-    version = "0.1.1"
+    version = "0.2.0"
 
     [workspace.dependencies.serde]
     version = "1"
