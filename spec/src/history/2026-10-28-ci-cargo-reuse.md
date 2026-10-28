@@ -19,9 +19,11 @@ sensitive under loaded hosted runners.
   fetch. `format:check`, `boundaries`, and `test:governance` run after fetch in
   Rust build (offline Changesets prep and rustfmt need that bootstrap).
 - Rust build compiles once (clippy, feature-aligned workspace/examples, nextest
-  archive, package check, publish dry-run), uploads the archive, and test jobs
-  only run that archive. Re-running failed test jobs reuses the producer
-  artifact; dependency caches use `cache-on-failure` and same-repo `save-if`.
+  archive + in-tree nextest run, package check, publish dry-run). Archive
+  execution across jobs cannot remap `env!("CARGO_BIN_EXE_*")` paths, so tests
+  run on the builder. Dependency caches use `cache-on-failure` and same-repo
+  `save-if`. Declaring every runtime example restores builds after an explicit
+  `[[example]]` disabled Cargo auto-discovery.
 - Native jobs build once with matching features, then
   `LAPIS_AI_SKIP_NATIVE_BUILD=1` for qualification.
 

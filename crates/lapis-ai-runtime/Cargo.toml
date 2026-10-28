@@ -27,3 +27,9 @@ tempfile = "3"
 [[example]]
 name = "native-session"
 path = "examples/native-session.rs"
+[[example]]
+name = "agent-catalog"
+path = "examples/agent-catalog.rs"
+[[example]]
+name = "native-compute"
+path = "examples/native-compute.rs"

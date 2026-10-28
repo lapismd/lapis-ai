@@ -17,12 +17,19 @@ if [ "${LAPIS_AI_SKIP_NATIVE_BUILD:-}" != "1" ]; then
   fi
 fi
 bin="target/$profile"
+require() {
+  if [ ! -x "$1" ]; then
+    echo "missing executable: $1" >&2
+    ls -la "$(dirname "$1")" >&2 || true
+    exit 1
+  fi
+}
 for helper in lapis-acp lapis-agent lapis-agent-tools lapis-compute; do
-  test -x "$bin/$helper"
+  require "$bin/$helper"
 done
-test -x "$bin/examples/native-session"
-test -x "$bin/examples/agent-catalog"
-test -x "$bin/examples/native-compute"
+require "$bin/examples/native-session"
+require "$bin/examples/agent-catalog"
+require "$bin/examples/native-compute"
 root=".local/ci-native-$profile"
 bundle="dist/qualified-$profile"
 python3 scripts/client-acceptance.py --acp "$bin/lapis-acp" --agent "$bin/lapis-agent" --tools "$bin/lapis-agent-tools" --client "$bin/examples/native-session" --catalog-client "$bin/examples/agent-catalog" --allow

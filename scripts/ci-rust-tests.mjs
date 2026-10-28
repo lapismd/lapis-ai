@@ -27,20 +27,14 @@ export function archiveTests() {
   ]);
 }
 
-export function runArchive() {
-  cargo([
-    "nextest",
-    "run",
-    "--archive-file",
-    archive,
-    "--workspace-remap",
-    resolve("."),
-  ]);
+/** Same-tree run: required because tests bake env!("CARGO_BIN_EXE_*") paths. */
+export function runWorkspace() {
+  cargo(["nextest", "run", "--workspace", ...features]);
 }
 
 if (import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const mode = process.argv[2];
   if (mode === "archive") archiveTests();
-  else if (mode === "run") runArchive();
+  else if (mode === "run") runWorkspace();
   else throw new Error("Usage: ci-rust-tests.mjs archive|run");
 }
