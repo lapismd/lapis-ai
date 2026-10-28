@@ -130,7 +130,8 @@ Tooling qualification changes no service API, original M0–M5 gate or release
 permission. Portable results and actual inference remain separate evidence.
 
 Reusable CI callers (Changesets orchestration and Release) MUST grant at least
-the permissions CI declares, including `actions: read`. That is an unchanged
-LAI-REL-002–005 contract confirmation: publication still requires a human-merged
-Version Packages PR, immutable tags and scoped trusted publishing. Evidence:
-[CI Cargo reuse](../history/2026-10-28-ci-cargo-reuse.md).
+the permissions CI declares, including `actions: read`. The private renderer
+client keeps a `packages/ai/CHANGELOG.md` so coordinated Version Packages PRs can
+open. That is an unchanged LAI-REL-002–005 confirmation: publication still
+requires a human-merged Version Packages PR, immutable tags and scoped trusted
+publishing. Evidence: [CI Cargo reuse](../history/2026-10-28-ci-cargo-reuse.md).

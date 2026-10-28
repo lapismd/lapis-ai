@@ -76,6 +76,25 @@ export function checkRelease(root = ".") {
       throw Error(`${name}: internal registry version differs`);
   if (!read(root, "CHANGELOG.md").includes(`\n## ${selected}\n`))
     throw Error("current version missing from changelog");
+  // changesets/action reads each versioned package changelog when opening the
+  // Version Packages PR; a missing client file fails only after version prep.
+  let clientChangelog;
+  try {
+    clientChangelog = read(root, "packages/ai/CHANGELOG.md");
+  } catch (error) {
+    if (error && error.code === "ENOENT")
+      throw Error(
+        "packages/ai/CHANGELOG.md is required for coordinated Version Packages",
+      );
+    throw error;
+  }
+  if (
+    !clientChangelog.startsWith("# @lapismd/ai\n") ||
+    !clientChangelog.includes(`\n## ${selected}\n`)
+  )
+    throw Error(
+      "packages/ai/CHANGELOG.md must document the coordinated client version",
+    );
   return selected;
 }
 export async function pendingChangesets(root = ".") {

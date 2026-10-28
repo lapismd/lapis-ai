@@ -78,7 +78,24 @@ export async function prepareVersion(
     "--offline",
   ]);
   run("pnpm", ["install", "--lockfile-only", "--offline", "--ignore-pnpmfile"]);
-  run("pnpm", ["release:check"]);
+  const clientChangelog = join(root, "packages/ai/CHANGELOG.md");
+  const heading = `\n## ${selected}\n`;
+  if (!existsSync(clientChangelog)) {
+    writeFileSync(
+      clientChangelog,
+      `# @lapismd/ai\n\n## ${selected}\n\n### Patch Changes\n\n- Coordinated private renderer client version.\n`,
+    );
+  } else {
+    const body = read(root, "packages/ai/CHANGELOG.md");
+    if (!body.includes(heading))
+      writeFileSync(
+        clientChangelog,
+        body.replace(
+          /^# @lapismd\/ai\n/,
+          `# @lapismd/ai\n\n## ${selected}\n\n### Patch Changes\n\n- Coordinated private renderer client version.\n`,
+        ),
+      );
+  }
   run("pnpm", [
     "exec",
     "prettier",
@@ -88,8 +105,10 @@ export async function prepareVersion(
     "pnpm-lock.yaml",
     "README.md",
     "CHANGELOG.md",
+    "packages/ai/CHANGELOG.md",
     ...allCrates.map((name) => `${cratePath(name)}/README.md`),
   ]);
+  run("pnpm", ["release:check"]);
   return { changed: true, version: selected };
 }
 if (
