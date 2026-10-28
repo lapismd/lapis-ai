@@ -9,6 +9,8 @@
     "dev:cargo": "node scripts/managed-cargo.mjs",
     "build": "node scripts/validation.mjs run build",
     "check": "node scripts/validation.mjs run check",
+    "check:governance": "node scripts/validation.mjs run check:governance",
+    "check:clippy": "node scripts/validation.mjs run check:clippy",
     "test": "node scripts/validation.mjs run test",
     "test:governance": "node scripts/validation.mjs run test:governance",
     "check:architecture": "node scripts/validation.mjs run check:architecture",

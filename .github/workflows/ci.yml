@@ -12,6 +12,7 @@ on:
 permissions:
   contents: read
   pull-requests: read
+  actions: read
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -19,18 +20,79 @@ env:
   LAPIS_AI_VALIDATION_RUNTIME: native
   CARGO_BUILD_JOBS: 1
   CARGO_INCREMENTAL: 0
+  LAPIS_AI_TEST_ARCHIVE: .release/tests-canonical.tar.zst
 jobs:
-  validate:
-    name: Canonical checks
+  plan:
+    name: Plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      cache_write: ${{ steps.cache.outputs.cache_write }}
+      source: ${{ steps.source.outputs.source }}
+    steps:
+      - id: source
+        run: |
+          source="${{ inputs.ref || github.event.pull_request.head.sha || github.sha }}"
+          echo "source=$source" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ steps.source.outputs.source }}
+          sparse-checkout: |
+            scripts/ci-cache.mjs
+          sparse-checkout-cone-mode: false
+      - id: cache
+        run: node scripts/ci-cache.mjs
+        env:
+          CI_EVENT: ${{ github.event_name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          CI_HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+  # Spec and Node governance only. No Rust toolchain, fetch, or compile.
+  spec:
+    name: Spec and governance
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.plan.outputs.source }}
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --ignore-pnpmfile
+      - name: Select committed revision range
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CI_EVENT: ${{ github.event_name }}
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: node scripts/ci-range.mjs
+      - run: pnpm spec:check --base "$LAPIS_AI_CHECK_BASE" --head
+          "$LAPIS_AI_CHECK_HEAD"
+      - run: pnpm check:governance
+      - run: pnpm exec prettier --check .
+      - run: pnpm check:client
+      - run: pnpm test:governance
+      - run: pnpm test:client
+      - name: Install actionlint 1.7.12
+        run: |
+          curl --fail --silent --show-error --location https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/actionlint.tar.gz
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum --check
+          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
+          sudo install -m 755 /tmp/actionlint /usr/local/bin/actionlint
+      - run: pnpm check:workflow
+  # One feature-aligned compile: clippy, bins/examples, nextest archive, package.
+  rust-build:
+    name: Rust build
+    needs: [plan, spec]
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 0
-          ref:
-            ${{ inputs.ref || github.event.pull_request.head.sha || github.sha
-            }}
+          ref: ${{ needs.plan.outputs.source }}
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -50,37 +112,66 @@ jobs:
           sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
           df -h .
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        id: rust-cache
+        with:
+          workspaces: . -> target
+          key: canonical-1.99-debug
+          save-if: ${{ needs.plan.outputs.cache_write == 'true' }}
+          cache-workspace-crates: "false"
+          cache-on-failure: "true"
+      - name: Report Rust cache match
+        run: 'echo "Rust cache exact hit: $CACHE_HIT" >> "$GITHUB_STEP_SUMMARY"'
+        env:
+          CACHE_HIT: ${{ steps.rust-cache.outputs.cache-hit }}
       - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
         with:
-          tool: mdbook@0.5.4
-      - name: Install actionlint 1.7.12
-        run: |
-          curl --fail --silent --show-error --location https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/actionlint.tar.gz
-          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum --check
-          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
-          sudo install -m 755 /tmp/actionlint /usr/local/bin/actionlint
+          tool: nextest@0.9.108
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
-      - name: Fetch locked Rust dependencies before offline checks
-        run: pnpm dev:cargo -- fetch --locked
-      - name: Select committed revision range
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          CI_EVENT: ${{ github.event_name }}
-          CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: node scripts/ci-range.mjs
-      - run: pnpm spec:check --base "$LAPIS_AI_CHECK_BASE" --head
-          "$LAPIS_AI_CHECK_HEAD"
-      # Clippy, then one feature-aligned build, then tests that reuse those
-      # artifacts. A build-after-test with mismatched features recompiled the
-      # workspace a third time.
-      - run: pnpm check
+      - run: pnpm dev:cargo -- fetch --locked
+      - run: pnpm format:check
+      - run: pnpm check:boundaries
+      - run: pnpm check:clippy
       - run: pnpm build
-      - run: pnpm test
-      - run: pnpm check:workflow
+      - run: node scripts/ci-rust-tests.mjs archive
       - run: pnpm package:check
       - run: pnpm dev:cargo -- publish --workspace --exclude lapis-compute --locked --dry-run
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tests-canonical-${{ github.run_attempt }}
+          path: .release/tests-canonical.tar.zst*
+          if-no-files-found: error
+          retention-days: 3
+          include-hidden-files: true
+  # Re-run failed tests without rebuilding: download the archive and execute.
+  rust-test:
+    name: Rust tests
+    needs: [plan, rust-build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.plan.outputs.source }}
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
+        with:
+          toolchain: "1.99.0"
+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
+        with:
+          tool: nextest@0.9.108
+      - run: pnpm install --frozen-lockfile --ignore-pnpmfile
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v6.0.0
+        with:
+          name: tests-canonical-${{ github.run_attempt }}
+          path: .release
+      - run: node scripts/ci-rust-tests.mjs run
   native:
     name: Native ${{ matrix.target }}
+    needs: [plan, spec]
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 90
     strategy:
@@ -94,7 +185,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ inputs.ref || github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ needs.plan.outputs.source }}
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -114,14 +205,35 @@ jobs:
           sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
           df -h .
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        id: rust-cache
+        with:
+          workspaces: . -> target
+          key: native-${{ matrix.target }}-1.99-debug
+          save-if: ${{ needs.plan.outputs.cache_write == 'true' }}
+          cache-workspace-crates: "false"
+          cache-on-failure: "true"
+      - name: Report Rust cache match
+        run: 'echo "Rust cache exact hit: $CACHE_HIT" >> "$GITHUB_STEP_SUMMARY"'
+        env:
+          CACHE_HIT: ${{ steps.rust-cache.outputs.cache-hit }}
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
       - name: Require qualified ARM64 architecture
         run: test "$(uname -m)" = arm64 || test "$(uname -m)" = aarch64
-      # Build bins/examples once with the same features as the test lane so the
-      # following cargo test and qualification do not recompile the workspace.
       - run: pnpm build
       - run: pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked
       - name: Cold inference, permissions, Rust clients and native bundle
         env:
           LAPIS_AI_SKIP_NATIVE_BUILD: "1"
         run: bash scripts/native-qualification.sh debug
+  validate:
+    name: Canonical checks
+    needs: [plan, spec, rust-build, rust-test]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require green producer and consumer jobs
+        run: |
+          test "${{ needs.spec.result }}" = success
+          test "${{ needs.rust-build.result }}" = success
+          test "${{ needs.rust-test.result }}" = success

@@ -63,3 +63,4 @@
 - [Host execution backend](history/2026-10-22-host-execution.md)
 
 - [Docker portable validation](history/2026-10-25-docker-validation.md)
+- [CI Cargo reuse](history/2026-10-28-ci-cargo-reuse.md)

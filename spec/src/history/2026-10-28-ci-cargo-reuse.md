@@ -15,13 +15,18 @@ sensitive under loaded hosted runners.
 ## Commands and source results
 
 - Focused: `LAPIS_AI_VALIDATION_RUNTIME=native pnpm dev:cargo -- test -p lapis-ai-service --test stream_cadence --locked`
-- Workflow and build lane share `lapis-agent/test-support` so native CI builds
-  once, tests against those artifacts, and skips the second qualification compile.
-- `LAPIS_AI_SKIP_NATIVE_BUILD=1` requires the production helpers and examples
-  already present under `target/<profile>`.
+- Hosted CI runs `spec:check` and Node governance first with no Rust toolchain,
+  fetch, or compile. `cargo metadata --no-deps` (boundaries) and `cargo fmt`
+  stay in the Rust build job.
+- Rust build compiles once (clippy, feature-aligned workspace/examples, nextest
+  archive, package check, publish dry-run), uploads the archive, and test jobs
+  only run that archive. Re-running failed test jobs reuses the producer
+  artifact; dependency caches use `cache-on-failure` and same-repo `save-if`.
+- Native jobs build once with matching features, then
+  `LAPIS_AI_SKIP_NATIVE_BUILD=1` for qualification.
 
 ## Unchanged-contract confirmation
 
 Hosted native qualification still runs cold client, compute and bundle
-acceptance on both admitted ARM64 targets. Canonical lanes still run clippy,
-build, test, package check and publish dry-run.
+acceptance on both admitted ARM64 targets. Canonical aggregator still requires
+green spec, Rust build and Rust test jobs.
