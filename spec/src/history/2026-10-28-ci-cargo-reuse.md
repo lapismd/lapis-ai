@@ -15,9 +15,9 @@ sensitive under loaded hosted runners.
 ## Commands and source results
 
 - Focused: `LAPIS_AI_VALIDATION_RUNTIME=native pnpm dev:cargo -- test -p lapis-ai-service --test stream_cadence --locked`
-- Hosted CI runs `spec:check` and Node governance first with no Rust toolchain,
-  fetch, or compile. `cargo metadata --no-deps` (boundaries) and `cargo fmt`
-  stay in the Rust build job.
+- Hosted CI runs `node scripts/ci-spec.mjs` first with no Rust toolchain or
+  fetch. `format:check`, `boundaries`, and `test:governance` run after fetch in
+  Rust build (offline Changesets prep and rustfmt need that bootstrap).
 - Rust build compiles once (clippy, feature-aligned workspace/examples, nextest
   archive, package check, publish dry-run), uploads the archive, and test jobs
   only run that archive. Re-running failed test jobs reuses the producer

@@ -63,11 +63,20 @@ Formatting/Changeset authoring, spec search, artifact staging and `dev:cargo`
 remain native commands. The existing provisioned CI explicitly selects native
 execution to preserve its artifact paths. `scripts/native-qualification.sh`
 also selects native execution before testing actual providers/models and bundles.
-Hosted CI runs `spec:check` and Node governance before any Rust toolchain or
-`cargo fetch`. Rust build archives tests with nextest; the Rust test job only
-runs that archive so failed-job re-runs skip compile. Hosted native jobs build
-once with the same Cargo features as the test lane, then set
-`LAPIS_AI_SKIP_NATIVE_BUILD=1` so qualification does not recompile.
+Hosted CI runs `node scripts/ci-spec.mjs` first (validators, mdBook, Node
+governance, prettier, client, actionlint) with no Rust toolchain or fetch.
+After `cargo fetch`, Rust build runs the Cargo-backed `spec:check` lanes
+(`format:check`, `boundaries`, `test:governance`), compiles once, and archives
+tests with nextest so failed-job re-runs skip compile. Hosted native jobs build
+once with matching features, then set `LAPIS_AI_SKIP_NATIVE_BUILD=1`. Before
+pushing CI or spec changes, run the Spec gate locally:
+
+```sh
+export LAPIS_AI_CHECK_BASE=$(git merge-base HEAD origin/main)
+export LAPIS_AI_CHECK_HEAD=$(git rev-parse HEAD)
+node scripts/ci-spec.mjs
+```
+
 Portable Docker checks do not replace macOS Metal, C++ runtime, real-model,
 provider, native Tauri, release or broader platform qualification. No publication
 or execution-backend change is authorized by this development tooling.

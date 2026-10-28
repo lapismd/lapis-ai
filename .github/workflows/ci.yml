@@ -46,9 +46,11 @@ jobs:
           CI_EVENT: ${{ github.event_name }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           CI_HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-  # Spec and Node governance only. No Rust toolchain, fetch, or compile.
+  # Node-only: validators, mdBook, prettier, client, actionlint. No Rust.
+  # Cargo-backed spec:check lanes (fmt, boundaries, test:governance) run after
+  # fetch in rust-build. Prefer the Spec gate script locally before pushing.
   spec:
-    name: Spec and governance
+    name: Spec
     needs: plan
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -62,6 +64,15 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
+        with:
+          tool: mdbook@0.5.4
+      - name: Install actionlint 1.7.12
+        run: |
+          curl --fail --silent --show-error --location https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/actionlint.tar.gz
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum --check
+          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
+          sudo install -m 755 /tmp/actionlint /usr/local/bin/actionlint
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
       - name: Select committed revision range
         env:
@@ -69,20 +80,7 @@ jobs:
           CI_EVENT: ${{ github.event_name }}
           CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: node scripts/ci-range.mjs
-      - run: pnpm spec:check --base "$LAPIS_AI_CHECK_BASE" --head
-          "$LAPIS_AI_CHECK_HEAD"
-      - run: pnpm check:governance
-      - run: pnpm exec prettier --check .
-      - run: pnpm check:client
-      - run: pnpm test:governance
-      - run: pnpm test:client
-      - name: Install actionlint 1.7.12
-        run: |
-          curl --fail --silent --show-error --location https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/actionlint.tar.gz
-          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum --check
-          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
-          sudo install -m 755 /tmp/actionlint /usr/local/bin/actionlint
-      - run: pnpm check:workflow
+      - run: node scripts/ci-spec.mjs
   # One feature-aligned compile: clippy, bins/examples, nextest archive, package.
   rust-build:
     name: Rust build
@@ -128,8 +126,10 @@ jobs:
           tool: nextest@0.9.108
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
       - run: pnpm dev:cargo -- fetch --locked
+      # Cargo-backed pieces of pnpm spec:check; Node validators already ran in Spec.
       - run: pnpm format:check
       - run: pnpm check:boundaries
+      - run: pnpm test:governance
       - run: pnpm check:clippy
       - run: pnpm build
       - run: node scripts/ci-rust-tests.mjs archive
@@ -164,7 +164,7 @@ jobs:
         with:
           tool: nextest@0.9.108
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v6.0.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: tests-canonical-${{ github.run_attempt }}
           path: .release
