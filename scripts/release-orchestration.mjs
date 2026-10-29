@@ -71,7 +71,7 @@ export async function publishTag(state, sha, request) {
     "POST",
     {
       ref: state.tag,
-      inputs: { tag: state.tag, publish_crates: true },
+      inputs: { tag: state.tag },
     },
   );
   if (dispatch.status !== 204)

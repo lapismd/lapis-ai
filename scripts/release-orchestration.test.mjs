@@ -49,7 +49,7 @@ test("new_version_dispatches_the_exact_qualified_immutable_tag", async () => {
   assert.deepEqual(calls[2], [
     "actions/workflows/release.yml/dispatches",
     "POST",
-    { ref: state.tag, inputs: { tag: state.tag, publish_crates: true } },
+    { ref: state.tag, inputs: { tag: state.tag } },
   ]);
 });
 test("uncertain_tag_lookup_and_conflicting_races_block_publication", async () => {

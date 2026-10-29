@@ -83,7 +83,7 @@ jobs:
           CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: node scripts/ci-range.mjs
       - run: node scripts/ci-spec.mjs
-  # One feature-aligned compile: clippy, bins/examples, nextest archive, package.
+  # Clippy, then one feature-aligned compile (bins/examples/tests + archive).
   rust-build:
     name: Rust build
     needs: [plan, spec]
@@ -132,11 +132,12 @@ jobs:
       - run: pnpm format:check
       - run: pnpm check:boundaries
       - run: pnpm test:governance
+      # Clippy is a separate rustc driver wave; keep it before the one normal
+      # feature-aligned compile that emits bins, examples, and test targets.
       - run: pnpm check:clippy
-      - run: pnpm build
-      # Archive for evidence, then run in-tree. Cross-job archive execution cannot
-      # remap env!("CARGO_BIN_EXE_*") paths baked into integration tests.
-      - run: node scripts/ci-rust-tests.mjs archive
+      # One cargo build --bins --examples --tests, then nextest archive (reuse).
+      # Cross-job archive execution cannot remap env!("CARGO_BIN_EXE_*") paths.
+      - run: node scripts/ci-rust-tests.mjs prepare
       - run: node scripts/ci-rust-tests.mjs run
       - run: pnpm package:check
       - run: pnpm dev:cargo -- publish --workspace --exclude lapis-compute --locked --dry-run
@@ -202,10 +203,10 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
       - name: Require qualified ARM64 architecture
         run: test "$(uname -m)" = arm64 || test "$(uname -m)" = aarch64
-      # Serialize helper peers on constrained ARM runners (jj-store native pattern).
+      # One feature-aligned compile (bins/examples/tests), then tests reuse it.
+      # Serialize helper peers on constrained ARM runners (jj-store pattern).
+      - run: pnpm dev:cargo -- build --workspace --bins --examples --tests --features lapis-agent/test-support --locked
       - run: pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked -- --test-threads=1
-      # Rebuild with --bins --examples so production CLIs exist for qualification.
-      - run: pnpm build
       - name: Cold inference, permissions, Rust clients and native bundle
         env:
           LAPIS_AI_SKIP_NATIVE_BUILD: "1"

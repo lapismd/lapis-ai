@@ -15,6 +15,18 @@ function cargo(args) {
   if (result.status) process.exit(result.status);
 }
 
+/** One feature-aligned compile for bins, examples, and test targets. */
+export function prepareWorkspace() {
+  cargo([
+    "build",
+    "--workspace",
+    "--bins",
+    "--examples",
+    "--tests",
+    ...features,
+  ]);
+}
+
 export function archiveTests() {
   mkdirSync(".release", { recursive: true });
   cargo([
@@ -32,9 +44,16 @@ export function runWorkspace() {
   cargo(["nextest", "run", "--workspace", ...features]);
 }
 
+/** Build once, then archive; nextest reuses the prepared artifacts. */
+export function prepareAndArchive() {
+  prepareWorkspace();
+  archiveTests();
+}
+
 if (import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const mode = process.argv[2];
-  if (mode === "archive") archiveTests();
+  if (mode === "prepare") prepareAndArchive();
+  else if (mode === "archive") archiveTests();
   else if (mode === "run") runWorkspace();
-  else throw new Error("Usage: ci-rust-tests.mjs archive|run");
+  else throw new Error("Usage: ci-rust-tests.mjs prepare|archive|run");
 }

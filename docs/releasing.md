@@ -36,56 +36,31 @@ Create a protected **release** environment restricted to version tags and a
 maintainer approval. Credentials belong only in that environment. Never add
 credentials to TOML, checkout files, artifacts or command arguments.
 
-## First Cargo publication
+## Crate consumption
 
-New crate names require an initial authenticated namespace creation before
-crates.io trusted publishers can be configured. This repository does not carry
-or create a token during setup.
+Downstream repositories consume the crates from the git repository. The Release
+workflow does not publish them to crates.io. Depend on a tag or revision:
 
-1. Review and merge the generated initial `0.1.1` version PR when release is
-   authorized. CI qualifies its exact main revision; orchestration creates the
-   immutable `v0.1.1` tag. An ordinary OIDC attempt without configured publishers
-   can stop without publishing; no token fallback occurs.
-2. For the explicit initial bootstrap, add a narrowly scoped crates.io API token
-   as environment secret `CARGO_REGISTRY_BOOTSTRAP_TOKEN`. Dispatch **Release**
-   with `tag=v0.1.1`, `publish_crates=true`, `bootstrap=true`, then approve the
-   protected job. Dispatch from the tag as well as selecting its input, because
-   the environment admits only version-tag workflow runs. The identity guard
-   refuses this mode for other versions or events. Delete this secret after initial namespace creation.
-3. Configure a trusted publisher on every admitted crate for owner `lapismd`,
-   repository `lapis-ai`, workflow `release.yml`, environment `release`.
-   Future publication exchanges GitHub OIDC for a short-lived scoped token.
-
-The explicit initial dispatch is:
-
-```sh
-gh workflow run release.yml --repo lapismd/lapis-ai --ref v0.1.1 -f tag=v0.1.1 -F publish_crates=true -F bootstrap=true
+```toml
+lapis-ai-runtime = { git = "https://github.com/lapismd/lapis-ai", tag = "v0.2.0" }
 ```
 
-Cancel any earlier blocked release run before dispatching its retry; release runs
-for the same tag are serialized.
-
-The compute helper stays unpublished while its pinned Mesh SDK has no matching
-registry version. Do not replace the SDK just to make Cargo publication pass.
+The compute helper stays out of crates.io while its pinned Mesh SDK has no
+matching registry version.
 
 ## Immutable release and retry
 
-After human merge, orchestration runs reusable exact-source CI before creating
-one `v<version>` tag and dispatching Release. Release verifies tag/version,
+After human merge, orchestration runs exact-source CI before creating one
+`v<version>` tag and dispatching Release. Release verifies tag/version,
 checkout identity, main ancestry, no pending notes and coordinated metadata.
 Supported ARM64 jobs qualify real inference, permissions, clients and the staged
 release bundle. Artifacts retain TOML inventories, SHA-256 checksums and licenses.
 
-The protected Cargo job packages the ten admitted crates, compares already
-published bytes, then publishes missing crates in Cargo dependency order.
-Checksum mismatch stops the release. The job also installs and runs the published
-ACP executable. GitHub release assets are uploaded only after registry acceptance;
-existing assets must match byte-for-byte. Tags and differing assets are never
-replaced.
+GitHub release assets are uploaded after those archives. Existing assets must
+match byte-for-byte. Tags and differing assets are never replaced.
 
 Resume a failed release by dispatching **Release** against its existing tag.
-`publish_crates=false` is verification-only and still requires every registry
-version to exist. Do not delete/recreate a release tag or broaden token access to
-work around a mismatch. Native archives currently support macOS ARM64 Metal and
-Linux ARM64 CPU (glibc 2.38+); model weights are never included. Signing,
+Do not delete or recreate a release tag. Native archives currently support
+macOS ARM64 Metal and Linux ARM64 CPU (glibc 2.38+); model weights are never
+included. Signing,
 notarization, installers and other platform profiles remain separate work.
