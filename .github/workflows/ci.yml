@@ -14,7 +14,7 @@ on:
 permissions:
   contents: read
   pull-requests: read
-  actions: read
+  actions: write
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -147,13 +147,18 @@ jobs:
           if-no-files-found: error
           retention-days: 3
           include-hidden-files: true
+      - name: Stop the rest of this workflow
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run cancel "${{ github.run_id }}"
   native:
     name: Native ${{ matrix.target }}
     needs: [plan, spec]
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 90
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
           - runner: ubuntu-24.04-arm
@@ -205,6 +210,11 @@ jobs:
         env:
           LAPIS_AI_SKIP_NATIVE_BUILD: "1"
         run: bash scripts/native-qualification.sh debug
+      - name: Stop the rest of this workflow
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run cancel "${{ github.run_id }}"
   validate:
     name: Canonical checks
     needs: [plan, spec, rust-build]

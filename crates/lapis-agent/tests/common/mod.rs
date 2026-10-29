@@ -13,6 +13,7 @@
 
 use std::collections::VecDeque;
 use std::process::Stdio;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex as StdMutex};
 use std::time::Duration;
 
@@ -26,19 +27,45 @@ pub struct CapturingLlm {
     pub captured: Arc<Mutex<Vec<Value>>>,
 }
 
+/// Shared one-shot so only the held provider POST waits, and only once.
+type PostHold = Arc<Mutex<Option<oneshot::Receiver<()>>>>;
+
 pub async fn spawn_capturing_llm(responses: Vec<Value>) -> CapturingLlm {
     spawn_capturing_llm_with_status(responses.into_iter().map(|v| (200u16, v)).collect()).await
+}
+
+/// Serve `responses` in order, but withhold POST number `hold_post` (1-based,
+/// `GET /models` excluded) until `release` fires. A fast runner otherwise
+/// finishes the turn before a steer sent after `activeRunId` is processed.
+pub async fn spawn_capturing_llm_holding_post(
+    responses: Vec<Value>,
+    hold_post: usize,
+    release: oneshot::Receiver<()>,
+) -> CapturingLlm {
+    spawn_capturing_llm_inner(
+        responses.into_iter().map(|v| (200u16, v)).collect(),
+        Some((hold_post, Arc::new(Mutex::new(Some(release))))),
+    )
+    .await
 }
 
 /// Like `spawn_capturing_llm` but each canned response carries its own HTTP
 /// status, so a test can serve a real provider rejection (e.g. a context-window
 /// 400) instead of only success bodies.
 pub async fn spawn_capturing_llm_with_status(responses: Vec<(u16, Value)>) -> CapturingLlm {
+    spawn_capturing_llm_inner(responses, None).await
+}
+
+async fn spawn_capturing_llm_inner(
+    responses: Vec<(u16, Value)>,
+    hold: Option<(usize, PostHold)>,
+) -> CapturingLlm {
     let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
     let url = format!("http://{}", listener.local_addr().unwrap());
     let queue = Arc::new(Mutex::new(VecDeque::from(responses)));
     let captured: Arc<Mutex<Vec<Value>>> = Arc::new(Mutex::new(Vec::new()));
     let cap2 = captured.clone();
+    let posts = Arc::new(AtomicUsize::new(0));
     tokio::spawn(async move {
         loop {
             let (mut sock, _) = match listener.accept().await {
@@ -47,6 +74,8 @@ pub async fn spawn_capturing_llm_with_status(responses: Vec<(u16, Value)>) -> Ca
             };
             let queue = queue.clone();
             let captured = cap2.clone();
+            let posts = posts.clone();
+            let hold = hold.clone();
             tokio::spawn(async move {
                 let mut buf = Vec::new();
                 let mut tmp = [0u8; 8192];
@@ -90,6 +119,14 @@ pub async fn spawn_capturing_llm_with_status(responses: Vec<(u16, Value)>) -> Ca
                 }
                 if let Ok(req) = serde_json::from_slice::<Value>(&buf[header_end..]) {
                     captured.lock().await.push(req);
+                }
+                let post_num = posts.fetch_add(1, Ordering::Relaxed) + 1;
+                if let Some((hold_post, gate)) = &hold {
+                    if post_num == *hold_post {
+                        if let Some(rx) = gate.lock().await.take() {
+                            let _ = rx.await;
+                        }
+                    }
                 }
                 let (status, body) = queue
                     .lock()

@@ -51,8 +51,11 @@ automatic fallback when OIDC fails. Later releases use the repository,
 
 This setup includes an initial patch note and deliberately leaves the generated
 version PR open. Native profile claims remain macOS ARM64 Metal and Linux ARM64
-CPU with glibc 2.38 or later. Public release claims require actual hosted gates;
-local historical qualification does not substitute for hosted results.
+CPU with glibc 2.38 or later. Linux release archive and crate hosts install the
+same GTK, WebKit and librsvg development packages as native CI so the workspace
+release build can link the Tauri plugin. Public release claims require actual
+hosted gates; local historical qualification does not substitute for hosted
+results.
 
 Coordinated preparation includes formatting regenerated lockfiles. A disposable
 real version-preparation test checks the resulting pnpm lock against the normal

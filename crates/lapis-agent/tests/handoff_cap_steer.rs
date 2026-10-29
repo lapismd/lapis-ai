@@ -2,9 +2,12 @@
 //! Kept out of `regressions.rs` so that frozen architecture exception cannot grow.
 
 use serde_json::{json, Value};
+use tokio::sync::oneshot;
 
 mod common;
-use common::{approve_permission, openai_text, openai_tool_call, spawn_capturing_llm, Harness};
+use common::{
+    approve_permission, openai_text, openai_tool_call, spawn_capturing_llm_holding_post, Harness,
+};
 
 fn openai_text_with_usage(content: &str, prompt_tokens: u64) -> Value {
     let mut v = openai_text(content);
@@ -18,8 +21,9 @@ fn openai_text_with_usage(content: &str, prompt_tokens: u64) -> Value {
 
 /// Within a single turn, the per-turn cap still bounds the number of handoffs.
 /// A steer is injected while the run is active to prove the steer path does
-/// not reset `handoff_attempts`. Drain waits for both the prompt result and the
-/// steer RPC reply so prompt-complete races cannot drop the steer arm.
+/// not reset `handoff_attempts`. The second provider response stays withheld
+/// until that steer is accepted, so a fast runner cannot finish the turn
+/// first. Drain then waits for both the prompt result and the steer reply.
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn handoff_cap_binds_within_a_single_turn() {
     let fake_mcp = env!("CARGO_BIN_EXE_fake-mcp");
@@ -32,12 +36,20 @@ async fn handoff_cap_binds_within_a_single_turn() {
         });
         v
     };
-    let llm = spawn_capturing_llm(vec![
-        openai_text_with_usage("seed", 950),
-        openai_text("handoff-summary"),
-        tool_call_with_usage,
-        openai_text_with_usage("end_turn_text", 10),
-    ])
+    let (release_tx, release_rx) = oneshot::channel();
+    let mut release_tx = Some(release_tx);
+    // POST 1 is the seed turn. POST 2 is the steered turn's first provider
+    // call; hold it so the run is still active when the steer is processed.
+    let llm = spawn_capturing_llm_holding_post(
+        vec![
+            openai_text_with_usage("seed", 950),
+            openai_text("handoff-summary"),
+            tool_call_with_usage,
+            openai_text_with_usage("end_turn_text", 10),
+        ],
+        2,
+        release_rx,
+    )
     .await;
 
     let mut h = Harness::spawn_with_env(
@@ -127,6 +139,9 @@ async fn handoff_cap_binds_within_a_single_turn() {
                 "steer must reference the live run id"
             );
             steer_accepted = true;
+            if let Some(tx) = release_tx.take() {
+                let _ = tx.send(());
+            }
             if prompt_done {
                 break;
             }
