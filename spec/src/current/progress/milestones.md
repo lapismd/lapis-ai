@@ -23,7 +23,10 @@ awaits exact-source CI for tagged releases and hardens the handoff-cap steer
 drain. [Release Linux system libraries](../../history/2026-10-28-release-linux-libraries.md)
 installs the native-CI GTK stack on Linux release hosts.
 [Git crate consumption](../../history/2026-10-29-git-crate-consumption.md)
-stops the Release workflow from publishing crates. M5 stays open.
+stops the Release workflow from publishing crates.
+[CI single Cargo compile](../../history/2026-10-29-ci-cargo-once.md) keeps one
+feature-aligned bins/examples/tests compile before nextest and native tests.
+M5 stays open.
 
 [Codex compact effort](../../history/2026-10-19-codex-effort.md) adds a
 private Control V3 compatibility profile for Notes local-file chat. Generic IDs,

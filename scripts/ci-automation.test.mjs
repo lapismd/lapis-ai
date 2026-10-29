@@ -179,9 +179,18 @@ test("ci_resolves_automation_before_checks_and_keeps_product_gates", () => {
     assert.ok(spec.includes(`"${lane}"`), lane);
   for (const command of [
     "pnpm test:governance",
-    "pnpm build",
+    "node scripts/ci-rust-tests.mjs prepare",
     "pnpm package:check",
     "pnpm dev:cargo -- publish --workspace --exclude lapis-compute --locked --dry-run",
   ])
     assert.ok(ci.includes(command), command);
+  assert.ok(
+    ci.indexOf(
+      "pnpm dev:cargo -- build --workspace --bins --examples --tests",
+    ) <
+      ci.indexOf(
+        "pnpm dev:cargo -- test --workspace --features lapis-agent/test-support",
+      ),
+    "native must build once before workspace tests",
+  );
 });
