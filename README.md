@@ -119,12 +119,11 @@ Run `pnpm changeset` and select **@lapismd/lapis-ai** for a release-worthy chang
 Packages** PR that updates all Cargo versions, internal ranges, lockfiles and
 changelog. The PR requires human review; automation never merges it.
 
-After a reviewed version PR is merged, exact-source CI qualifies the version,
-creates an immutable tag and starts protected Cargo/native publication. Registry
-retries verify existing package checksums and publish only missing packages.
-The npm coordinator stays private. Initial crates.io namespace bootstrap and
-subsequent trusted-publisher setup are documented in [releasing](docs/releasing.md).
-This setup intentionally leaves the first version PR open and publishes no crates.
+After a reviewed version PR is merged, exact-source CI qualifies the version
+and creates an immutable tag. Release publishes native GitHub assets and does
+not publish crates. Other repositories consume the crates from this git
+repository, as documented in [releasing](docs/releasing.md). The npm coordinator
+stays private.
 
 ## Specification and provenance
 
