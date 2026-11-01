@@ -45,7 +45,7 @@
     "validation:all": "node scripts/validation.mjs run validation:all"
   },
   "devDependencies": {
-    "@lapismd/spec-validator": "^0.1.0",
+    "@lapismd/spec-validator": "^0.2.0",
     "prettier": "^3.6.2",
     "@iarna/toml": "^2.2.5",
     "@changesets/cli": "^2.31.1",
