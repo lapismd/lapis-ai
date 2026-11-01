@@ -1,3 +1,8 @@
+import { specificationDockerArguments } from "../dependency-automation/spec-policy.mjs";
+const docker = (config, args) =>
+  dockerWithoutPrContext(config, specificationDockerArguments(args));
+const output = (config, args) =>
+  outputWithoutPrContext(config, specificationDockerArguments(args));
 import { execFileSync } from "node:child_process";
 import { writeFile, mkdir, mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
@@ -11,7 +16,11 @@ import {
   stoppedRunState,
 } from "./model.mjs";
 import { collect } from "./reports.mjs";
-import { output, docker, sendDirectory } from "./docker.mjs";
+import {
+  output as outputWithoutPrContext,
+  docker as dockerWithoutPrContext,
+  sendDirectory,
+} from "./docker.mjs";
 import { snapshot } from "./source.mjs";
 
 export const revision = (root) =>

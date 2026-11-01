@@ -2,8 +2,8 @@ name: CI
 on:
   push:
     branches: [main]
-  pull_request:
-  # Merge queue validates the exact post-merge commit before it reaches main.
+  pull_request: # Merge queue validates the exact post-merge commit before it reaches main.
+
   merge_group:
   workflow_dispatch:
   workflow_call:
@@ -23,6 +23,11 @@ env:
   CARGO_BUILD_JOBS: 1
   CARGO_INCREMENTAL: 0
   LAPIS_AI_TEST_ARCHIVE: .release/tests-canonical.tar.zst
+  LAPIS_CI_EVENT: ${{ github.event_name }}
+  LAPIS_CI_PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+  LAPIS_CI_PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
+  LAPIS_CI_PR_HEAD: ${{ github.event.pull_request.head.ref }}
+  LAPIS_DEPENDENCY_BOT_LOGIN: ${{ vars.LAPIS_DEPENDENCY_BOT_LOGIN }}
 jobs:
   plan:
     name: Plan
