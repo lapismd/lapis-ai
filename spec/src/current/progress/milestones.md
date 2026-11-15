@@ -28,6 +28,11 @@ stops the Release workflow from publishing crates.
 feature-aligned bins/examples/tests compile before nextest and native tests.
 M5 stays open.
 
+[Version PR App authentication](../../history/2026-11-15-version-pr-app-auth.md)
+scopes generated PR writes to the dependency App while preserving existing
+dispatch/tag credentials and exact-source/native gates. M0–M4 are unchanged;
+M5 remains in progress pending its existing hosted and release qualification.
+
 [Codex compact effort](../../history/2026-10-19-codex-effort.md) adds a
 private Control V3 compatibility profile for Notes local-file chat. Generic IDs,
 M0–M5 gates and publication authority stay unchanged; full wider qualification

@@ -1,5 +1,11 @@
 # Governance
 
+The version-PR authentication change applies LAI-REL-003 with a repository-scoped
+dependency App. LAI-GOV-100–105 retain the source, test and native qualification
+boundaries; no CI dispatch, publication, exact-source/native gate or original
+M0–M5 completion claim changes. Parsed workflow regression evidence accompanies
+the owning release requirement.
+
 <!-- dependency-automation-policy -->
 
 Dependency update PRs from the trusted LapisMD App, Dependabot or Renovate MAY skip specification checks using the PR author rather than the rerun actor. Functional checks remain required. The shared `lapismd/dependency-automation` coordinator proposes published first-party npm updates with Changeset release intent where required; it does not merge, publish, sign or deploy. This CI policy changes no runtime or public contract in this chapter.

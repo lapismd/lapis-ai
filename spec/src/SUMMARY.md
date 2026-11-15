@@ -70,3 +70,4 @@
 - [Release Linux system libraries](history/2026-10-28-release-linux-libraries.md)
 - [Git crate consumption](history/2026-10-29-git-crate-consumption.md)
 - [CI single Cargo compile](history/2026-10-29-ci-cargo-once.md)
+- [Version PR App authentication](history/2026-11-15-version-pr-app-auth.md)

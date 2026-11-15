@@ -28,7 +28,14 @@ The npm coordinator and the `@lapismd/ai` renderer client stay private and have
 no npm publication or tag lane. The client shares the coordinated version;
 version preparation checks and updates its manifest alongside Cargo versions.
 
-Changesets generates a Version Packages PR. A passing PR is merged by a human
+Changesets MUST generate Version Packages PRs on canonical main using the
+existing dependency App, scoped to this repository with contents and pull-request
+write permissions only. Missing App credentials MUST fail closed. Checkout MUST
+not persist credentials. CI dispatch, tag orchestration and release publication
+MUST retain their existing workflow credentials and exact-source/native gates.
+Changesets MUST NOT create GitHub releases directly.
+
+A passing PR is merged by a human
 through the main merge queue, which MUST run the same required checks on the
 exact post-merge commit before that commit reaches main. The reviewed version on
 main then becomes a candidate for exact-source CI and one immutable
