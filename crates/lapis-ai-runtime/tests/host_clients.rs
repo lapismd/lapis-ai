@@ -1,14 +1,15 @@
 #![cfg(unix)]
 use lapis_ai_runtime::{
-    AcpClient, AcpOptions, AgentClient, ComputeClient, PreparedLaunch, ProcessLimits,
+    AcpClient, AcpOptions, AgentClient, ComputeClient, Error, PreparedLaunch, ProcessLimits,
 };
 use serde_json::json;
-use std::{os::unix::fs::PermissionsExt, path::Path, time::Duration};
+use std::{path::Path, time::Duration};
 
-fn launch(root: &Path, body: &str) -> PreparedLaunch {
-    let executable = root.join("host-peer.py");
-    std::fs::write(&executable, format!("#!/usr/bin/env python3\n{body}")).unwrap();
-    std::fs::set_permissions(&executable, std::fs::Permissions::from_mode(0o700)).unwrap();
+fn launch(root: &Path, fixture: &str) -> PreparedLaunch {
+    // These committed executables are never opened for writing by parallel tests.
+    let executable = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures")
+        .join(fixture);
     let mut command = std::process::Command::new(executable);
     command
         .current_dir(root)
@@ -20,10 +21,7 @@ fn launch(root: &Path, body: &str) -> PreparedLaunch {
 #[tokio::test]
 async fn prepared_v3_acp_preserves_launch_and_exact_frames() {
     let root = tempfile::tempdir().unwrap();
-    let mut plan = launch(
-        root.path(),
-        "import json,sys\nassert '--runner' in sys.argv\nassert sys.argv[sys.argv.index('--control-version')+1]=='3'\nprint(json.dumps({'type':'ready','version':3}),flush=True)\nfor line in sys.stdin: print(line.strip(),flush=True)",
-    );
+    let mut plan = launch(root.path(), "host-acp.py");
     plan.arguments = vec!["--runner".into(), "fixture".into()];
     let mut client = AcpClient::start_prepared_with_options(plan, AcpOptions::default())
         .await
@@ -45,10 +43,7 @@ async fn prepared_v3_acp_preserves_launch_and_exact_frames() {
 #[tokio::test]
 async fn compute_progress_and_stop_are_independent_of_operation_completion() {
     let root = tempfile::tempdir().unwrap();
-    let mut plan = launch(
-        root.path(),
-        "import json,sys,os\nassert os.getcwd()==os.path.realpath(os.environ['HOME'])\nprint(json.dumps({'type':'ready','endpoint':'http://127.0.0.1:12345/v1','identity':'retained'}),flush=True)\nfor line in sys.stdin:\n frame=json.loads(line)\n if frame['action']=='stop': break\n print(json.dumps({'type':'progress','requestId':frame['requestId'],'progress':42}),flush=True)",
-    );
+    let mut plan = launch(root.path(), "host-compute.py");
     plan.override_environment("HOME", root.path().to_str().unwrap())
         .unwrap();
     plan.override_environment("JJ_STORE_COMPUTE_TOKEN", "private-fixture-token")
@@ -84,18 +79,26 @@ async fn compute_progress_and_stop_are_independent_of_operation_completion() {
 #[tokio::test]
 async fn prepared_agent_keeps_host_environment_and_output_limits() {
     let root = tempfile::tempdir().unwrap();
-    let mut plan = launch(
-        root.path(),
-        "import os,json,sys\nassert sys.argv[1]=='--models'\nassert os.environ['HOST_ONLY']=='retained'\nassert 'JJ_STORE_TEST_SERVER_CREDENTIAL' not in os.environ\nsys.stdout.write(json.dumps({'status':'ready','extra':'x'*100}))",
-    );
-    plan.override_environment("HOST_ONLY", "retained").unwrap();
+    let prepare = || {
+        let mut plan = launch(root.path(), "host-agent.py");
+        plan.override_environment("HOST_ONLY", "retained").unwrap();
+        plan
+    };
+    let accepted =
+        AgentClient::models_prepared(prepare(), ProcessLimits::default(), Duration::from_secs(2))
+            .await
+            .unwrap();
+    assert_eq!(accepted["status"], "ready");
+    assert_eq!(accepted["extra"].as_str().unwrap().len(), 100);
     let limits = ProcessLimits {
         maximum_frame_bytes: 64,
         ..Default::default()
     };
-    assert!(
-        AgentClient::models_prepared(plan, limits, Duration::from_secs(2))
+    assert_eq!(
+        AgentClient::models_prepared(prepare(), limits, Duration::from_secs(2))
             .await
-            .is_err()
+            .err()
+            .unwrap(),
+        Error("helper_protocol_failed")
     );
 }

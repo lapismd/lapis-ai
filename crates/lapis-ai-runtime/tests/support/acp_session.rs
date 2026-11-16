@@ -5,10 +5,22 @@ use lapis_ai_runtime::{
 use serde_json::Value;
 use std::{os::unix::fs::PermissionsExt, path::Path, time::Duration};
 
+pub const PEER_FILE: &str = "serve";
+
 pub fn plan(root: &Path) -> PreparedLaunch {
-    let helper = root.join("peer.py");
+    let helper = root.join(PEER_FILE);
     std::fs::write(&helper, PEER).unwrap();
     std::fs::set_permissions(&helper, std::fs::Permissions::from_mode(0o700)).unwrap();
+    // The session adapter owns fixed argv: python3 serve --control-version 3.
+    // Interpret the owned entrypoint as data instead of exec-ing its fresh inode.
+    let python = std::env::split_paths(&std::env::var_os("PATH").unwrap())
+        .map(|directory| directory.join("python3"))
+        .find(|candidate| {
+            candidate.is_file() && candidate.metadata().unwrap().permissions().mode() & 0o111 != 0
+        })
+        .expect("Python 3 fixture prerequisite")
+        .canonicalize()
+        .unwrap();
     let mut environment = Environment::default();
     environment
         .0
@@ -18,8 +30,11 @@ pub fn plan(root: &Path) -> PreparedLaunch {
         root.join("frames.jsonl").to_string_lossy().into_owned(),
     );
     PreparedLaunch {
-        executable: helper,
-        arguments: vec!["unsafe-override".into()],
+        executable: python,
+        arguments: vec![
+            helper.to_string_lossy().into_owned(),
+            "unsafe-override".into(),
+        ],
         directory: root.into(),
         environment,
     }
@@ -104,7 +119,7 @@ pub async fn reaped(pid: u32) {
 const PEER: &str = r#"#!/usr/bin/env python3
 import os,sys,json
 log=open(os.environ['LOG'],'a',buffering=1)
-log.write(json.dumps({'pid':os.getpid(),'args':sys.argv[1:],'root':os.getcwd(),'launchRoot':os.environ.get('JJ_ACP_CWD')})+'\n')
+log.write(json.dumps({'pid':os.getpid(),'args':sys.argv,'root':os.getcwd(),'launchRoot':os.environ.get('JJ_ACP_CWD')})+'\n')
 seq=0
 scope=None
 active=None

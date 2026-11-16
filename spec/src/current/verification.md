@@ -74,7 +74,7 @@
 | LAI-RUN-007     | Implemented | [Foundation](../history/2026-10-16-foundation.md)                                                                                      |
 | LAI-RUN-008     | Implemented | [Foundation](../history/2026-10-16-foundation.md)                                                                                      |
 | LAI-RUN-009     | Implemented | [Foundation](../history/2026-10-16-foundation.md)                                                                                      |
-| LAI-RUNTIME-001 | Implemented | [Foundation](../history/2026-10-16-foundation.md)                                                                                      |
+| LAI-RUNTIME-001 | Implemented | [Foundation](../history/2026-10-16-foundation.md); [Peer fixture](../history/2026-11-16-acp-peer-fixture.md)                           |
 | LAI-RUNTIME-002 | Implemented | [Foundation](../history/2026-10-16-foundation.md)                                                                                      |
 | LAI-RUNTIME-003 | Implemented | [Foundation](../history/2026-10-16-foundation.md), [Compute inventory](../history/2026-10-21-compute-library.md)                       |
 | LAI-RUNTIME-004 | Implemented | [Foundation](../history/2026-10-16-foundation.md)                                                                                      |
@@ -98,9 +98,9 @@
 | LAI-TAURI-004   | Implemented | [Packaged ACP Tauri](../history/2026-10-17-native-tauri.md)                                                                            |
 | LAI-TAURI-005   | Implemented | [Packaged ACP Tauri](../history/2026-10-17-native-tauri.md)                                                                            |
 | LAI-TAURI-006   | Implemented | [Packaged ACP Tauri](../history/2026-10-17-native-tauri.md)                                                                            |
-| LAI-TAURI-007   | Implemented | [Native frame processing](../history/2026-10-18-native-processing.md)                                                                  |
+| LAI-TAURI-007   | Implemented | [Native frame processing](../history/2026-10-18-native-processing.md); [Peer fixture](../history/2026-11-16-acp-peer-fixture.md)       |
 | LAI-TAURI-008   | Implemented | [Native processor factory](../history/2026-10-18-tauri-processing.md)                                                                  |
-| LAI-TAURI-009   | Implemented | [Native text groups](../history/2026-10-18-native-batches.md)                                                                          |
+| LAI-TAURI-009   | Implemented | [Native text groups](../history/2026-10-18-native-batches.md); [Peer fixture](../history/2026-11-16-acp-peer-fixture.md)               |
 | LAI-TAURI-010   | Implemented | [Retained native processing](../history/2026-10-18-retained-processing.md)                                                             |
 | LAI-TAURI-011   | Implemented | [Native request preparation](../history/2026-10-20-request-preparation.md)                                                             |
 | LAI-TOOLS-001   | Implemented | [MCP engine](../history/2026-10-19-app-tools-engine.md)                                                                                |

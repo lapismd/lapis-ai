@@ -1,5 +1,11 @@
 # Governance
 
+ACP protocol fixtures must retain exact control argv, child identity, isolated
+roots, startup cancellation and supervised drain assertions. Their declared
+interpreter reads the owned entrypoint as data, avoiding an unintended mutable
+executable race; production spawn errors remain fail-closed without retries.
+LAI-RUNTIME-001/002 and LAI-TAURI-007/009 remain unchanged.
+
 The version-PR authentication change applies LAI-REL-003 with a repository-scoped
 dependency App. LAI-GOV-100–105 retain the source, test and native qualification
 boundaries; no CI dispatch, publication, exact-source/native gate or original

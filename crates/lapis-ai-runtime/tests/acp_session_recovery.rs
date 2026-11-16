@@ -167,7 +167,7 @@ async fn cancelling_startup_reaps_the_helper_and_does_not_start_a_second_worker(
 async fn cancelled_process_shutdown_retains_ownership_of_the_whole_child_group() {
     let root = tempfile::tempdir().unwrap();
     let launch = plan(root.path());
-    std::fs::write(&launch.executable, "#!/usr/bin/env python3\nimport os,time,json\nchild=os.fork()\nif child==0:\n time.sleep(120)\n os._exit(0)\nprint(json.dumps({'pid':os.getpid(),'child':child}),flush=True)\ntime.sleep(120)\n").unwrap();
+    std::fs::write(root.path().join(PEER_FILE), "#!/usr/bin/env python3\nimport os,time,json\nchild=os.fork()\nif child==0:\n time.sleep(120)\n os._exit(0)\nprint(json.dumps({'pid':os.getpid(),'child':child}),flush=True)\ntime.sleep(120)\n").unwrap();
     let mut process = NativeProcess::spawn(launch).await.unwrap();
     let identity = process.next(Duration::from_secs(3)).await.unwrap();
     let pid = identity["pid"].as_u64().unwrap() as u32;

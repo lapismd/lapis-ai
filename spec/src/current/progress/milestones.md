@@ -1,5 +1,9 @@
 # Milestones
 
+[ACP protocol peer fixture launch](../../history/2026-11-16-acp-peer-fixture.md)
+retains the native/session/drain contract and every M0–M5 status. Portable test
+fixture reliability does not complete M5 or native/model/platform qualification.
+
 | Task | Status      | Dependencies | Gate                                                                   | Evidence                                                                   | Next action                                                |
 | ---- | ----------- | ------------ | ---------------------------------------------------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | M0   | Done        | none         | Standalone workspace, governance, imports and provenance               | [Foundation](../../history/2026-10-16-foundation.md)                       | Maintain source pins and frozen budgets                    |
