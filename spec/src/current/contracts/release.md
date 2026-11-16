@@ -7,15 +7,16 @@ merged by automation. No package or tag is published during this setup.
 
 ## Requirements
 
-| ID          | Requirement                                                                                                                                                                                                                                    |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LAI-REL-001 | Cargo publication MUST include portable metadata, registry-versioned internal dependencies, notices, licenses and required fixture sources. Test helper binaries MUST require an explicit development feature and MUST NOT install by default. |
-| LAI-REL-002 | CI MUST qualify exact committed revisions with explicit Git base/head ranges, retain local Jujutsu checks and run formatting, specifications, boundaries, release/package checks, Clippy, tests, builds and supported native acceptance.       |
-| LAI-REL-003 | Changesets MUST coordinate the private npm coordinator and renderer client, all fifteen Cargo versions, internal version ranges, lockfiles and changelog. Version preparation MUST NOT fabricate specification or milestone evidence.          |
-| LAI-REL-004 | A same-repository Changesets or Dependabot PR MAY omit same-change spec/evidence bookkeeping only after exact bot, branch, base, repository and revision checks. Every product, packaging and canonical integrity gate MUST remain required.   |
-| LAI-REL-005 | Cargo release MUST qualify an immutable version tag on main history and reject pending Changesets. The Release workflow MUST NOT publish crates. Downstream repositories consume the crates from the git repository.                           |
-| LAI-REL-006 | GitHub Pages MUST build the canonical mdBook for pull requests and deploy only main through the GitHub Pages environment with the `/lapis-ai/` site prefix.                                                                                    |
-| LAI-REL-007 | Native releases MUST include supported target inventories, SHA-256 checksums and licenses. The pinned compute executable MUST remain native-only while its exact Mesh dependency revision has no matching registry release.                    |
+| ID          | Requirement                                                                                                                                                                                                                                                                       |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LAI-REL-001 | Cargo publication MUST include portable metadata, registry-versioned internal dependencies, notices, licenses and required fixture sources. Test helper binaries MUST require an explicit development feature and MUST NOT install by default.                                    |
+| LAI-REL-002 | CI MUST qualify exact committed revisions with explicit Git base/head ranges, retain local Jujutsu checks and run formatting, specifications, boundaries, release/package checks, Clippy, tests, builds and supported native acceptance.                                          |
+| LAI-REL-003 | Changesets MUST coordinate the private npm coordinator and renderer client, all fifteen Cargo versions, internal version ranges, lockfiles and changelog. Version preparation MUST NOT fabricate specification or milestone evidence.                                             |
+| LAI-REL-004 | A same-repository Changesets or Dependabot PR MAY omit same-change spec/evidence bookkeeping only after exact bot, branch, base, repository and revision checks. Every product, packaging and canonical integrity gate MUST remain required.                                      |
+| LAI-REL-005 | Cargo release MUST qualify an immutable version tag on main history and reject pending Changesets. The Release workflow MUST NOT publish crates. Downstream repositories consume the crates from the git repository.                                                              |
+| LAI-REL-006 | GitHub Pages MUST build the canonical mdBook for pull requests and deploy only main through the GitHub Pages environment with the `/lapis-ai/` site prefix.                                                                                                                       |
+| LAI-REL-007 | Native releases MUST include supported target inventories, SHA-256 checksums and licenses. The pinned compute executable MUST remain native-only while its exact Mesh dependency revision has no matching registry release.                                                       |
+| LAI-REL-008 | Version preparation MUST validate its qualified Node runtime, Changesets bytes and exact recipe/configuration inputs through the pinned shared guard after existing bootstrap and before App minting. Drift MUST fail closed without replacing the source recipe or native gates. |
 
 ## Publication scope
 
@@ -34,6 +35,14 @@ write permissions only. Missing App credentials MUST fail closed. Checkout MUST
 not persist credentials. CI dispatch, tag orchestration and release publication
 MUST retain their existing workflow credentials and exact-source/native gates.
 Changesets MUST NOT create GitHub releases directly.
+
+LAI-REL-008 consumes the source-owned public qualification file through Lapis CI
+`2f90eb7a035f841f0757d3a2cffc959cbecdfff0`. The guard retains Node22,
+CLI2.31.1, pnpm10.34.5, Rust1.99.0 and the actual offline version recipe.
+The successful [whole-recipe proof](https://github.com/lapismd/lapis-ci/actions/runs/43814544020)
+precedes adoption; its historical note is disposable validation input only.
+Input drift requires owning-source review and requalification before writer
+authority. The guard adds no credentials or publication/deployment authority.
 
 A passing PR is merged by a human
 through the main merge queue, which MUST run the same required checks on the

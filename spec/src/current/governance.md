@@ -6,6 +6,11 @@ interpreter reads the owned entrypoint as data, avoiding an unintended mutable
 executable race; production spawn errors remain fail-closed without retries.
 LAI-RUNTIME-001/002 and LAI-TAURI-007/009 remain unchanged.
 
+The qualified version-runtime guard applies LAI-REL-008 before App minting.
+Its reviewed public input bindings retain the actual Node22/Rust/offline recipe;
+no runtime contract, M0–M5 status, imported budget or release gate changes.
+Whole-recipe proof and adoption checks remain separate evidence.
+
 The version-PR authentication change applies LAI-REL-003 with a repository-scoped
 dependency App. LAI-GOV-100–105 retain the source, test and native qualification
 boundaries; no CI dispatch, publication, exact-source/native gate or original

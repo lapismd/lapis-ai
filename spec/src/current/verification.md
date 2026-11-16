@@ -95,6 +95,7 @@
 | LAI-REL-005     | Planned     | [Release setup](../history/2026-10-16-release-setup.md)                                                                                |
 | LAI-REL-006     | Implemented | [Release setup](../history/2026-10-16-release-followup.md)                                                                             |
 | LAI-REL-007     | Planned     | [Release setup](../history/2026-10-16-release-setup.md)                                                                                |
+| LAI-REL-008     | Implemented | [Qualified version runtime guard](../history/2026-11-16-version-runtime-guard.md)                                                      |
 | LAI-TAURI-004   | Implemented | [Packaged ACP Tauri](../history/2026-10-17-native-tauri.md)                                                                            |
 | LAI-TAURI-005   | Implemented | [Packaged ACP Tauri](../history/2026-10-17-native-tauri.md)                                                                            |
 | LAI-TAURI-006   | Implemented | [Packaged ACP Tauri](../history/2026-10-17-native-tauri.md)                                                                            |

@@ -73,3 +73,4 @@
 - [Version PR App authentication](history/2026-11-15-version-pr-app-auth.md)
 
 - [ACP protocol peer fixture launch](history/2026-11-16-acp-peer-fixture.md)
+- [Qualified version runtime guard](history/2026-11-16-version-runtime-guard.md)

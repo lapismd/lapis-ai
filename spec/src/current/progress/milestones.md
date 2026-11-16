@@ -37,6 +37,10 @@ scopes generated PR writes to the dependency App while preserving existing
 dispatch/tag credentials and exact-source/native gates. M0–M4 are unchanged;
 M5 remains in progress pending its existing hosted and release qualification.
 
+[Qualified version runtime guard](../../history/2026-11-16-version-runtime-guard.md)
+adds the fail-closed source-input gate before App minting after actual native
+recipe proof. M0–M4 remain unchanged; M5 and native/release gates remain open.
+
 [Codex compact effort](../../history/2026-10-19-codex-effort.md) adds a
 private Control V3 compatibility profile for Notes local-file chat. Generic IDs,
 M0–M5 gates and publication authority stay unchanged; full wider qualification
