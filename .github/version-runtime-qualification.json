@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "nodeMajor": 22,
+  "cliVersion": "2.31.1",
+  "packageManager": "pnpm@10.34.5",
+  "configSha256": "e0039887bca8bd61c77ae5bc644831a201f70332517e8ce6a85724755ac6c63c",
+  "scripts": {
+    "release:version": "node scripts/changeset-version.mjs",
+    "release:check": "node scripts/validation.mjs run release:check",
+    "dev:cargo": "node scripts/managed-cargo.mjs"
+  },
+  "files": {
+    ".prettierignore": "c35d9f7faff84acf5dc5f1e4383ee5b86de6c597d4112bd8ef9692d882960854",
+    ".prettierrc.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "pnpm-workspace.yaml": "daa09fb27c0b144072b39fe28fe1c3509f312a7856e118437fcf2b5e5c4d432a",
+    "release.toml": "930611ff7ef6bbcf8a4696bd8eea98ee8b132e9b2efb1355a01eb58aec9b3e57",
+    "rust-toolchain.toml": "ed26309ca00c855d0073d18fb07968ff1b16d1fe9d86f168ee96efc576218350",
+    "scripts/changeset-version.mjs": "c4918f0f11f0c279f19cac11a56a0b93ae5c5effcf9b4d7219eeb68f8269191f",
+    "scripts/dependency-automation/spec-policy.mjs": "92250b338be61199e74cdc89af684c77dc27cb81ac8d58c51272cb1f063afd8a",
+    "scripts/managed-cargo.mjs": "2d39f71feae038caca77a2ce1cc9376dabddb3749e95515be2f6e10a9bf8881f",
+    "scripts/release-state.mjs": "569fd02b85091ec2d014e60d4301abd25b8c7ee6a7ccf42ef2d419fe748db11c",
+    "scripts/release-version.mjs": "152b14aaacdd5751e9ff5d78a341fd90fbb6203db77221e1bf8e6c0d4ec1e918",
+    "scripts/validation.mjs": "8acd287c82cc6ccc7e0668464dd6f5326089aa85c19190619370070b3be0e6c1",
+    "scripts/validation/docker.mjs": "db568e8fe8826cabb1ae7552700ef059ca845121b0aae36850949ee9ef045f8a",
+    "scripts/validation/lanes.json": "8cfcf2dd75ec52bae9dd1cd07a760e8cf8ff06b0e9fe0e42c9d6b4a31abe53c5",
+    "scripts/validation/model.mjs": "3c3d776eef46abfa63b1aa0f9dfa6779733bc9a22a0314ac2e41d49460ef402c",
+    "scripts/validation/reports.mjs": "c9bd146cbf968696e4b7daf1da8ea5271544852ae8568c39ebea4913cd6042b7",
+    "scripts/validation/runs.mjs": "e8a4113b8780b1bd1729808359827cc54878a96645371c27ff0d6ad0931be640",
+    "scripts/validation/source.mjs": "d3c42818ee14a0cf2e733c517cddc7a85320d4906d29c51718e648e5b9c86078"
+  }
+}

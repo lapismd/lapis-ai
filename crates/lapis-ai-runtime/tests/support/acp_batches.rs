@@ -95,11 +95,12 @@ impl SessionProcessor for Capture {
 }
 pub fn plan(root: &Path, startup: bool) -> lapis_ai_runtime::PreparedLaunch {
     let plan = super::acp_session::plan(root);
-    let mut peer = std::fs::read_to_string(&plan.executable).unwrap().replace("update={'text':'reply'}", "update={'sessionUpdate':'agent_message_chunk','messageId':'answer','content':{'type':'text','text':'unprocessed reply'}}");
+    let script = root.join(super::acp_session::PEER_FILE);
+    let mut peer = std::fs::read_to_string(&script).unwrap().replace("update={'text':'reply'}", "update={'sessionUpdate':'agent_message_chunk','messageId':'answer','content':{'type':'text','text':'unprocessed reply'}}");
     if startup {
         peer = peer.replace("emit('queued',rid);emit('warmed',rid,capabilities={})", "emit('activity',rid,update={'sessionUpdate':'agent_message_chunk','messageId':'startup','content':{'type':'text','text':'unprocessed startup'}});emit('queued',rid);emit('warmed',rid,capabilities={})");
     }
-    std::fs::write(&plan.executable, peer).unwrap();
+    std::fs::write(&script, peer).unwrap();
     plan
 }
 pub fn captured(root: &Path) -> Vec<Value> {

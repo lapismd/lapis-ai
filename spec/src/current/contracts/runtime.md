@@ -1,5 +1,10 @@
 # Configuration and supervised clients
 
+The ACP protocol-fixture repair changes no LAI-RUNTIME-001/002 launch or
+cancellation behavior. Direct execution of a write-open script still fails
+closed; owned fixture interpretation preserves the exact fixed control argv,
+process identity, isolated root, protocol and supervised cleanup assertions.
+
 LAI-CAPTURE-003's transient local JSONL/SQLite acquisition changes no
 LAI-CONFIG-003 or LAI-RUNTIME-001/002/004 behavior: it runs no helper, reads no
 runtime configuration or credentials, and grants no execution or replay rights.

@@ -133,7 +133,8 @@ pub fn captured(root: &Path) -> Vec<Value> {
 }
 pub fn startup_frames(root: &Path) -> lapis_ai_runtime::PreparedLaunch {
     let plan = super::acp_session::plan(root);
-    let peer = std::fs::read_to_string(&plan.executable).unwrap();
+    let script = root.join(super::acp_session::PEER_FILE);
+    let peer = std::fs::read_to_string(&script).unwrap();
     let peer = peer
         .replace(
             "emit('queued',rid);emit('warmed',rid,capabilities={})",
@@ -143,6 +144,6 @@ pub fn startup_frames(root: &Path) -> lapis_ai_runtime::PreparedLaunch {
             "session={'models':['fixture-model']}",
             "session={'models':['fixture-model'],'label':'facts-secret'}",
         );
-    std::fs::write(&plan.executable, peer).unwrap();
+    std::fs::write(&script, peer).unwrap();
     plan
 }

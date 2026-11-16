@@ -39,6 +39,10 @@ jobs:
       - run: pnpm release:check
       - name: Bootstrap locked Cargo dependencies before version preparation
         run: pnpm dev:cargo -- fetch --locked
+      - name: Guard the qualified source-owned version runtime
+        uses: lapismd/lapis-ci/actions/guard-version-runtime@2f90eb7a035f841f0757d3a2cffc959cbecdfff0
+        with:
+          qualification-file: .github/version-runtime-qualification.json
       - name: Mint repository-scoped version PR token
         id: app
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3
