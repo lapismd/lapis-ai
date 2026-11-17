@@ -74,3 +74,5 @@
 
 - [ACP protocol peer fixture launch](history/2026-11-16-acp-peer-fixture.md)
 - [Qualified version runtime guard](history/2026-11-16-version-runtime-guard.md)
+
+- [Bounded dependency automation](history/2026-11-17-dependency-automation-adoption.md)

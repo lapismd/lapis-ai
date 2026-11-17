@@ -17,8 +17,10 @@ const config = defineConfig(tableRequirements(), {
     bookIgnore: "LAI-GOV-101",
     specFirst: "LAI-GOV-100",
     internal: "LAI-GOV-100",
+    qmd: "LAI-GOV-100",
   },
   validators: {
+    qmd: { collection: "lapis-ai-spec", configPath: ".qmd/index.yml" },
     fileLimits: { maxLines: 400, maxBytes: 32768 },
     summary: true,
     governance: {

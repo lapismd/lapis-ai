@@ -1,15 +1,15 @@
 {
   "build": "pnpm build:client && pnpm dev:cargo -- build --workspace --bins --examples --features lapis-agent/test-support --locked",
   "check": "pnpm check:governance && pnpm format:check && pnpm check:boundaries && pnpm check:client && pnpm check:clippy",
-  "check:governance": "pnpm check:validation-routing && pnpm spec:validate && pnpm release:check && pnpm check:architecture && pnpm check:progress && pnpm check:upstream",
+  "check:governance": "pnpm check:dependency-intake && pnpm check:validation-routing && pnpm spec:validate && pnpm release:check && pnpm check:architecture && pnpm check:progress && pnpm check:upstream",
   "check:clippy": "pnpm dev:cargo -- clippy --workspace --all-targets --features lapis-agent/test-support --locked -- -D warnings",
   "test": "pnpm test:client && pnpm test:governance && pnpm dev:cargo -- test --workspace --features lapis-agent/test-support --locked",
-  "test:governance": "node --test scripts/*.test.mjs",
+  "test:governance": "pnpm test:dependency-intake && node --test scripts/*.test.mjs",
   "check:architecture": "node scripts/architecture.mjs",
   "check:boundaries": "node scripts/boundaries.mjs",
   "check:progress": "node scripts/progress.mjs",
   "format:check": "pnpm dev:cargo -- fmt --all -- --check && prettier --check .",
-  "spec:check": "pnpm check:validation-routing && node scripts/dependency-automation/spec-policy.mjs check",
+  "spec:check": "pnpm check:dependency-intake && pnpm check:validation-routing && node scripts/dependency-automation/spec-policy.mjs check",
   "spec:validate": "node scripts/dependency-automation/spec-policy.mjs validate",
   "spec:first": "node scripts/dependency-automation/spec-policy.mjs first",
   "spec:build": "node scripts/dependency-automation/spec-policy.mjs build",
@@ -24,5 +24,7 @@
   "check:validation-routing": "node scripts/validation/check-routing.mjs",
   "validation:check": "node --test scripts/validation.test.mjs",
   "validation:smoke": "node scripts/validation/smoke.mjs",
-  "validation:all": "pnpm check && pnpm test && pnpm build && pnpm check:workflow && pnpm package:check && pnpm spec:check"
+  "validation:all": "pnpm check && pnpm test && pnpm build && pnpm check:workflow && pnpm package:check && pnpm spec:check",
+  "check:dependency-intake": "node scripts/dependency-automation/check-canonical-intake.mjs",
+  "test:dependency-intake": "node --test scripts/dependency-automation/*.test.mjs"
 }

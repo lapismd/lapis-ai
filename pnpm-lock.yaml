@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  "@lapismd/spec-validator": 0.2.1
+
 importers:
   .:
     devDependencies:
@@ -17,8 +20,8 @@ importers:
         specifier: ^2.2.5
         version: 2.2.5
       "@lapismd/spec-validator":
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: 0.2.1
+        version: 0.2.1
       "@tauri-apps/api":
         specifier: ~2.12.4
         version: 2.12.4
@@ -173,10 +176,10 @@ packages:
       "@types/node":
         optional: true
 
-  "@lapismd/spec-validator@0.2.0":
+  "@lapismd/spec-validator@0.2.1":
     resolution:
       {
-        integrity: sha512-fUMh7fpoZXuMRAc5Jdo+Y2sUhAPeO5o5R5AIdwKEs/xNLS2W3mSSHimscxI58JuUEFPPk/SI+jE0Vcvv7gXdlw==,
+        integrity: sha512-aHLByppZkay1axSm8KvCwOJz0si8aDyZBXDGWW+d2VQw+66f1KLimw2rEMjYIpLdoSG9+yN5Kd1MKlAJw7xUVw==,
       }
     engines: { node: ">=22" }
     hasBin: true
@@ -914,7 +917,7 @@ snapshots:
       chardet: 2.2.0
       iconv-lite: 0.7.3
 
-  "@lapismd/spec-validator@0.2.0":
+  "@lapismd/spec-validator@0.2.1":
     dependencies:
       jiti: 2.7.0
       typescript: 5.9.3
