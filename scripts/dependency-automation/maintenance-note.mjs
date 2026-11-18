@@ -21,6 +21,42 @@ export function readMaintenanceNote(path) {
     readFileSync(target),
   );
 }
+export function readCurrentMaintenanceNote(path) {
+  return lstatSync(resolve(path), { throwIfNoEntry: false }) === undefined
+    ? undefined
+    : readMaintenanceNote(path);
+}
+export function loadMaintenanceNotes(root, changedFiles, files) {
+  const consumed = [];
+  for (const path of maintenanceNotePaths(changedFiles)) {
+    const bytes = readCurrentMaintenanceNote(resolve(root, path));
+    if (bytes === undefined) consumed.push(path);
+    else files[path] = bytes;
+  }
+  return consumed;
+}
+export function verifyMaintenanceLifecycle(
+  changedFiles,
+  files,
+  consumedNotes,
+  unchangedFacts,
+) {
+  const notes = maintenanceNotePaths(changedFiles);
+  if (
+    !Array.isArray(consumedNotes) ||
+    new Set(consumedNotes).size !== consumedNotes.length ||
+    consumedNotes.some(
+      (path) => !notes.includes(path) || Object.hasOwn(files, path),
+    )
+  )
+    throw Error("Unexpected consumed maintenance inventory");
+  verifyMaintenanceNotes(
+    unchangedFacts
+      ? changedFiles.filter((path) => !consumedNotes.includes(path))
+      : changedFiles,
+    files,
+  );
+}
 export function verifyMaintenanceNotes(changedFiles, files, release = {}) {
   const notes = maintenanceNotePaths(changedFiles);
   for (const path of notes) {

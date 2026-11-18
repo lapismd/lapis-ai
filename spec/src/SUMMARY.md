@@ -81,3 +81,5 @@
 - [Native acceptance permission lifecycle and evidence](history/2026-11-18-native-fixture-evidence.md)
 
 - [Immutable committed intake range](history/2026-11-18-clean-git-intake-range.md)
+
+- [Consumed maintenance notes](history/2026-11-18-consumed-maintenance-notes.md)

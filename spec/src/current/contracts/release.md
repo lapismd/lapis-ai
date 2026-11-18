@@ -90,7 +90,11 @@ version recipe and native/release gates. Only compatible Node-only validator0.2
 development patches are admitted. Independent normal source checks validate the
 complete catalog and both managed slots outside trusted-bot spec exemptions.
 One exact managed maintenance note may contain only an empty YAML release map;
-null, nonempty, malformed, multiple and arbitrary notes reject. A one-time exact
+null, nonempty, malformed, multiple and arbitrary notes reject. Version
+consumption may remove that note only with unchanged complete dependency facts;
+present notes always validate, and actual SDK intake still requires its bytes.
+This does not change the private empty-only whole-version recipe or grant
+publication authority. A one-time exact
 reviewed baseline plus before/after input hashes binds initial SDK0.2.0→0.2.1
 adoption; missing/foreign ancestry and future initialization fail closed. Every
 ordinary later update requires its existing immutable opt-in and factual slots.

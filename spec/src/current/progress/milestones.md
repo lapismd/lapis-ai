@@ -185,3 +185,8 @@ controls alone do not complete the native hosted qualification.
 [Committed intake range](../../history/2026-11-18-clean-git-intake-range.md)
 repairs clean Git managed-note and source-scope scrutiny with one immutable
 baseline. M0–M4 and M5 status, native/model and release gates remain unchanged.
+
+[Consumed maintenance notes](../../history/2026-11-18-consumed-maintenance-notes.md)
+preserves strict source reads while admitting ordinary version consumption
+with unchanged dependency facts. M0–M4 stay done; M5 and every native/model,
+platform and release qualification remain open as previously recorded.
