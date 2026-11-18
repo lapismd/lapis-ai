@@ -116,3 +116,8 @@ ordinary later update requires its existing immutable opt-in and factual slots.
 ```
 
 <!-- dependency-intake:validator-development:end -->
+
+Exact current remote-main qualification distinguishes CLI status from the raw
+no-note macro: changed private packages need an empty maintenance note for status
+admission even when the raw macro returns unchanged. The empty map still yields
+false intent, preserving App/writer admission and all native/publisher gates.

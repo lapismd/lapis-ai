@@ -2,6 +2,8 @@ import { sourceBaseline } from "./initial-intake.mjs";
 import { sourceIntakeReader } from "./source-intake-reader.mjs";
 import {
   managedMaintenanceNote,
+  readMaintenanceNote,
+  verifyMaintenanceNotes,
   verifyMaintenanceScope,
 } from "./maintenance-note.mjs";
 import { readFileSync, realpathSync } from "node:fs";
@@ -184,6 +186,7 @@ export function verifyValidatorCanonicalIntake({
   changedFiles = [],
 }) {
   const facts = validatorFacts(files, policyBytes);
+  verifyMaintenanceNotes(changedFiles, files);
   for (const p of chapters)
     if (!equal(slot(documents[p]).facts, facts))
       fail("managed facts differ from actual candidate");
@@ -267,7 +270,7 @@ export function checkValidatorCanonicalIntake(root = process.cwd()) {
   });
   const changedFiles = changesFromVcs({}, root).map((c) => c.path);
   for (const path of changedFiles.filter(managedMaintenanceNote))
-    files[path] = read(path);
+    files[path] = readMaintenanceNote(resolve(root, path));
   return verifyValidatorCanonicalIntake({
     files,
     policyBytes: read(policyPath),
