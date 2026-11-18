@@ -1,9 +1,8 @@
 import { sourceBaseline } from "./initial-intake.mjs";
 import { sourceIntakeReader } from "./source-intake-reader.mjs";
 import {
-  managedMaintenanceNote,
-  readMaintenanceNote,
-  verifyMaintenanceNotes,
+  loadMaintenanceNotes,
+  verifyMaintenanceLifecycle,
   verifyMaintenanceScope,
 } from "./maintenance-note.mjs";
 import { readFileSync, realpathSync } from "node:fs";
@@ -183,9 +182,17 @@ export function verifyValidatorCanonicalIntake({
   basePolicyBytes,
   baseDocuments,
   changedFiles = [],
+  consumedNotes = [],
 }) {
   const facts = validatorFacts(files, policyBytes);
-  verifyMaintenanceNotes(changedFiles, files);
+  verifyMaintenanceLifecycle(
+    changedFiles,
+    files,
+    consumedNotes,
+    before &&
+      typeof basePolicyBytes === "string" &&
+      equal(validatorFacts(before, basePolicyBytes), facts),
+  );
   for (const p of chapters)
     if (!equal(slot(documents[p]).facts, facts))
       fail("managed facts differ from actual candidate");
@@ -245,7 +252,10 @@ export function verifyValidatorCanonicalIntake({
   }
   return facts;
 }
-export function checkValidatorCanonicalIntake(root = process.cwd()) {
+export function checkValidatorCanonicalIntake(
+  root = process.cwd(),
+  sourceReader = sourceIntakeReader,
+) {
   const read = (path) => {
     const target = resolve(root, path);
     if (realpathSync(target) !== target) fail("non-regular source path");
@@ -259,7 +269,7 @@ export function checkValidatorCanonicalIntake(root = process.cwd()) {
   ];
   const files = Object.fromEntries(inputs.map((p) => [p, read(p)])),
     documents = Object.fromEntries(chapters.map((p) => [p, read(p)]));
-  const base = sourceIntakeReader(root);
+  const base = sourceReader(root);
   const context = sourceBaseline({
     readPrevious: base,
     sourceSha: base.sourceSha,
@@ -268,14 +278,14 @@ export function checkValidatorCanonicalIntake(root = process.cwd()) {
     metadataBytes: read(".github/dependency-automation/bootstrap.json"),
   });
   const changedFiles = base.changedFiles();
-  for (const path of changedFiles.filter(managedMaintenanceNote))
-    files[path] = readMaintenanceNote(resolve(root, path));
+  const consumedNotes = loadMaintenanceNotes(root, changedFiles, files);
   return verifyValidatorCanonicalIntake({
     files,
     policyBytes: read(policyPath),
     documents,
     ...context,
     changedFiles,
+    consumedNotes,
   });
 }
 if (

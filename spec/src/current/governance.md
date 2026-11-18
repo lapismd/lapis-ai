@@ -206,8 +206,13 @@ complete catalog and both managed slots outside trusted-bot spec exemptions.
 One exact managed maintenance note may contain only an empty YAML release map;
 null, nonempty, malformed, multiple and arbitrary notes reject. The reserved
 managed namespace is validated before initial-bootstrap and same-fact returns.
-Regular-file UTF-8 reads and an8192-byte bound reject symlinks, missing/unsafe,
-invalid-encoding and oversized notes without admitting new paths. A one-time exact
+Regular-file UTF-8 reads and an8192-byte bound reject symlinks, unsafe,
+invalid-encoding and oversized notes without admitting new paths. An absent
+changed managed note is permitted only after version consumption when its full
+dependency fact tuple is unchanged; actual SDK changes and initial bootstrap
+still require note bytes. Present notes always validate before either return.
+Missing-only `lstat` detection retains raw changed paths and rejects dangling
+links, directories and other read errors. A one-time exact
 reviewed baseline plus before/after input hashes binds initial SDK0.2.0→0.2.1
 adoption; missing/foreign ancestry and future initialization fail closed. Every
 ordinary later update requires its existing immutable opt-in and factual slots.
