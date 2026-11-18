@@ -1,3 +1,4 @@
+import { changesFromVcs } from "@lapismd/spec-validator";
 import { existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
@@ -42,5 +43,11 @@ export function sourceIntakeReader(
         ])
       : run("git", ["show", `${parent}:${path}`]);
   read.sourceSha = parent;
+  read.changedFiles = () =>
+    changesFromVcs(
+      { base: parent, head: hasJj ? "@" : "HEAD" },
+      root,
+      (binary, args) => run(binary, args),
+    ).map((change) => change.path);
   return read;
 }

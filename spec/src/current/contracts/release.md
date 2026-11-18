@@ -121,3 +121,9 @@ Exact current remote-main qualification distinguishes CLI status from the raw
 no-note macro: changed private packages need an empty maintenance note for status
 admission even when the raw macro returns unchanged. The empty map still yields
 false intent, preserving App/writer admission and all native/publisher gates.
+
+Canonical dependency validation reads baseline facts and changed paths from the
+same captured immutable parent. Clean Git CI compares that parent with committed
+HEAD; local JJ compares the same parent with its selected working revision.
+Managed development notes and unexpected source paths remain checked in both
+transports under LAI-REL-002/008; a clean working tree is not an empty candidate.

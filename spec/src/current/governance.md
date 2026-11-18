@@ -238,3 +238,7 @@ The exact native fixture instruction and compiled synthetic-provider regression
 are recorded in [native evidence](../history/2026-11-18-native-fixture-evidence.md).
 The existing build lane supplies real helpers for explicit compiled controls;
 this does not qualify actual model/platform behavior or change release gates.
+
+LAI-GOV-103/104 canonical-intake evidence distinguishes committed Git transport
+from JJ working-change tests. The selected parent owns both previous bytes and
+changed-file scope; default working-tree diffs cannot substitute for this range.
