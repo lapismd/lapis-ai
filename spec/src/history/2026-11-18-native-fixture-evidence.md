@@ -123,3 +123,64 @@ could mask rejection during diagnostic encoding; it failed once before the
 classifier was made non-throwing for those values, and now passes. Full portable and exact-source Node gates are recorded with the enclosing
 change. Fresh native qualification must establish the refused predicate before
 any admission change is considered. No old native run was retried.
+
+## Exact native tool instruction
+
+Linux ARM64 run `44249353447`, source `0861b518`, failed at source-native
+permission admission: `write_file`, correct keyset, 12-byte matching marker,
+`other_inside_fixture`. The actual path was not retained and is unknown. The
+three compiled session-root controls prove unchanged arguments and correct
+session rooting; no transport or product defect is evidenced. The original
+macOS queue timeout remains separately unexplained.
+
+The prompt now specifies the exact relative tool JSON and explicitly forbids
+an added directory component. This is a new committed-source qualification
+attempt of the same native model coding/permission task. The real model must
+still emit the call, obtain a fresh scoped allow_once, perform the actual write
+and complete. No file is precreated or model response replaced in native
+qualification. The admission predicate, safe target/content (128-byte bound),
+symlink/outside/shell restrictions, fresh identity checks, MAX16, one 300000ms
+absolute deadline, no uncertain replay/retry and terminal/cleanup checks are
+unchanged. Diagnostics remain bounded classifications and hashes.
+
+Exact regression command (default bounded Docker image, read-only built cache):
+`python3 -B scripts/native-instruction.test.py /cache/target/debug NativeInstructionTests.test_exact_instruction_reaches_provider_and_real_tools_write`.
+Before the prompt change: one failure, missing exact JSON on actual provider
+wire. After: one pass, zero failures. The full compiled controls pass three
+cases: exact instruction/file effect plus added-session-directory and other
+inside-path rejection, with unchanged wire arguments, absent preapproval target,
+no launch-root effect and no provider retry. These synthetic path names are
+negative controls, not inferred values of the unknown native path. Existing
+17 Python lifecycle/evidence controls pass unchanged.
+
+The explicit bounded compiled-control command runs against public binaries built
+by the existing build lane. It remains separate from Node-only governance.
+They preserve the previously confirmed session-root checks rather than changing
+cwd behavior. Full portable and exact-source validation results follow in the
+verified enclosing change. Milestone review: M0–M5 statuses, runtime contract,
+platform/model and release gates remain unchanged. Actual Linux native remains
+one observed failure with no after-run yet; both ARM source/bundle hosted
+qualifications remain Root-owned. Portable passes cannot claim this native
+failure fixed. No original failed run or uncertain side effect was replayed.
+
+The first full matrix found one intake failure: adding a root task alias changed
+the bootstrap manifest frozen by the existing intake guard. The alias was removed
+without changing the manifest. No
+bootstrap digest, test assertion or guard was relaxed. Its immutable run report
+is `lapis-ai-run-955b8551-39fd-472a-97b0-49871b4081a0`.
+
+The second full matrix found one whole-recipe binding failure because the
+validation lanes are part of the 16 frozen qualified release inputs. The lane
+change was removed, preserving that binding and keeping compiled controls an
+explicit bounded acceptance command after build. The exact whole-recipe test
+now passes without changing its assertions or qualification metadata. Immutable
+report: `lapis-ai-run-6e4311f0-9ba4-46fc-ada9-9f9a8127a776`.
+
+Final default 4-CPU/12-GiB Docker `validation:all` passed in
+`lapis-ai-run-86457f33-a28a-4981-8b46-c31e2b0fcea3`: check, tests, build,
+workflow, package and all 11 spec lanes. Rust: 1078 passed, zero failed, two
+existing opt-in ignores; client: 43; intake: 46; governance: 73. The final three
+compiled instruction controls also pass against the resulting public helpers.
+The exact-source Node CI gate passes. Both newly exposed binding regressions
+are now zero failures; native Linux remains one observed failure without an
+after-run, and actual macOS/Linux model/bundle qualification stays Root-owned.

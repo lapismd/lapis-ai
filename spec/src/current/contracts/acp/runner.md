@@ -303,3 +303,11 @@ the original absolute deadline, requires actual approved file effects and a
 completed terminal record, and never treats outcome_unknown as success.
 Its bounded diagnostics and deterministic protocol controls qualify the harness;
 actual macOS Metal/Linux ARM64 model and bundle checks remain separate gates.
+
+The fixture instructs the real model to call `workspace__write_file` with exact
+JSON `{"path":"native-ready.txt","content":"NATIVE_READY"}`, relative to the
+opened workspace with no added directory component. This clarifies the existing
+acceptance task; it does not precreate the target, alter model output, broaden
+admission or retry uncertain turns. Compiled synthetic-provider controls verify
+the outgoing instruction and unchanged tool arguments; they do not qualify a
+real model. Wrong paths remain rejected before approval.

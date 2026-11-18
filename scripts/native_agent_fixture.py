@@ -148,7 +148,7 @@ def native_agent(acp, agent, tools, endpoint, token, model, evidence=None):
             evidence.phase = 'turn'
             deadline = time.monotonic() + AGENT_TURN_MS / 1000
             send('prompt', 'turn', sessionId='native', maxDurationMs=AGENT_TURN_MS,
-                text='Write native-ready.txt with content NATIVE_READY using workspace__write_file. You may read that file or search this disposable workspace. Then reply DONE. Use no other mutations or shell commands.')
+                text='Call workspace__write_file with exactly this JSON: {"path":"native-ready.txt","content":"NATIVE_READY"}. The path is relative to the opened workspace, with no added directory component. You may read that file or search this disposable workspace. Then reply DONE. Use no other mutations or shell commands.')
             seen = set()
             mutations = 0
             while True:
