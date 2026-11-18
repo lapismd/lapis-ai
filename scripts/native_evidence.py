@@ -18,6 +18,15 @@ def digest(path, limit=4 * 1024**3):
     return {'bytes': size, 'sha256': value.hexdigest()}
 
 
+def utf8_length(value):
+    if not isinstance(value, str):
+        return None
+    try:
+        return len(value.encode())
+    except UnicodeEncodeError:
+        return None
+
+
 class Evidence:
     def __init__(self, directory=None, stage='native'):
         assert re.fullmatch(r'[a-z0-9-]{1,64}', stage), 'diagnostic_stage'
@@ -48,6 +57,41 @@ class Evidence:
             item['quiescent'] = frame.get('quiescent') is True
             item['sessionUsable'] = frame.get('sessionUsable') is True
         self.events.append(item)
+
+    def rejected_permission(self, call, session):
+        """Classify a refused request without retaining any raw tool/argument text."""
+        title = call.get('title')
+        tools = {'workspace__write_file': 'write_file', 'workspace__read_file': 'read_file',
+            'workspace__search': 'search', 'workspace__shell': 'shell'}
+        tool = tools.get(title, 'other') if isinstance(title, str) else 'invalid'
+        args = call.get('rawInput')
+        shape = 'object' if isinstance(args, dict) else ('null' if args is None else
+            'array' if isinstance(args, list) else 'string' if isinstance(args, str) else
+            'boolean' if isinstance(args, bool) else 'number' if isinstance(args, (int, float)) else 'invalid')
+        keys = set(args) if isinstance(args, dict) else set()
+        keyset = ('write_file' if keys == {'path', 'content'} else 'read_file' if keys == {'path'}
+            else 'search' if keys == {'query'} else 'other')
+        path = args.get('path') if isinstance(args, dict) else None
+        path_class = 'invalid'
+        path_bytes = utf8_length(path)
+        if path_bytes is not None and 0 < path_bytes <= 4096 and '\0' not in path:
+            # Lexical classification only: this never admits or resolves a requested path.
+            root = os.path.abspath(session)
+            target = os.path.join(root, 'native-ready.txt')
+            normalized = os.path.normpath(path if os.path.isabs(path) else os.path.join(root, path))
+            path_class = ('exact_relative' if path == 'native-ready.txt' else
+                'normalized_absolute_same_fixture' if normalized == target and os.path.isabs(path) else
+                'normalized_relative_same_fixture' if normalized == target else
+                'other_inside_fixture' if os.path.commonpath([root, normalized]) == root else 'outside_fixture')
+        content = args.get('content') if isinstance(args, dict) else None
+        detail = {'tool': tool, 'inputShape': shape, 'keyset': keyset, 'pathClass': path_class,
+            'contentIsString': isinstance(content, str),
+            'contentBytes': utf8_length(content), 'contentUtf8Valid': utf8_length(content) is not None,
+            'contentMarkerMatch': isinstance(content, str) and content.strip() == 'NATIVE_READY'}
+        if self.events and self.events[-1]['type'] == 'permission':
+            self.events[-1]['rejection'] = detail
+        else:
+            self.events.append({'type': 'permission', 'rejection': detail})
 
     def stderr(self, chunk):
         data = chunk.encode('utf-8', errors='replace')

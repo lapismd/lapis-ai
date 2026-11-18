@@ -84,3 +84,42 @@ separate from native/model qualification.
 The first aggregate found one missing SUMMARY entry for this evidence page;
 the source index was corrected and both later aggregate runs passed. No rule,
 assertion, source limit, audit or native platform gate was relaxed.
+
+## Fresh native rejection and diagnostic follow-up
+
+Fresh PR #19 source `aabc743e` ran CI `44244495959`. macOS job `134600793907`
+failed in the first source-native fixture at `permission_choice`'s tool/input
+predicate; ARM Linux was cancelled by the unchanged matrix fail-fast. Spec,
+Rust and canonical jobs passed. The retained JSON artifact `14401821000` proves
+15 frames ending at permission, no terminal, no diagnostic errors, and the
+managed model's 396705472 bytes with SHA256
+`ac2d97712095a558e31573f62f466a3f9d93990898b0ec79d7c974c1780d524a`.
+It did not retain the refused arguments, so the exact failed predicate remains
+unknown. This is distinct from the earlier queue timeout and does not prove
+an environmental failure or justify widening permissions.
+
+The follow-up changes diagnostics only. A refused tool/input predicate adds a
+known tool enum, typed input shape and keyset enum, lexical path class, and
+content-marker/length flags. Exact relative, normalized relative, normalized
+absolute same-fixture, other inside, outside and invalid paths are distinct.
+Normalization is classification only: all admission predicates, exact relative
+path/content checks, denial, the original 300000ms bound and no-replay behavior
+remain unchanged. Raw tools, unknown keys, paths and content are never retained.
+
+`scripts/fixtures/native-permission-v2.json` was captured from the real owning
+ACP/agent/tools binaries in the same bounded Docker image and read-only source
+build cache. A deterministic local HTTP provider supplied only synthetic tool
+arguments; no model, user profile or provider credentials were involved. The
+actual emitted v2 request passes the independent fixture unchanged; the full
+turn completed with the exact permitted file effect. That fixture also drives
+refusal controls, rather than assuming a hand-authored request shape is the
+actual emitted protocol.
+
+The narrow missing-classification regression failed once before the change
+(KeyError for absent rejection metadata) and now passes. All 17 Python controls
+pass, including actual emitted-wire admission, classified rejection and secret
+absence. A self-review control also proved that invalid UTF-8 surrogate arguments
+could mask rejection during diagnostic encoding; it failed once before the
+classifier was made non-throwing for those values, and now passes. Full portable and exact-source Node gates are recorded with the enclosing
+change. Fresh native qualification must establish the refused predicate before
+any admission change is considered. No old native run was retried.

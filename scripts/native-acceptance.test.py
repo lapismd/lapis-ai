@@ -159,6 +159,80 @@ class EvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, 'model_root'):
                 Evidence().snapshot(owned, model='fixture')
 
+    def test_rejection_diagnostics_do_not_mask_invalid_utf8_arguments(self):
+        from native_agent_fixture import permission_choice
+        from native_evidence import Evidence
+        frame = json.loads((Path(__file__).parent / 'fixtures/native-permission-v2.json').read_text())
+        frame['request']['subject']['toolCall'] = {'title': 'unknown', 'rawInput': {'path': '\ud800', 'content': '\ud800'}}
+        with tempfile.TemporaryDirectory() as temporary:
+            evidence = Evidence()
+            evidence.frame(frame)
+            with self.assertRaisesRegex(AssertionError, 'permission_scope'):
+                permission_choice(frame, Path(temporary), set(), 0, evidence)
+            detail = evidence.events[-1]['rejection']
+            self.assertEqual(detail['pathClass'], 'invalid')
+            self.assertIsNone(detail['contentBytes'])
+            self.assertFalse(detail['contentUtf8Valid'])
+
+    def test_actual_emitted_permission_passes_without_admission_changes(self):
+        from native_agent_fixture import permission_choice
+        from native_evidence import Evidence
+        frame = json.loads((Path(__file__).parent / 'fixtures/native-permission-v2.json').read_text())
+        with tempfile.TemporaryDirectory() as temporary:
+            evidence = Evidence()
+            evidence.frame(frame)
+            self.assertEqual(permission_choice(frame, Path(temporary), set(), 0, evidence), ('allow_once', True))
+            self.assertNotIn('rejection', evidence.events[-1])
+
+    def test_rejected_permission_records_only_bounded_classification(self):
+        from native_agent_fixture import permission_choice
+        from native_evidence import Evidence
+        with tempfile.TemporaryDirectory() as temporary:
+            session = Path(temporary)
+            for path, expected in [
+                ('native-ready.txt', 'exact_relative'),
+                ('./native-ready.txt', 'normalized_relative_same_fixture'),
+                (str(session / 'native-ready.txt'), 'normalized_absolute_same_fixture'),
+                ('other.txt', 'other_inside_fixture'),
+                ('../outside.txt', 'outside_fixture'),
+                (None, 'invalid'),
+            ]:
+                # Actual owning binary emission; mutate only the deliberately rejected arguments.
+                frame = json.loads((Path(__file__).parent / 'fixtures/native-permission-v2.json').read_text())
+                frame['request']['subject']['toolCall']['rawInput'] = {'path': path, 'content': 'PRIVATE-MARKER'}
+                evidence = Evidence()
+                evidence.frame(frame)
+                with self.assertRaisesRegex(AssertionError, 'permission_scope'):
+                    permission_choice(frame, session, set(), 0, evidence)
+                value = evidence.write('failed')
+                detail = value['events'][-1]['rejection']
+                self.assertEqual(detail['tool'], 'write_file')
+                self.assertEqual(detail['keyset'], 'write_file')
+                self.assertEqual(detail['pathClass'], expected)
+                self.assertFalse(detail['contentMarkerMatch'])
+                self.assertEqual(detail['contentBytes'], 14)
+                text = json.dumps(value)
+                for secret in ['PRIVATE-MARKER', temporary, 'outside.txt', 'other.txt']:
+                    self.assertNotIn(secret, text)
+                self.assertLessEqual(len(text.encode()), 32768)
+            for path in ['./native-ready.txt', str(session / 'native-ready.txt'), '../outside.txt']:
+                frame['request']['subject']['toolCall']['rawInput'] = {'path': path, 'content': 'NATIVE_READY'}
+                evidence = Evidence()
+                evidence.frame(frame)
+                with self.assertRaisesRegex(AssertionError, 'permission_scope'):
+                    permission_choice(frame, session, set(), 0, evidence)
+                self.assertTrue(evidence.events[-1]['rejection']['contentMarkerMatch'])
+            for args, shape in [('PRIVATE-INPUT', 'string'), (None, 'null'), ([], 'array'),
+                                ({'PRIVATE-KEY': 'PRIVATE-INPUT'}, 'object')]:
+                frame['request']['subject']['toolCall'] = {'title': 'PRIVATE-TOOL', 'rawInput': args}
+                evidence = Evidence()
+                evidence.frame(frame)
+                with self.assertRaisesRegex(AssertionError, 'permission_scope'):
+                    permission_choice(frame, session, set(), 0, evidence)
+                detail = evidence.events[-1]['rejection']
+                self.assertEqual((detail['tool'], detail['inputShape'], detail['keyset']), ('other', shape, 'other'))
+                self.assertNotIn('PRIVATE', json.dumps(evidence.write('failed')))
+
     def test_permission_shapes_options_and_scope_fail_closed(self):
         from native_agent_fixture import permission_choice
         from native_evidence import Evidence

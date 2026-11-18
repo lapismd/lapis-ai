@@ -59,7 +59,9 @@ source ownership and M0–M5 milestone contracts remain unchanged.
 Native qualification uses one non-resetting300-second agent deadline and an
 explicit bounded permission loop. Each admitted read/search in the disposable
 workspace or exact native-ready mutation requires a distinct live allow_once;
-foreign, stale, unsafe or excess requests fail closed. Unknown outcomes stay
+foreign, stale, unsafe or excess requests fail closed. Rejected requests retain only known
+tool/shape/keyset/path classifications and content-marker/length flags, never raw
+arguments. Lexical path classification grants no admission authority. Unknown outcomes stay
 failures without automatic prompt retry. This fixture change preserves
 LAI-RUN-003/008/009 and production permission policy.
 

@@ -44,6 +44,7 @@ def permission_choice(frame, session, seen, mutations, evidence):
         or title == 'workspace__search' and set(args) == {'query'}
         and isinstance(args['query'], str) and 0 < len(args['query'].encode()) <= 4096)
     if not legal:
+        evidence.rejected_permission(call, session)
         raise evidence.fail('permission_scope')
     target = session / 'native-ready.txt'
     if target.is_symlink() or (not mutations and target.exists()):
