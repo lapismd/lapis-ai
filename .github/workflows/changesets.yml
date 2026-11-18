@@ -36,14 +36,18 @@ jobs:
         with:
           toolchain: "1.99.0"
       - run: pnpm install --frozen-lockfile --ignore-pnpmfile
+      - run: pnpm check:dependency-intake
       - run: pnpm release:check
       - name: Bootstrap locked Cargo dependencies before version preparation
         run: pnpm dev:cargo -- fetch --locked
       - name: Guard the qualified source-owned version runtime
-        uses: lapismd/lapis-ci/actions/guard-version-runtime@2f90eb7a035f841f0757d3a2cffc959cbecdfff0
+        id: runtime
+        uses: lapismd/lapis-ci/actions/guard-version-runtime@dc81ff65ba812bf005fb2a806eb3308bb8b5f71f
         with:
           qualification-file: .github/version-runtime-qualification.json
+          detect-release-intent: true
       - name: Mint repository-scoped version PR token
+        if: steps.runtime.outputs.hasChangesets == 'true'
         id: app
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3
         with:
@@ -55,6 +59,7 @@ jobs:
           permission-pull-requests: write
       - uses: changesets/action@63a615b9cd06ba9a3e6d13796c7fbcb080a60a0b # v1.8.0
         id: changesets
+        if: steps.runtime.outputs.hasChangesets == 'true'
         with:
           version: pnpm release:version
           commit: Version coordinated Cargo packages

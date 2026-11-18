@@ -8,7 +8,7 @@ import YAML from "yaml";
 const source = path.resolve(".");
 const qualificationPath = ".github/version-runtime-qualification.json";
 const helper =
-  "lapismd/lapis-ci/actions/guard-version-runtime@2f90eb7a035f841f0757d3a2cffc959cbecdfff0";
+  "lapismd/lapis-ci/actions/guard-version-runtime@dc81ff65ba812bf005fb2a806eb3308bb8b5f71f";
 const digest = (value) => createHash("sha256").update(value).digest("hex");
 const canonical = (value) =>
   value && typeof value === "object" && !Array.isArray(value)
@@ -26,7 +26,10 @@ test("qualified runtime guard follows real native bootstrap and precedes App wri
   const steps = workflow.jobs.version.steps;
   const guard = steps.find((step) => step.uses === helper);
   assert(guard, "AI must use the exact qualified shared helper");
-  assert.deepEqual(guard.with, { "qualification-file": qualificationPath });
+  assert.deepEqual(guard.with, {
+    "qualification-file": qualificationPath,
+    "detect-release-intent": true,
+  });
   for (const key of ["if", "continue-on-error", "env"])
     assert.equal(guard[key], undefined);
   const bootstrap = steps.find(
@@ -62,10 +65,10 @@ test("AI qualification retains the complete reviewed whole-recipe input binding"
   const qualification = JSON.parse(
     readFileSync(path.join(source, qualificationPath), "utf8"),
   );
-  // Audited hosted proof 43814544020, immutable AI source 3e29e16f..., helper 2f90eb7a....
+  // New Node22 SDK0.2.1 whole-recipe proof retains16 exact executable/config bindings.
   assert.equal(
     digest(JSON.stringify(canonical(qualification))),
-    "ae99c917bcefd0441de564ac204cc2edf5b79bff291d8cf30d0c181d2686a438",
+    "e5d878c5b34893f5968962ceb3184c934885b9e4796e6212430ff11e94c881b5",
   );
   assert.equal(qualification.nodeMajor, 22);
   assert.equal(qualification.cliVersion, "2.31.1");
@@ -79,7 +82,7 @@ test("AI qualification retains the complete reviewed whole-recipe input binding"
     digest(readFileSync(path.join(source, ".changeset/config.json"))),
     qualification.configSha256,
   );
-  assert.equal(Object.keys(qualification.files).length, 17);
+  assert.equal(Object.keys(qualification.files).length, 16);
   for (const [file, expected] of Object.entries(qualification.files))
     assert.equal(digest(readFileSync(path.join(source, file))), expected, file);
   assert.equal(

@@ -82,3 +82,42 @@ namespace/distribution and native consumer qualification remain separate gates.
 
 `lapis-ai-service` joins the coordinated library cohort. Extracting the existing
 host implementation does not publish a crate or grant hosted execution.
+
+## Bounded specification-tool intake
+
+LAI-GOV-100/103/105 and LAI-REL-008 retain the actual private Node22/Rust
+version recipe and native/release gates. Only compatible Node-only validator0.2
+development patches are admitted. Independent normal source checks validate the
+complete catalog and both managed slots outside trusted-bot spec exemptions.
+One exact managed maintenance note may contain only an empty YAML release map;
+null, nonempty, malformed, multiple and arbitrary notes reject. A one-time exact
+reviewed baseline plus before/after input hashes binds initial SDK0.2.0→0.2.1
+adoption; missing/foreign ancestry and future initialization fail closed. Every
+ordinary later update requires its existing immutable opt-in and factual slots.
+
+<!-- dependency-intake:validator-development:start -->
+
+```json
+{
+  "schemaVersion": 1,
+  "kind": "development-dependency-intake",
+  "dependency": "@lapismd/spec-validator",
+  "version": "0.2.1",
+  "peer": null,
+  "integrity": "sha512-aHLByppZkay1axSm8KvCwOJz0si8aDyZBXDGWW+d2VQw+66f1KLimw2rEMjYIpLdoSG9+yN5Kd1MKlAJw7xUVw==",
+  "importers": {
+    ".": {
+      "specifier": "0.2.1",
+      "version": "0.2.1"
+    }
+  },
+  "policySha256": "3aa73330b177ffb38c07e8096b526ff9ba66b32a973a36d0339f16c0e09ccb72"
+}
+```
+
+<!-- dependency-intake:validator-development:end -->
+
+Exact current remote-main qualification distinguishes CLI status from the raw
+no-note macro: changed private packages need an empty maintenance note for status
+admission even when the raw macro returns unchanged. The empty map still yields
+false intent, preserving App/writer admission and all native/publisher gates.

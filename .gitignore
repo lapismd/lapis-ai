@@ -8,3 +8,5 @@
 *.key
 *.pem
 .DS_Store
+
+.qmd/index.sqlite*

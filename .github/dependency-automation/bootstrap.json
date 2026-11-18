@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "baselineSource": "1e6743d0095f83c52b3329782a927437e63b3107",
+  "policySha256": "3aa73330b177ffb38c07e8096b526ff9ba66b32a973a36d0339f16c0e09ccb72",
+  "inputs": {
+    "package.json": {
+      "before": "3a52ab4901665ecef4093447e176108e09c03248fe2e08126cfc71fb46129c30",
+      "after": "810b86e1415aa760f129a717503cbdecd03eceac73c691f442bc31ff633c9b0b"
+    },
+    "pnpm-workspace.yaml": {
+      "before": "daa09fb27c0b144072b39fe28fe1c3509f312a7856e118437fcf2b5e5c4d432a",
+      "after": "980acb3a1c1d0a7b8a78bc15c31010223b9108938833ff0c89300bd02b90ff09"
+    },
+    "pnpm-lock.yaml": {
+      "before": "925de41aeef67f9e9e874b310003e72ddd23760dfa63ce8522699e0a5a7e4f86",
+      "after": "960678610bcc2ae5018001d999cf49041a0c5ef9efffd239f575e9eaf94a9a4b"
+    },
+    "packages/ai/package.json": {
+      "before": "9e07ef8280ca1c9c9fb37105b62d3d3d5b8e5e0d68df8905d7a4e867e79725e4",
+      "after": "9e07ef8280ca1c9c9fb37105b62d3d3d5b8e5e0d68df8905d7a4e867e79725e4"
+    }
+  }
+}
