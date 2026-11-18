@@ -181,3 +181,7 @@ M0–M5 status, model/platform qualification and publication remain unchanged.
 repairs private acceptance permission handling and failure observability.
 M0–M5 status and actual platform/model/release gates remain unchanged; fixture
 controls alone do not complete the native hosted qualification.
+
+[Committed intake range](../../history/2026-11-18-clean-git-intake-range.md)
+repairs clean Git managed-note and source-scope scrutiny with one immutable
+baseline. M0–M4 and M5 status, native/model and release gates remain unchanged.
