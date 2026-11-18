@@ -78,3 +78,4 @@
 - [Bounded dependency automation](history/2026-11-17-dependency-automation-adoption.md)
 
 - [Bounded managed maintenance notes](history/2026-11-18-managed-maintenance-notes.md)
+- [Native acceptance permission lifecycle and evidence](history/2026-11-18-native-fixture-evidence.md)

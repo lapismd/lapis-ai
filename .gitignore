@@ -10,3 +10,5 @@
 .DS_Store
 
 .qmd/index.sqlite*
+
+__pycache__/

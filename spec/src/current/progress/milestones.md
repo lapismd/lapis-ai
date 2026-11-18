@@ -176,3 +176,8 @@ checks use bounded isolated workers over the exact source revision. Full
 portable check/test/build/package/spec qualification passes, with 1,076 Rust,
 43 renderer and 57 governance cases. Native/model qualification stays separate. Original
 M0–M5 status, model/platform qualification and publication remain unchanged.
+
+[Native fixture evidence](../../history/2026-11-18-native-fixture-evidence.md)
+repairs private acceptance permission handling and failure observability.
+M0–M5 status and actual platform/model/release gates remain unchanged; fixture
+controls alone do not complete the native hosted qualification.

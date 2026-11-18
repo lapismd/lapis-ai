@@ -293,3 +293,13 @@ permission contracts remain unchanged by release preparation.
 
 The GitHub ownership transfer updates package documentation links to
 `lapismd/lapis-ai`; the owning ACP requirements and runtime behavior are unchanged.
+
+## Native qualification evidence
+
+The native model fixture exercises LAI-RUN-008 permissions throughout a turn,
+including repeated writes and bounded non-mutating requests in its disposable
+workspace. It selects each advertised allow_once identifier separately, enforces
+the original absolute deadline, requires actual approved file effects and a
+completed terminal record, and never treats outcome_unknown as success.
+Its bounded diagnostics and deterministic protocol controls qualify the harness;
+actual macOS Metal/Linux ARM64 model and bundle checks remain separate gates.

@@ -56,6 +56,19 @@ The spec-validator 0.2 development-tool intake uses the published Node-only
 CLI through the existing portable lane commands. Runtime, native qualification,
 source ownership and M0–M5 milestone contracts remain unchanged.
 
+Native qualification uses one non-resetting300-second agent deadline and an
+explicit bounded permission loop. Each admitted read/search in the disposable
+workspace or exact native-ready mutation requires a distinct live allow_once;
+foreign, stale, unsafe or excess requests fail closed. Unknown outcomes stay
+failures without automatic prompt retry. This fixture change preserves
+LAI-RUN-003/008/009 and production permission policy.
+
+LAI-GOV-103/104 qualification evidence retains bounded stage/frame/terminal and
+helper/runtime/model hashes, never model payloads, keys, raw stderr or environment.
+Native failure artifacts contain only those JSON summaries. Native jobs retain
+failure status and matrix fail-fast rather than cancelling their own workflow;
+all platform, exact-source, test and release gates remain mandatory.
+
 ## Requirements
 
 | ID          | Requirement                                                                                                                                                                                                                 |
