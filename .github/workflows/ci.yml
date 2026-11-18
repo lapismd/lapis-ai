@@ -14,7 +14,7 @@ on:
 permissions:
   contents: read
   pull-requests: read
-  actions: write
+  actions: read
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -153,11 +153,6 @@ jobs:
           if-no-files-found: error
           retention-days: 3
           include-hidden-files: true
-      - name: Stop the rest of this workflow
-        if: failure()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh run cancel "${{ github.run_id }}"
   native:
     name: Native ${{ matrix.target }}
     needs: [plan, spec]
@@ -215,12 +210,16 @@ jobs:
       - name: Cold inference, permissions, Rust clients and native bundle
         env:
           LAPIS_AI_SKIP_NATIVE_BUILD: "1"
+          LAPIS_AI_NATIVE_SOURCE: ${{ needs.plan.outputs.source }}
         run: bash scripts/native-qualification.sh debug
-      - name: Stop the rest of this workflow
+      - name: Retain bounded native failure evidence
         if: failure()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh run cancel "${{ github.run_id }}"
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-diagnostics-${{ matrix.target }}-${{ github.sha }}-${{ github.run_attempt }}
+          path: .local/native-diagnostics/debug/*.json
+          if-no-files-found: ignore
+          retention-days: 7
   validate:
     name: Canonical checks
     needs: [plan, spec, rust-build]

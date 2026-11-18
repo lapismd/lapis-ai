@@ -1,0 +1,35 @@
+{
+  "permissionId": "permission-7",
+  "request": {
+    "options": [
+      {
+        "kind": "allow_once",
+        "name": "Allow",
+        "optionId": "allow_once"
+      },
+      {
+        "kind": "reject_once",
+        "name": "Deny",
+        "optionId": "reject_once"
+      }
+    ],
+    "sessionId": "ses_1db3a9f7f9371a78",
+    "subject": {
+      "toolCall": {
+        "rawInput": {
+          "content": "NATIVE_READY",
+          "path": "native-ready.txt"
+        },
+        "title": "workspace__write_file",
+        "toolCallId": "fixture-write"
+      },
+      "type": "tool_call"
+    },
+    "title": "workspace__write_file"
+  },
+  "requestId": "turn",
+  "sequence": 8,
+  "sessionId": "native",
+  "type": "permission",
+  "version": 3
+}
